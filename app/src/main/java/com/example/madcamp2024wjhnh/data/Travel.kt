@@ -1,5 +1,5 @@
 package com.example.madcamp2024wjhnh.data
-
+import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -9,9 +9,13 @@ data class Travel(
     val address: String,
     val tags: String,
     val description: String,
-    val photoResId: Int,
-    val photoListday1: List<Int>, // 사진 리스트
-    val photoListday2: List<Int> // 사진 리스트
+//    val photoResId: Int,
+//    val photoListday1: List<Int>, // 사진 리스트
+//    val photoListday2: List<Int> // 사진 리스트
+    val photoResId: Int? = null, // Drawable 리소스 ID (기존)
+    val photoUri: Uri? = null,
+    val photoListday1: List<Int>, // Uri 리스트로 변경
+    val photoListday2: List<Int>  // Uri 리스트로 변경
 ) : Parcelable
 
 //
