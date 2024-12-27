@@ -1,4 +1,4 @@
-package com.example.myapplication1.ui.home
+package com.example.madcamp2024wjhnh.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.myapplication1.R
-import com.example.myapplication1.data.Travel
-import com.example.myapplication1.databinding.FragmentHomeBinding
+import com.example.madcamp2024wjhnh.R
+import com.example.madcamp2024wjhnh.data.Travel
+import com.example.madcamp2024wjhnh.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
 
