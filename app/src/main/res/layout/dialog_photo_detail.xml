@@ -13,6 +13,14 @@
         android:scaleType="centerCrop"
         android:contentDescription="@string/photo" />
 
+    <ToggleButton
+        android:id="@+id/favoriteToggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="즐겨찾기 추가됨"
+        android:textOff="즐겨찾기 추가"
+        android:layout_marginTop="4dp" />
+
     <TextView
         android:id="@+id/dialogTitleTextView"
         android:layout_width="wrap_content"

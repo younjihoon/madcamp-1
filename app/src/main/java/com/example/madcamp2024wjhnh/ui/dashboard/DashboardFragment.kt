@@ -51,6 +51,7 @@ class DashboardFragment : Fragment() {
         val adapter = PhotoAdapter(requireContext(), photos)
         binding.placesRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.placesRecyclerView.adapter = adapter
+
     }
 
     override fun onDestroyView() {
