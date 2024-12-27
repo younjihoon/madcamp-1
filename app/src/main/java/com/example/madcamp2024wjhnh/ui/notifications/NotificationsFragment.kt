@@ -14,6 +14,7 @@ import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.util.MarkerIcons
 
 class NotificationsFragment : Fragment(), OnMapReadyCallback {
 
@@ -53,6 +54,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
             val marker = Marker()
             marker.position = LatLng(photo.latitude, photo.longitude)
             marker.map = naverMap
+            marker.icon = MarkerIcons.PINK //https://navermaps.github.io/android-map-sdk/reference/com/naver/maps/map/util/MarkerIcons.html
         }
     }
 
