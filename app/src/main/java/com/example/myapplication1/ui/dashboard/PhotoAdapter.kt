@@ -45,11 +45,13 @@ class PhotoAdapter(
         val dialogImageView = dialogView.findViewById<ImageView>(R.id.dialogImageView)
         val dialogTitleTextView = dialogView.findViewById<TextView>(R.id.dialogTitleTextView)
         val dialogDescriptionTextView = dialogView.findViewById<TextView>(R.id.dialogDescriptionTextView)
+        val dialogLinkTextView = dialogView.findViewById<TextView>(R.id.dialogLinkTextView)
 
         // 데이터 설정
         dialogImageView.setImageResource(photo.imageResId)
         dialogTitleTextView.text = photo.title
         dialogDescriptionTextView.text = photo.description
+        dialogLinkTextView.text = photo.link
 
         // 다이얼로그 생성
         AlertDialog.Builder(context)

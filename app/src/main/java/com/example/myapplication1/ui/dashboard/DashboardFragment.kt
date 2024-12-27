@@ -30,31 +30,18 @@ class DashboardFragment : Fragment() {
 
         // 샘플 데이터 생성
         val photos = listOf(
-            Photo(R.drawable.image1, "Title 1", "This is description for Title 1"),
-            Photo(R.drawable.image2, "Title 2", "This is description for Title 2"),
-            Photo(R.drawable.image3, "Title 3", "This is description for Title 3"),
-            Photo(R.drawable.image4, "Title 4", "This is description for Title 4"),
-            Photo(R.drawable.image5, "Title 5", "This is description for Title 5"),
-            Photo(R.drawable.image1, "Title 1", "This is description for Title 1"),
-            Photo(R.drawable.image2, "Title 2", "This is description for Title 2"),
-            Photo(R.drawable.image3, "Title 3", "This is description for Title 3"),
-            Photo(R.drawable.image4, "Title 4", "This is description for Title 4"),
-            Photo(R.drawable.image5, "Title 5", "This is description for Title 5"),
-            Photo(R.drawable.image1, "Title 1", "This is description for Title 1"),
-            Photo(R.drawable.image2, "Title 2", "This is description for Title 2"),
-            Photo(R.drawable.image3, "Title 3", "This is description for Title 3"),
-            Photo(R.drawable.image4, "Title 4", "This is description for Title 4"),
-            Photo(R.drawable.image5, "Title 5", "This is description for Title 5"),
-            Photo(R.drawable.image1, "Title 1", "This is description for Title 1"),
-            Photo(R.drawable.image2, "Title 2", "This is description for Title 2"),
-            Photo(R.drawable.image3, "Title 3", "This is description for Title 3"),
-            Photo(R.drawable.image4, "Title 4", "This is description for Title 4"),
-            Photo(R.drawable.image5, "Title 5", "This is description for Title 5"),
-            Photo(R.drawable.image1, "Title 1", "This is description for Title 1"),
-            Photo(R.drawable.image2, "Title 2", "This is description for Title 2"),
-            Photo(R.drawable.image3, "Title 3", "This is description for Title 3"),
-            Photo(R.drawable.image4, "Title 4", "This is description for Title 4"),
-            Photo(R.drawable.image5, "Title 5", "This is description for Title 5")
+            Photo(R.drawable.image1, "Title 1", "This is description for Title 1","https://www.google.com"),
+            Photo(R.drawable.image2, "건물", "This is description for ..", "https://www.google.com"),
+            Photo(R.drawable.image3, "볼거리", "This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대","https://www.google.com"),
+            Photo(R.drawable.image1, "Title 1", "This is description for Title 1","https://www.google.com"),
+            Photo(R.drawable.image2, "건물", "This is description for ..", "https://www.google.com"),
+            Photo(R.drawable.image3, "볼거리", "This is description for 첨성대","https://www.google.com"),
+            Photo(R.drawable.image1, "Title 1", "This is description for Title 1","https://www.google.com"),
+            Photo(R.drawable.image2, "건물", "This is description for ..", "https://www.google.com"),
+            Photo(R.drawable.image3, "볼거리", "This is description for 첨성대","https://www.google.com"),
+            Photo(R.drawable.image1, "Title 1", "This is description for Title 1","https://www.google.com"),
+            Photo(R.drawable.image2, "건물", "This is description for ..", "https://www.google.com"),
+            Photo(R.drawable.image3, "볼거리", "This is description for 첨성대","https://www.google.com")
         )
 
         // RecyclerView 설정
