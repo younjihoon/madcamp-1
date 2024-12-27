@@ -1,4 +1,4 @@
-package com.example.madcamp2024wjhnh.ui.viewmodel
+package com.example.madcamp2024wjhnh
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,5 +18,9 @@ class SharedViewModel : ViewModel() {
     // 즐겨찾기 필터링
     fun getFavoritePhotos(): List<Photo> {
         return _photos.value?.filter { it.isFavorite } ?: emptyList()
+    }
+
+    fun getPhotos(): List<Photo> {
+        return _photos.value ?: emptyList()
     }
 }

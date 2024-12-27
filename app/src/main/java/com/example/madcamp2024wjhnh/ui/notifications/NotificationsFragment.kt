@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.databinding.FragmentNotificationsBinding
-import com.example.madcamp2024wjhnh.ui.viewmodel.SharedViewModel
+import com.example.madcamp2024wjhnh.SharedViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap

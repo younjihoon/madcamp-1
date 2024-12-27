@@ -10,6 +10,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.madcamp2024wjhnh.databinding.ActivityMainBinding
 import com.naver.maps.map.NaverMapSdk
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import com.example.madcamp2024wjhnh.data.Photo
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +32,9 @@ class MainActivity : AppCompatActivity() {
                 // 인증 실패 처리
                 handleAuthFailed(exception)
             }
+        var sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
+        val photos = loadPhotosFromCSV()
+        sharedViewModel.setPhotos(photos)
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -42,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         navView.setupWithNavController(navController)
 
     }
+
     private fun handleAuthFailed(exception: NaverMapSdk.AuthFailedException) {
         // Logcat에 에러 메시지 출력
         android.util.Log.e(
@@ -56,4 +64,34 @@ class MainActivity : AppCompatActivity() {
             Toast.LENGTH_LONG
         ).show()
     }
+    private fun loadPhotosFromCSV(): List<Photo> {
+        val photos = mutableListOf<Photo>()
+
+        // CSV 파일 읽기
+        val inputStream = resources.openRawResource(R.raw.photos)
+        val reader = BufferedReader(InputStreamReader(inputStream, Charsets.UTF_8))
+
+        // 첫 번째 줄은 헤더이므로 건너뛰기
+        reader.readLine()
+
+        reader.forEachLine { line ->
+            val tokens = line.split(",") // CSV 필드 분리
+            if (tokens.size >= 4) {
+                val imageResId = getImageResId(tokens[0].trim())
+                val title = tokens[1].trim()
+                val description = tokens[2].trim()
+                val link = tokens[3].trim()
+                val latitude = tokens[4].trim().toDouble()
+                val longitude = tokens[5].trim().toDouble()
+                photos.add(Photo(imageResId, title, description, link, latitude, longitude))
+            }
+        }
+        return photos
+    }
+
+    private fun getImageResId(imageName: String): Int {
+        // 리소스 이름을 기반으로 ID 가져오기
+        return resources.getIdentifier(imageName, "drawable", packageName)
+    }
+
 }

@@ -11,7 +11,7 @@ import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.Photo
 import com.example.madcamp2024wjhnh.databinding.FragmentDashboardBinding
 import com.example.madcamp2024wjhnh.ui.PhotoAdapter
-import com.example.madcamp2024wjhnh.ui.viewmodel.SharedViewModel
+import com.example.madcamp2024wjhnh.SharedViewModel
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -31,9 +31,8 @@ class DashboardFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
-        val photos = loadPhotosFromCSV()
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        val photos = sharedViewModel.getPhotos()
         sharedViewModel.setPhotos(photos)
 
         // RecyclerView 설정
