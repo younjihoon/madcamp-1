@@ -1,17 +1,17 @@
-image,title,description,link
-image1,Title 1,This is description for Title 1,https://www.google.com
-image2,관광지,This is description for 관광지,https://www.google.com
-image3,볼거리,This is description for 첨성대,https://www.google.com
-image1,Title 1,This is description for Title 1,https://www.google.com
-image2,관광지,This is description for 관광지,https://www.google.com
-image3,볼거리,This is description for 첨성대,https://www.google.com
-image1,Title 1,This is description for Title 1,https://www.google.com
-image2,관광지,This is description for 관광지,https://www.google.com
-image3,볼거리,This is description for 첨성대,https://www.google.com
-image1,Title 1,This is description for Title 1,https://www.google.com
-image2,관광지,This is description for 관광지,https://www.google.com
-image3,볼거리,This is description for 첨성대,https://www.google.com
-image1,Title 1,This is description for Title 1,https://www.google.com
-image2,관광지,This is description for 관광지,https://www.google.com
-image3,볼거리,This is description for 첨성대,https://www.google.com
-image3,볼거리,This is description for 첨성대,https://www.google.com
+image,title,description,link,latitude,longitude
+image1,Title 1,This is description for Title 1,https://www.google.com, 37.5658331, 126.9747221
+image2,관광지,This is description for 관광지,https://www.google.com, 37.5865851, 126.9982038
+image3,볼거리,This is description for 첨성대,https://www.google.com, 37.5659448, 126.9785151
+image1,Title 1,This is description for Title 1,https://www.google.com, 37.5646452, 126.9781534
+image2,관광지,This is description for 관광지,https://www.google.com, 37.5650349, 126.9765191
+image3,볼거리,This is description for 첨성대,https://www.google.com, 37.5665851, 126.9782038
+image1,Title 1,This is description for Title 1,https://www.google.com, 37.5660000, 126.9780000
+image2,관광지,This is description for 관광지,https://www.google.com, 37.5660050, 126.9780050
+image3,볼거리,This is description for 첨성대,https://www.google.com, 37.5660500, 126.9780500
+image1,Title 1,This is description for Title 1,https://www.google.com, 37.5660500, 126.9780000
+image2,관광지,This is description for 관광지,https://www.google.com, 37.5660000, 126.9780500
+image3,볼거리,This is description for 첨성대,https://www.google.com, 37.5665000, 126.9785000
+image1,Title 1,This is description for Title 1,https://www.google.com, 37.5665000, 126.9780000
+image2,관광지,This is description for 관광지,https://www.google.com, 37.5660000, 126.9785000
+image3,볼거리,This is description for 첨성대,https://www.google.com, 37.5665500, 126.9785500
+image3,볼거리,This is description for 첨성대,https://www.google.com, 37.5665500, 126.9780000

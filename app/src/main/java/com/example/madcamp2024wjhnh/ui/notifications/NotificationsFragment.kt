@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.databinding.FragmentNotificationsBinding
+import com.example.madcamp2024wjhnh.ui.viewmodel.SharedViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.MapFragment
 import com.naver.maps.map.NaverMap
@@ -22,6 +24,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
     private val binding get() = _binding!!
 
     private lateinit var naverMap: NaverMap
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,12 +45,15 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
     }
 
     override fun onMapReady(naverMap: NaverMap) {
-        this.naverMap = naverMap
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        // 마커 추가
-        val marker = Marker()
-        marker.position = LatLng(37.5670135, 126.9783740) // 서울 시청 위치
-        marker.map = naverMap
+        val favoritePhotos = sharedViewModel.getFavoritePhotos()
+
+        for (photo in favoritePhotos) {
+            val marker = Marker()
+            marker.position = LatLng(photo.latitude, photo.longitude)
+            marker.map = naverMap
+        }
     }
 
     override fun onDestroyView() {

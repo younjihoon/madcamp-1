@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.Photo
 import com.example.madcamp2024wjhnh.databinding.FragmentDashboardBinding
 import com.example.madcamp2024wjhnh.ui.PhotoAdapter
+import com.example.madcamp2024wjhnh.ui.viewmodel.SharedViewModel
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -17,7 +19,7 @@ class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
     private val binding get() = _binding!!
-
+    private lateinit var sharedViewModel: SharedViewModel
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,22 +32,9 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 샘플 데이터 생성
-//        val photos = listOf(
-//            Photo(R.drawable.image1, "Title 1", "This is description for Title 1","https://www.google.com"),
-//            Photo(R.drawable.image2, "건물", "This is description for ..", "https://www.google.com"),
-//            Photo(R.drawable.image3, "볼거리", "This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대This is description for 첨성대","https://www.google.com"),
-//            Photo(R.drawable.image1, "Title 1", "This is description for Title 1","https://www.google.com"),
-//            Photo(R.drawable.image2, "건물", "This is description for ..", "https://www.google.com"),
-//            Photo(R.drawable.image3, "볼거리", "This is description for 첨성대","https://www.google.com"),
-//            Photo(R.drawable.image1, "Title 1", "This is description for Title 1","https://www.google.com"),
-//            Photo(R.drawable.image2, "건물", "This is description for ..", "https://www.google.com"),
-//            Photo(R.drawable.image3, "볼거리", "This is description for 첨성대","https://www.google.com"),
-//            Photo(R.drawable.image1, "Title 1", "This is description for Title 1","https://www.google.com"),
-//            Photo(R.drawable.image2, "건물", "This is description for ..", "https://www.google.com"),
-//            Photo(R.drawable.image3, "볼거리", "This is description for 첨성대","https://www.google.com")
-//        )
+        sharedViewModel = ViewModelProvider(requireActivity()).get(SharedViewModel::class.java)
         val photos = loadPhotosFromCSV()
+        sharedViewModel.setPhotos(photos)
 
         // RecyclerView 설정
         val adapter = PhotoAdapter(requireContext(), photos)
@@ -70,12 +59,14 @@ class DashboardFragment : Fragment() {
 
         reader.forEachLine { line ->
             val tokens = line.split(",") // CSV 필드 분리
-            if (tokens.size == 4) {
+            if (tokens.size >= 4) {
                 val imageResId = getImageResId(tokens[0].trim())
                 val title = tokens[1].trim()
                 val description = tokens[2].trim()
                 val link = tokens[3].trim()
-                photos.add(Photo(imageResId, title, description, link))
+                val latitude = tokens[4].trim().toDouble()
+                val longitude = tokens[5].trim().toDouble()
+                photos.add(Photo(imageResId, title, description, link, latitude, longitude))
             }
         }
         return photos
