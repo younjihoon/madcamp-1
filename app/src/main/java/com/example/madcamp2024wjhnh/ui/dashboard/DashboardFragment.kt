@@ -1,4 +1,4 @@
-package com.example.myapplication1.ui.dashboard
+package com.example.madcamp2024wjhnh.ui.dashboard
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.myapplication1.R
-import com.example.myapplication1.data.Photo
-import com.example.myapplication1.databinding.FragmentDashboardBinding
-import com.example.myapplication1.ui.PhotoAdapter
+import com.example.madcamp2024wjhnh.R
+import com.example.madcamp2024wjhnh.data.Photo
+import com.example.madcamp2024wjhnh.databinding.FragmentDashboardBinding
+import com.example.madcamp2024wjhnh.ui.PhotoAdapter
 import java.io.BufferedReader
 import java.io.InputStreamReader
 

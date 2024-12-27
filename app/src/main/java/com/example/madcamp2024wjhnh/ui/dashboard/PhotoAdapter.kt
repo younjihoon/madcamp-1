@@ -1,4 +1,4 @@
-package com.example.myapplication1.ui
+package com.example.madcamp2024wjhnh.ui
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.example.myapplication1.R
-import com.example.myapplication1.data.Photo
+import com.example.madcamp2024wjhnh.R
+import com.example.madcamp2024wjhnh.data.Photo
 
 class PhotoAdapter(
     private val context: Context,

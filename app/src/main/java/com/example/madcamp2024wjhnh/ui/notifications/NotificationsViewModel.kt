@@ -1,4 +1,4 @@
-package com.example.myapplication1.ui.notifications
+package com.example.madcamp2024wjhnh.ui.notifications
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

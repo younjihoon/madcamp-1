@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication1"
+    namespace = "com.example.madcamp2024wjhnh"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.myapplication1"
+        applicationId = "com.example.madcamp2024wjhnh"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.play.services.maps)
+    implementation("com.naver.maps:map-sdk:3.20.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
