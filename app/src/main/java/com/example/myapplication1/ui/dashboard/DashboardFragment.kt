@@ -4,17 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.myapplication1.R
+import com.example.myapplication1.data.Photo
 import com.example.myapplication1.databinding.FragmentDashboardBinding
+import com.example.myapplication1.ui.PhotoAdapter
 
 class DashboardFragment : Fragment() {
 
     private var _binding: FragmentDashboardBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,17 +21,46 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
-        }
-        return root
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // 샘플 데이터 생성
+        val photos = listOf(
+            Photo(R.drawable.image1, "Title 1", "This is description for Title 1"),
+            Photo(R.drawable.image2, "Title 2", "This is description for Title 2"),
+            Photo(R.drawable.image3, "Title 3", "This is description for Title 3"),
+            Photo(R.drawable.image4, "Title 4", "This is description for Title 4"),
+            Photo(R.drawable.image5, "Title 5", "This is description for Title 5"),
+            Photo(R.drawable.image1, "Title 1", "This is description for Title 1"),
+            Photo(R.drawable.image2, "Title 2", "This is description for Title 2"),
+            Photo(R.drawable.image3, "Title 3", "This is description for Title 3"),
+            Photo(R.drawable.image4, "Title 4", "This is description for Title 4"),
+            Photo(R.drawable.image5, "Title 5", "This is description for Title 5"),
+            Photo(R.drawable.image1, "Title 1", "This is description for Title 1"),
+            Photo(R.drawable.image2, "Title 2", "This is description for Title 2"),
+            Photo(R.drawable.image3, "Title 3", "This is description for Title 3"),
+            Photo(R.drawable.image4, "Title 4", "This is description for Title 4"),
+            Photo(R.drawable.image5, "Title 5", "This is description for Title 5"),
+            Photo(R.drawable.image1, "Title 1", "This is description for Title 1"),
+            Photo(R.drawable.image2, "Title 2", "This is description for Title 2"),
+            Photo(R.drawable.image3, "Title 3", "This is description for Title 3"),
+            Photo(R.drawable.image4, "Title 4", "This is description for Title 4"),
+            Photo(R.drawable.image5, "Title 5", "This is description for Title 5"),
+            Photo(R.drawable.image1, "Title 1", "This is description for Title 1"),
+            Photo(R.drawable.image2, "Title 2", "This is description for Title 2"),
+            Photo(R.drawable.image3, "Title 3", "This is description for Title 3"),
+            Photo(R.drawable.image4, "Title 4", "This is description for Title 4"),
+            Photo(R.drawable.image5, "Title 5", "This is description for Title 5")
+        )
+
+        // RecyclerView 설정
+        val adapter = PhotoAdapter(requireContext(), photos)
+        binding.placesRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.placesRecyclerView.adapter = adapter
     }
 
     override fun onDestroyView() {
