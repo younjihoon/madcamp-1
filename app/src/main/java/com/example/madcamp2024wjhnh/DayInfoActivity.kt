@@ -20,6 +20,7 @@ import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import okhttp3.internal.notify
 
 class DayInfoActivity: AppCompatActivity() {
     private lateinit var binding: ActivityDayInfoBinding
@@ -28,7 +29,8 @@ class DayInfoActivity: AppCompatActivity() {
     private val dayInfoList = mutableListOf<DayInfo>()
     private val context : Context = this
     private val imageList = mutableListOf<Uri>()
-
+    private lateinit var adapter : DayInfoAdapter
+    private lateinit var imageAdapter : DayInfoImageAddAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +40,7 @@ class DayInfoActivity: AppCompatActivity() {
 
         val travel = intent.getParcelableExtra<Travel>("travel")?:Travel(1,"제목","장소","20241228", emptyList(),".",0,mutableListOf(DayInfo(1, mutableListOf("주소"),"DayInfoActivity로 Travel이 넘어오지 않았음", mutableListOf())))
         dayInfoList.addAll(travel.Dayinfos)
-        val adapter = DayInfoAdapter(dayInfoList)
+        adapter = DayInfoAdapter(dayInfoList)
 
         dayInfoRecyclerView = binding.dayInfoRecyclerView
         dayInfoRecyclerView.adapter = adapter
@@ -51,7 +53,7 @@ class DayInfoActivity: AppCompatActivity() {
     }
 
     private fun showAddDayInfoDialog(adapter: DayInfoAdapter) {
-        val imageAdapter = DayInfoImageAddAdapter(imageList) {
+        imageAdapter = DayInfoImageAddAdapter(imageList) {
             openImagePicker()
         }
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_day_info, null)
@@ -92,9 +94,6 @@ class DayInfoActivity: AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val imageAdapter = DayInfoImageAddAdapter(imageList) {
-            openImagePicker()
-        }
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             val clipData = data?.clipData
@@ -105,13 +104,15 @@ class DayInfoActivity: AppCompatActivity() {
                     val imageUri = clipData.getItemAt(i).uri
                     imageList.add(imageUri)
                 }
-                imageAdapter.notifyItemRangeInserted(imageList.size - clipData.itemCount -1,clipData.itemCount)
+                imageAdapter.notifyItemRangeInserted(imageList.size - clipData.itemCount,clipData.itemCount)
+
             } else {
                 // 단일 선택
                 val imageUri = data?.data
                 imageUri?.let {
                     imageList.add(it)
                     imageAdapter.notifyItemInserted(imageList.size - 1)
+
                 }
             }
 
