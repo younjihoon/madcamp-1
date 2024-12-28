@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.ToggleButton
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp2024wjhnh.R
@@ -46,12 +47,18 @@ class PhotoAdapter(
         val dialogTitleTextView = dialogView.findViewById<TextView>(R.id.dialogTitleTextView)
         val dialogDescriptionTextView = dialogView.findViewById<TextView>(R.id.dialogDescriptionTextView)
         val dialogLinkTextView = dialogView.findViewById<TextView>(R.id.dialogLinkTextView)
-
+        val dialogFavoriteToggleButton = dialogView.findViewById<ToggleButton>(R.id.favoriteToggleButton)
         // 데이터 설정
         dialogImageView.setImageResource(photo.imageResId)
         dialogTitleTextView.text = photo.title
         dialogDescriptionTextView.text = photo.description
         dialogLinkTextView.text = photo.link
+
+        dialogFavoriteToggleButton.isChecked = photo.isFavorite
+        dialogFavoriteToggleButton.setOnCheckedChangeListener { _, isChecked ->
+            photo.isFavorite = isChecked
+            notifyItemChanged(photos.indexOf(photo)) // RecyclerView 갱신
+        }
 
         // 다이얼로그 생성
         AlertDialog.Builder(context)
