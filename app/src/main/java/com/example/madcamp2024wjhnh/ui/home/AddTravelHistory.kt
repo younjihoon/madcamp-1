@@ -85,8 +85,8 @@ class AddTravelHistory : Fragment() {
             tags = tags,
             memo = memo,
             DayInfos = mutableListOf(
-                DayInfo(0, mutableListOf("주소"), "description", mutableListOf(0)),
-                DayInfo(1, mutableListOf("주소"), "description", mutableListOf(0))
+                DayInfo(0, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY)),
+                DayInfo(1, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY))
             )
 //            thumbnail = image
         )
