@@ -7,13 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment"
     android:background="#FFFFFF">
-    <Button
-        android:id="@+id/buttonGoToDayInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="DayInfo 테스트용 버튼"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
     <!-- RecyclerView: 목록 표시 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/travelRecyclerView"

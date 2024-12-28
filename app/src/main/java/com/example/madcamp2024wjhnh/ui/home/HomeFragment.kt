@@ -174,7 +174,11 @@ class HomeFragment : Fragment() {
         )
 
         // RecyclerView 설정
-        travelAdapter = TravelAdapter(requireContext(), travelList)
+        travelAdapter = TravelAdapter(requireContext(), travelList) { travel ->
+            val intent = Intent(requireContext(), DayInfoActivity::class.java)
+            intent.putExtra("travel", travel)
+            startActivity(intent)
+        }
         binding.travelRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.travelRecyclerView.adapter = travelAdapter
 
@@ -186,18 +190,6 @@ class HomeFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-
-        binding.buttonGoToDayInfo.setOnClickListener{
-            val intent = Intent(requireContext(), DayInfoActivity::class.java)
-            val initInfo = mutableListOf(
-                DayInfo(0, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY)),
-                DayInfo(1, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY))
-            )
-            val travel = Travel(1, "제목", "장소", "20241228", emptyList(), "메모", 0, initInfo)
-            intent.putExtra("travel", travel)
-            startActivity(intent)
-        }
-
         return root
     }
 

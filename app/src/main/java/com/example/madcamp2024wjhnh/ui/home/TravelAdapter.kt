@@ -115,7 +115,8 @@ import com.example.madcamp2024wjhnh.data.Travel
 
 class TravelAdapter(
     private val context: Context,
-    private val travels: List<Travel>
+    private val travels: List<Travel>,
+    private val onItemClick: (Travel) -> Unit
 ) : RecyclerView.Adapter<TravelAdapter.TravelViewHolder>() {
 
     class TravelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -136,7 +137,9 @@ class TravelAdapter(
 //        holder.titleTextView.text = travel.title
 //        holder.addressTextView.text = travel.address
 //        holder.descriptionTextView.text = travel.description
-
+        holder.itemView.setOnClickListener {
+            onItemClick(travel) // 클릭된 DayInfo를 콜백으로 전달
+        }
     }
 
     override fun getItemCount(): Int = travels.size
