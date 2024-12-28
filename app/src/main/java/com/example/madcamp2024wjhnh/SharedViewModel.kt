@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.madcamp2024wjhnh.data.Photo
+import com.example.madcamp2024wjhnh.data.Travel
 
 class SharedViewModel : ViewModel() {
 
@@ -23,4 +24,16 @@ class SharedViewModel : ViewModel() {
     fun getPhotos(): List<Photo> {
         return _photos.value ?: emptyList()
     }
+
+    /////////
+
+    private val _travels = MutableLiveData<List<Travel>>(emptyList())
+    val travels: LiveData<List<Travel>> get() = _travels
+
+    fun setNewTravel(travel: Travel) {
+        val updatedList = _travels.value.orEmpty().toMutableList()
+        updatedList.add(travel)
+        _travels.value = updatedList
+    }
+
 }

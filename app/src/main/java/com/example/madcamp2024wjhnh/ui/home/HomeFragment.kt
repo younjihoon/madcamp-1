@@ -1,120 +1,3 @@
-//package com.example.madcamp2024wjhnh.ui.home
-//
-//import android.app.Activity
-//import android.app.AlertDialog
-//import android.content.Intent
-//import android.net.Uri
-//import android.os.Bundle
-//import android.view.LayoutInflater
-//import android.view.View
-//import android.view.ViewGroup
-//import android.widget.EditText
-//import androidx.fragment.app.Fragment
-//import androidx.recyclerview.widget.LinearLayoutManager
-//import com.example.madcamp2024wjhnh.R
-//import com.example.madcamp2024wjhnh.data.Travel
-//import com.example.madcamp2024wjhnh.databinding.FragmentHomeBinding
-//
-//class HomeFragment : Fragment() {
-//
-//    private var _binding: FragmentHomeBinding? = null
-//    private val binding get() = _binding!!
-//
-//    private lateinit var travelAdapter: TravelAdapter
-//    private val sampleData = mutableListOf<Travel>() // 데이터 저장
-//
-//    companion object {
-//        private const val PICK_IMAGE_REQUEST = 1 // 이미지 선택 요청 코드
-//    }
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater,
-//        container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View {
-//        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-//        val root: View = binding.root
-//
-//        // 초기 데이터 추가
-//        sampleData.add(
-//            Travel(
-//                title = "Trip to the Beach",
-//                address = "Seaside, CA",
-//                tags = "#Relaxation #Sunny",
-//                description = "Enjoyed a peaceful day by the sea.",
-//                photoUri = null,
-//                photoListday1 = emptyList(),
-//                photoListday2 = emptyList()
-//            )
-//        )
-//
-//        // RecyclerView 설정
-//        travelAdapter = TravelAdapter(requireContext(), sampleData)
-//        binding.travelRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-//        binding.travelRecyclerView.adapter = travelAdapter
-//
-//        // 플로팅 버튼 클릭 리스너
-//        binding.fabAddItem.setOnClickListener {
-//            openGallery()
-//        }
-//
-//        return root
-//    }
-//
-//    private fun openGallery() {
-//        val intent = Intent(Intent.ACTION_PICK)
-//        intent.type = "image/*"
-//        startActivityForResult(intent, PICK_IMAGE_REQUEST)
-//    }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
-//            val selectedImageUri: Uri? = data?.data
-//            if (selectedImageUri != null) {
-//                showAddItemDialog(selectedImageUri)
-//            }
-//        }
-//    }
-//
-//    private fun showAddItemDialog(imageUri: Uri) {
-//        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_travelclick_detail, null)
-//        val titleInput = dialogView.findViewById<EditText>(R.id.title_input)
-//        val addressInput = dialogView.findViewById<EditText>(R.id.address_input)
-//        val descriptionInput = dialogView.findViewById<EditText>(R.id.description_input)
-//
-//        AlertDialog.Builder(requireContext())
-//            .setTitle("Add Travel")
-//            .setView(dialogView)
-//            .setPositiveButton("Add") { _, _ ->
-//                val title = titleInput.text.toString()
-//                val address = addressInput.text.toString()
-//                val description = descriptionInput.text.toString()
-//
-//                val newTravel = Travel(
-//                    title = title,
-//                    address = address,
-//                    tags = "#NewTrip",
-//                    description = description,
-//                    photoUri = imageUri,
-//                    photoListday1 = emptyList(),
-//                    photoListday2 = emptyList()
-//                )
-//                sampleData.add(newTravel)
-//                travelAdapter.notifyItemInserted(sampleData.size - 1)
-//            }
-//            .setNegativeButton("Cancel", null)
-//            .create()
-//            .show()
-//    }
-//
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
-//}
-
-
 package com.example.madcamp2024wjhnh.ui.home
 
 import android.content.Intent
@@ -130,6 +13,12 @@ import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.DayInfo
 import com.example.madcamp2024wjhnh.data.Travel
 import com.example.madcamp2024wjhnh.databinding.FragmentHomeBinding
+import com.example.madcamp2024wjhnh.ui.home.TravelAdapter
+import androidx.lifecycle.ViewModelProvider
+import com.example.madcamp2024wjhnh.SharedViewModel
+
+
+
 
 class HomeFragment : Fragment() {
 
@@ -139,6 +28,9 @@ class HomeFragment : Fragment() {
     private lateinit var travelAdapter: TravelAdapter
     private val travelList = mutableListOf<Travel>() // 여행 데이터 리스트
 
+    private lateinit var sharedViewModel: SharedViewModel
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -147,31 +39,19 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // 샘플 데이터
-        travelList.addAll(
-            listOf(
-                Travel(
-                    id = 0,
-                    title = "Trip to the Beach",
-                    place = "Seaside, CA",
-                    date = "20241225",
-                    tags = mutableListOf<String>("#Relaxation","#Sunny"),
-                    memo = "Enjoyed a peaceful day by the sea.",
-                    thumbnail = R.drawable.travel1,
-                    Dayinfos = mutableListOf()
-                ),
-                Travel(
-                    id = 1,
-                    title = "Mountain Hiking",
-                    place = "Rocky Mountains, CO",
-                    date = "20240425",
-                    tags = mutableListOf<String>("#Adventure","#Nature"),
-                    memo = "Explored the rugged mountain trails.",
-                    thumbnail = R.drawable.travel2,
-                    Dayinfos = mutableListOf()
-                )
-            )
-        )
+//        // 샘플 데이터
+//        travelList.addAll(
+//            listOf(
+//                Travel(
+//                    title = "Trip to the Beach",
+//                    place = "Seaside, CA",
+//                    date = "01/01~01/15",
+//                    tags = "#Relaxation#Sunny",
+//                    memo = "Enjoyed a peaceful day by the sea."
+////                    thumbnail = "Uri" // thumbnail 필드를 다시 활성화
+//                )
+//            )
+//        )
 
         // RecyclerView 설정
         travelAdapter = TravelAdapter(requireContext(), travelList) { travel ->
@@ -181,6 +61,14 @@ class HomeFragment : Fragment() {
         }
         binding.travelRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.travelRecyclerView.adapter = travelAdapter
+
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+
+        sharedViewModel.travels.observe(viewLifecycleOwner) { travels ->
+            travelList.clear()
+            travelList.addAll(travels) // ViewModel의 데이터를 가져와 RecyclerView에 반영
+            travelAdapter.notifyDataSetChanged()
+        }
 
         // 플로팅 버튼 클릭 시 AddTravelHistory 열기
         binding.fabAddItem.setOnClickListener {
@@ -193,11 +81,9 @@ class HomeFragment : Fragment() {
         return root
     }
 
-
-    // 새로운 여행 데이터 추가
-    fun addNewTravel(travel: Travel) {
-        travelList.add(travel)
-        travelAdapter.notifyItemInserted(travelList.size - 1)
+    private fun addNewTravel(travel: Travel) {
+        travelList.add(travel) // 리스트에 추가
+        travelAdapter.notifyItemInserted(travelList.size - 1) // RecyclerView 업데이트
     }
 
     override fun onDestroyView() {

@@ -16,8 +16,8 @@
         <!-- 왼쪽 이미지 -->
         <ImageView
             android:id="@+id/iv_photo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="172dp"
+            android:layout_height="155dp"
             android:layout_marginEnd="8dp"
             android:scaleType="centerCrop"
             android:src="@drawable/travel1" />
@@ -34,32 +34,44 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="Title"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_address"
+                android:id="@+id/tv_place"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="Address"
-                android:textSize="14sp" />
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tv_tags"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:text="Tags"
-                android:textColor="#757575"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_memo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
                 android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/tv_description"
+                android:id="@+id/tv_thumbnail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Description"
                 android:textSize="14sp" />
 
         </LinearLayout>

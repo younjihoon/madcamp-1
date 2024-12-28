@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/dialogImageView"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="97dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_foreground" />
 
@@ -22,6 +22,12 @@
         android:text="Pick Image"
         android:layout_gravity="center_horizontal" />
 
+<!--    <EditText-->
+<!--        android:id="@+id/et_travel_image"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:hint="image" />-->
+
 
     <EditText
         android:id="@+id/et_travel_title"
@@ -30,28 +36,33 @@
         android:hint="title" />
 
     <EditText
-        android:id="@+id/et_travel_address"
+        android:id="@+id/et_travel_place"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="address" />
+        android:hint="place" />
+
+    <EditText
+        android:id="@+id/et_travel_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="date" />
 
     <EditText
         android:id="@+id/et_travel_tags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="tags" />
+        android:hint="tags"/>
 
     <EditText
-        android:id="@+id/et_travel_description"
+        android:id="@+id/et_travel_memo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="description"
+        android:hint="memo"
         android:layout_marginBottom="16dp" />
 
     <Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save" />
-
+        android:text="Save"/>
 </LinearLayout>
