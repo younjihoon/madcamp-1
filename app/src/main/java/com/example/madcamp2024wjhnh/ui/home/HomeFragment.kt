@@ -118,6 +118,7 @@
 package com.example.madcamp2024wjhnh.ui.home
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -189,8 +190,8 @@ class HomeFragment : Fragment() {
         binding.buttonGoToDayInfo.setOnClickListener{
             val intent = Intent(requireContext(), DayInfoActivity::class.java)
             val initInfo = mutableListOf(
-                DayInfo(0, mutableListOf("주소"), "description", mutableListOf(0)),
-                DayInfo(1, mutableListOf("주소"), "description", mutableListOf(0))
+                DayInfo(0, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY)),
+                DayInfo(1, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY))
             )
             val travel = Travel(1, "제목", "장소", "20241228", emptyList(), "메모", 0, initInfo)
             intent.putExtra("travel", travel)

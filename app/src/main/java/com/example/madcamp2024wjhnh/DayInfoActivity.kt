@@ -71,7 +71,7 @@ class DayInfoActivity: AppCompatActivity() {
                 val number = dialogNumberEditText.text.toString().toIntOrNull()
                 val address = dialogAddressEditText.text.toString().split(",").toMutableList()
                 val description = dialogDescriptionEditText.text.toString()
-                val photoList = mutableListOf(0)
+                val photoList = imageList
                 if (number != null) {
                     val newDayInfo = DayInfo(number, address, description, photoList)
                     dayInfoList.add(newDayInfo)

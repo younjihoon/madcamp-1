@@ -33,7 +33,7 @@ class DayInfoAdapter(private val dayInfoList: MutableList<DayInfo>) :
         holder.descriptionTextView.text = dayInfo.description
         holder.dayAddressTextView.text = dayInfo.address.joinToString(", ")
         if (dayInfo.photoList.isNotEmpty()) {
-            holder.photoImageView.setImageResource(dayInfo.photoList[0])
+            holder.photoImageView.setImageURI(dayInfo.photoList[0])
         } else {
             holder.photoImageView.setImageResource(R.drawable.travel1)
         }
