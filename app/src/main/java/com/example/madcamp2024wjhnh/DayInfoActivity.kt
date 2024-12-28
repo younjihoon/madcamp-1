@@ -1,5 +1,6 @@
 package com.example.madcamp2024wjhnh
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
@@ -12,7 +13,11 @@ import com.example.madcamp2024wjhnh.data.Travel
 import com.example.madcamp2024wjhnh.databinding.ActivityDayInfoBinding
 import com.example.madcamp2024wjhnh.ui.DayInfoAdapter
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.MediaStore
 import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 
 class DayInfoActivity: AppCompatActivity() {
@@ -20,7 +25,10 @@ class DayInfoActivity: AppCompatActivity() {
     private lateinit var dayInfoRecyclerView: RecyclerView
     private lateinit var addDayInfoButton: Button
     private val dayInfoList = mutableListOf<DayInfo>()
-    val context : Context = this
+    private val context : Context = this
+    private lateinit var imageAdapter: DayInfoImageAddAdapter
+    private val imageList = mutableListOf<Uri>(Uri.EMPTY)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDayInfoBinding.inflate(layoutInflater)
@@ -43,11 +51,16 @@ class DayInfoActivity: AppCompatActivity() {
 
     private fun showAddDayInfoDialog(adapter: DayInfoAdapter) {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_day_info, null)
-        val dialogImageView = dialogView.findViewById<ImageView>(R.id.addImages)
         val dialogNumberEditText = dialogView.findViewById<EditText>(R.id.addNumber)
         val dialogAddressEditText = dialogView.findViewById<EditText>(R.id.addAddress)
         val dialogDescriptionEditText = dialogView.findViewById<EditText>(R.id.addDescription)
-        val dialogImagePickerButton = dialogView.findViewById<Button>(R.id.addimagePickerButton)
+        imageAdapter = DayInfoImageAddAdapter(imageList) {
+            // 이미지 추가 버튼 클릭 이벤트 처리
+            openImagePicker()
+        }
+        val imageRecyclerView = dialogView.findViewById<RecyclerView>(R.id.addImagesRecyclerView)
+        imageRecyclerView.layoutManager = GridLayoutManager(this, 3) // 3열 Grid
+        imageRecyclerView.adapter = imageAdapter
         AlertDialog.Builder(this)
             .setView(dialogView)
             .setPositiveButton("추가") { dialog, _ ->
@@ -67,6 +80,24 @@ class DayInfoActivity: AppCompatActivity() {
             }
             .create()
             .show()
+    }
 
+    private fun openImagePicker() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true) // 다중 선택 가능
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,"image/*")
+        startActivityForResult(intent, 1)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            val imageUri = data?.data
+            imageUri?.let {
+                // RecyclerView에 이미지 추가
+                imageList.add(it)
+                imageAdapter.notifyItemInserted(imageList.size)
+            }
+        }
     }
 }

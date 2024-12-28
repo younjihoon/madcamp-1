@@ -27,17 +27,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="설명을 입력하세요" />
-    <ImageView
-        android:id="@+id/addImages"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/addImagesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_foreground" />
-    <Button
-        android:id="@+id/addimagePickerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Pick Image"
-        android:layout_gravity="center_horizontal" />
+        android:scrollbars="vertical"
+        android:clipToPadding="false"
+        android:padding="8dp" />
 </LinearLayout>
