@@ -46,30 +46,6 @@ class DashboardFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-    private fun loadPhotosFromCSV(): List<Photo> {
-        val photos = mutableListOf<Photo>()
-
-        // CSV 파일 읽기
-        val inputStream = resources.openRawResource(R.raw.photos)
-        val reader = BufferedReader(InputStreamReader(inputStream, Charsets.UTF_8))
-
-        // 첫 번째 줄은 헤더이므로 건너뛰기
-        reader.readLine()
-
-        reader.forEachLine { line ->
-            val tokens = line.split(",") // CSV 필드 분리
-            if (tokens.size >= 4) {
-                val imageResId = getImageResId(tokens[0].trim())
-                val title = tokens[1].trim()
-                val description = tokens[2].trim()
-                val link = tokens[3].trim()
-                val latitude = tokens[4].trim().toDouble()
-                val longitude = tokens[5].trim().toDouble()
-                photos.add(Photo(imageResId, title, description, link, latitude, longitude))
-            }
-        }
-        return photos
-    }
 
     private fun getImageResId(imageName: String): Int {
         // 리소스 이름을 기반으로 ID 가져오기
