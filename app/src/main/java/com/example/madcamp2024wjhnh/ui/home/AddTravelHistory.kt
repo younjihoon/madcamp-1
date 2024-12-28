@@ -16,14 +16,22 @@ import androidx.fragment.app.Fragment
 import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.Travel
 import com.example.madcamp2024wjhnh.databinding.DialogAddTravelDetailBinding
+import com.example.madcamp2024wjhnh.SharedViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.example.madcamp2024wjhnh.data.DayInfo
+
 
 class AddTravelHistory : Fragment() {
 
     private var _binding: DialogAddTravelDetailBinding? = null
     private val binding get() = _binding!!
 
-    private val PICK_IMAGE_REQUEST = 1
+    private lateinit var sharedViewModel: SharedViewModel
+
+
     private var selectedImageUri: Uri? = null
+    private val PICK_IMAGE_REQUEST = 1 // 요청 코드 상수 정의
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,14 +41,10 @@ class AddTravelHistory : Fragment() {
         _binding = DialogAddTravelDetailBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // 이미지 선택 버튼
-        binding.imagePickerButton.setOnClickListener {
-            openGallery()
-        }
-        // 저장 버튼
-        binding.saveButton.setOnClickListener {
-            saveTravelHistory()
-        }
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+
+        binding.imagePickerButton.setOnClickListener { openGallery() }
+        binding.saveButton.setOnClickListener { saveTravelHistory() }
 
         return root
     }
@@ -79,21 +83,15 @@ class AddTravelHistory : Fragment() {
             place = place,
             date = date,
             tags = tags,
-            memo = memo
+            memo = memo,
+            DayInfos = mutableListOf(
+                DayInfo(0, mutableListOf("주소"), "description", mutableListOf(0)),
+                DayInfo(1, mutableListOf("주소"), "description", mutableListOf(0))
+            )
 //            thumbnail = image
         )
 
-        // HomeFragment에 데이터 전달
-        val homeFragment = parentFragment as? HomeFragment
-        Log.e("Errro","$homeFragment")
-        homeFragment?.addNewTravel(Travel(
-            title = "addtravelhisoty",
-            place = "Seaside, CA",
-            date = "01/01~01/15",
-            tags = "#Relaxation#Sunny",
-            memo = "Enjoyed a peaceful day by the sea."
-//                    thumbnail = "Uri" // thumbnail 필드를 다시 활성화
-        ))
+        sharedViewModel.setNewTravel(newTravel)
 
         // 현재 프래그먼트 종료
         requireActivity().supportFragmentManager.popBackStack()

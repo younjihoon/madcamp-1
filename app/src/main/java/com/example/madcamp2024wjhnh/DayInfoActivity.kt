@@ -36,8 +36,8 @@ class DayInfoActivity: AppCompatActivity() {
         binding = ActivityDayInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val travel = intent.getParcelableExtra<Travel>("travel")?:Travel(1,"제목","장소","20241228", emptyList(),".",0,mutableListOf(DayInfo(1, mutableListOf("주소"),"DayInfoActivity로 Travel이 넘어오지 않았음", mutableListOf())))
-        dayInfoList.addAll(travel.Dayinfos)
+        val travel = intent.getParcelableExtra<Travel>("travel")?:Travel("1","제목","장소","20241228",".", mutableListOf(DayInfo(1, mutableListOf("주소"),"DayInfoActivity로 Travel이 넘어오지 않았음", mutableListOf())))
+        dayInfoList.addAll(travel.DayInfos)
         val adapter = DayInfoAdapter(dayInfoList)
 
         dayInfoRecyclerView = binding.dayInfoRecyclerView

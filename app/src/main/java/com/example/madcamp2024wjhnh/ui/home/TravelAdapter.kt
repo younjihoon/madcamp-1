@@ -47,13 +47,17 @@ class TravelAdapter(
 
         holder.itemView.setOnClickListener {
 
+            val intent = Intent(context, DayInfoActivity::class.java)
+            intent.putExtra("travel", travels[position])
+            context.startActivity(intent)
+
         }
     }
 
     override fun getItemCount(): Int = travels.size
 
-    fun addTravel(travel: Travel) {
-        travels.add(travel)
-        notifyItemInserted(travels.size - 1) // 새 데이터 추가 시 갱신
-    }
+//    fun addTravel(travel: Travel) {
+//        travels.add(travel)
+//        notifyItemInserted(travels.size - 1) // 새 데이터 추가 시 갱신
+//    }
 }

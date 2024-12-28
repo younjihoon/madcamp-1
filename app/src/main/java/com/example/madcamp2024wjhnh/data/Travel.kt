@@ -11,4 +11,5 @@ data class Travel(
     val tags: String,
     val memo: String,
 //    val thumbnail: String
+    val DayInfos: MutableList<DayInfo>
 ) : Parcelable
