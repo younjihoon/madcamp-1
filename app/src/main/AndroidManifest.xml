@@ -30,6 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".DayInfoActivity" />
+        <activity android:name=".DayInfoDetailActivity" />
     </application>
 
 </manifest>

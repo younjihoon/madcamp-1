@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.DayInfo
 
-class DayInfoAdapter(private val dayInfoList: MutableList<DayInfo>) :
+class DayInfoAdapter(
+    private val dayInfoList: MutableList<DayInfo>,
+    private val onItemClick: (DayInfo) -> Unit
+) :
     RecyclerView.Adapter<DayInfoAdapter.DayInfoViewHolder>() {
 
     class DayInfoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -36,6 +39,9 @@ class DayInfoAdapter(private val dayInfoList: MutableList<DayInfo>) :
             holder.photoImageView.setImageURI(dayInfo.photoList[0])
         } else {
             holder.photoImageView.setImageResource(R.drawable.travel1)
+        }
+        holder.itemView.setOnClickListener{
+            onItemClick(dayInfo)
         }
     }
 
