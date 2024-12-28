@@ -117,13 +117,16 @@
 
 package com.example.madcamp2024wjhnh.ui.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.madcamp2024wjhnh.DayInfoActivity
 import com.example.madcamp2024wjhnh.R
+import com.example.madcamp2024wjhnh.data.DayInfo
 import com.example.madcamp2024wjhnh.data.Travel
 import com.example.madcamp2024wjhnh.databinding.FragmentHomeBinding
 
@@ -181,6 +184,17 @@ class HomeFragment : Fragment() {
                 .replace(R.id.nav_host_fragment_activity_main, AddTravelHistory())
                 .addToBackStack(null)
                 .commit()
+        }
+
+        binding.buttonGoToDayInfo.setOnClickListener{
+            val intent = Intent(requireContext(), DayInfoActivity::class.java)
+            val initInfo = mutableListOf(
+                DayInfo(0, mutableListOf("주소"), "description", mutableListOf(0)),
+                DayInfo(1, mutableListOf("주소"), "description", mutableListOf(0))
+            )
+            val travel = Travel(1, "제목", "장소", "20241228", emptyList(), "메모", 0, initInfo)
+            intent.putExtra("travel", travel)
+            startActivity(intent)
         }
 
         return root

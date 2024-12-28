@@ -45,18 +45,6 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         navView.setupWithNavController(navController)
         //--
-        val button = findViewById<Button>(R.id.buttonGoToSecond)
-        button.setOnClickListener {
-            // Intent를 사용해 SecondActivity로 이동
-            val intent = Intent(this, DayInfoActivity::class.java)
-            var initInfo = mutableListOf(
-                DayInfo(0, mutableListOf("주소"),"description", mutableListOf(0)),
-                DayInfo(1, mutableListOf("주소"),"description", mutableListOf(0))
-            )
-            var travel = Travel(1,"제목","장소","20241228", emptyList(),"메모",0, initInfo)
-            intent.putExtra("travel", travel)
-            startActivity(intent)
-        }
         //--
     }
 
