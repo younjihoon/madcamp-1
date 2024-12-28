@@ -47,7 +47,6 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(naverMap: NaverMap) {
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-
         val favoritePhotos = sharedViewModel.getFavoritePhotos()
 
         for (photo in favoritePhotos) {

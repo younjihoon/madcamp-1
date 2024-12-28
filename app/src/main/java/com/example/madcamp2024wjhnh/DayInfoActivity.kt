@@ -16,6 +16,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,41 +27,42 @@ class DayInfoActivity: AppCompatActivity() {
     private lateinit var addDayInfoButton: Button
     private val dayInfoList = mutableListOf<DayInfo>()
     private val context : Context = this
-    private lateinit var imageAdapter: DayInfoImageAddAdapter
-    private val imageList = mutableListOf<Uri>(Uri.EMPTY)
+    private val imageList = mutableListOf<Uri>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityDayInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val travel = intent.getParcelableExtra<Travel>("travel")?:Travel(1,"제목","장소","20241228", emptyList(),".",0,mutableListOf(DayInfo(1, mutableListOf("주소"),"DayInfoActivity로 Travel이 넘어오지 않았음", mutableListOf())))
 
+        val travel = intent.getParcelableExtra<Travel>("travel")?:Travel(1,"제목","장소","20241228", emptyList(),".",0,mutableListOf(DayInfo(1, mutableListOf("주소"),"DayInfoActivity로 Travel이 넘어오지 않았음", mutableListOf())))
         dayInfoList.addAll(travel.Dayinfos)
+        val adapter = DayInfoAdapter(dayInfoList)
 
         dayInfoRecyclerView = binding.dayInfoRecyclerView
-        addDayInfoButton = binding.addDayInfoButton
-
-        val adapter = DayInfoAdapter(dayInfoList)
         dayInfoRecyclerView.adapter = adapter
         dayInfoRecyclerView.layoutManager = LinearLayoutManager(this)
 
+        addDayInfoButton = binding.addDayInfoButton
         addDayInfoButton.setOnClickListener {
             showAddDayInfoDialog(adapter)
         }
     }
 
     private fun showAddDayInfoDialog(adapter: DayInfoAdapter) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_day_info, null)
-        val dialogNumberEditText = dialogView.findViewById<EditText>(R.id.addNumber)
-        val dialogAddressEditText = dialogView.findViewById<EditText>(R.id.addAddress)
-        val dialogDescriptionEditText = dialogView.findViewById<EditText>(R.id.addDescription)
-        imageAdapter = DayInfoImageAddAdapter(imageList) {
-            // 이미지 추가 버튼 클릭 이벤트 처리
+        val imageAdapter = DayInfoImageAddAdapter(imageList) {
             openImagePicker()
         }
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_day_info, null)
         val imageRecyclerView = dialogView.findViewById<RecyclerView>(R.id.addImagesRecyclerView)
         imageRecyclerView.layoutManager = GridLayoutManager(this, 3) // 3열 Grid
         imageRecyclerView.adapter = imageAdapter
+
+        val dialogNumberEditText = dialogView.findViewById<EditText>(R.id.addNumber)
+        val dialogAddressEditText = dialogView.findViewById<EditText>(R.id.addAddress)
+        val dialogDescriptionEditText = dialogView.findViewById<EditText>(R.id.addDescription)
+
         AlertDialog.Builder(this)
             .setView(dialogView)
             .setPositiveButton("추가") { dialog, _ ->
@@ -90,14 +92,29 @@ class DayInfoActivity: AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        val imageAdapter = DayInfoImageAddAdapter(imageList) {
+            openImagePicker()
+        }
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            val imageUri = data?.data
-            imageUri?.let {
-                // RecyclerView에 이미지 추가
-                imageList.add(it)
-                imageAdapter.notifyItemInserted(imageList.size)
+            val clipData = data?.clipData
+            Log.e("Error","No image : $clipData")
+            if (clipData != null) {
+                // 다중 선택
+                for (i in 0 until clipData.itemCount) {
+                    val imageUri = clipData.getItemAt(i).uri
+                    imageList.add(imageUri)
+                }
+                imageAdapter.notifyItemRangeInserted(imageList.size - clipData.itemCount -1,clipData.itemCount)
+            } else {
+                // 단일 선택
+                val imageUri = data?.data
+                imageUri?.let {
+                    imageList.add(it)
+                    imageAdapter.notifyItemInserted(imageList.size - 1)
+                }
             }
+
         }
     }
 }
