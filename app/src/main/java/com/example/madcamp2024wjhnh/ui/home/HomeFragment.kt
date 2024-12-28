@@ -147,22 +147,24 @@ class HomeFragment : Fragment() {
         travelList.addAll(
             listOf(
                 Travel(
+                    id = 0,
                     title = "Trip to the Beach",
-                    address = "Seaside, CA",
-                    tags = "#Relaxation #Sunny",
-                    description = "Enjoyed a peaceful day by the sea.",
-                    photoResId = R.drawable.travel1,
-                    photoListday1 = emptyList(),
-                    photoListday2 = emptyList()
+                    place = "Seaside, CA",
+                    date = "20241225",
+                    tags = mutableListOf<String>("#Relaxation","#Sunny"),
+                    memo = "Enjoyed a peaceful day by the sea.",
+                    thumbnail = R.drawable.travel1,
+                    Dayinfos = mutableListOf()
                 ),
                 Travel(
+                    id = 1,
                     title = "Mountain Hiking",
-                    address = "Rocky Mountains, CO",
-                    tags = "#Adventure #Nature",
-                    description = "Explored the rugged mountain trails.",
-                    photoResId = R.drawable.travel2,
-                    photoListday1 = emptyList(),
-                    photoListday2 = emptyList()
+                    place = "Rocky Mountains, CO",
+                    date = "20240425",
+                    tags = mutableListOf<String>("#Adventure","#Nature"),
+                    memo = "Explored the rugged mountain trails.",
+                    thumbnail = R.drawable.travel2,
+                    Dayinfos = mutableListOf()
                 )
             )
         )
@@ -183,6 +185,7 @@ class HomeFragment : Fragment() {
 
         return root
     }
+
 
     // 새로운 여행 데이터 추가
     fun addNewTravel(travel: Travel) {
