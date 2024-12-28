@@ -1,12 +1,11 @@
 package com.example.madcamp2024wjhnh.data
-import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class DayInfo(
     val number: Int,
-    val address: List<Double>,
+    val address: MutableList<String>,
     val description: String,
-    val photoList: List<Uri>
+    val photoList: MutableList<Int>
 ) : Parcelable

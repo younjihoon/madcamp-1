@@ -71,19 +71,19 @@ class AddTravelHistory : Fragment() {
             return
         }
 
-        val newTravel = Travel(
-            title = title,
-            address = address,
-            tags = tags,
-            description = description,
-            photoUri = selectedImageUri,
-            photoListday1 = emptyList(),
-            photoListday2 = emptyList()
-        )
-
-        // 결과 전달 및 현재 프래그먼트 종료
-        (activity as? HomeFragment)?.addNewTravel(newTravel)
-        requireActivity().supportFragmentManager.popBackStack()
+//        val newTravel = Travel(
+//            title = title,
+//            address = address,
+//            tags = tags,
+//            description = description,
+//            photoUri = selectedImageUri,
+//            photoListday1 = emptyList(),
+//            photoListday2 = emptyList()
+//        )
+//
+//        // 결과 전달 및 현재 프래그먼트 종료
+//        (activity as? HomeFragment)?.addNewTravel(newTravel)
+//        requireActivity().supportFragmentManager.popBackStack()
 
     }
 

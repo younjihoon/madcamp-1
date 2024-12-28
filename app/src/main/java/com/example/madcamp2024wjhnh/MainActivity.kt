@@ -1,17 +1,20 @@
 package com.example.madcamp2024wjhnh
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.madcamp2024wjhnh.databinding.ActivityMainBinding
 import com.naver.maps.map.NaverMapSdk
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import com.example.madcamp2024wjhnh.data.DayInfo
 import com.example.madcamp2024wjhnh.data.Photo
+import com.example.madcamp2024wjhnh.data.Travel
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
@@ -40,14 +43,21 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
+        //--
+        val button = findViewById<Button>(R.id.buttonGoToSecond)
+        button.setOnClickListener {
+            // Intent를 사용해 SecondActivity로 이동
+            val intent = Intent(this, DayInfoActivity::class.java)
+            var initInfo = mutableListOf(
+                DayInfo(0, mutableListOf("주소"),"description", mutableListOf(0)),
+                DayInfo(1, mutableListOf("주소"),"description", mutableListOf(0))
+            )
+            var travel = Travel(1,"제목","장소","20241228", emptyList(),"메모",0, initInfo)
+            intent.putExtra("travel", travel)
+            startActivity(intent)
+        }
+        //--
     }
 
     private fun handleAuthFailed(exception: NaverMapSdk.AuthFailedException) {

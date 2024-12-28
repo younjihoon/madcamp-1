@@ -101,12 +101,15 @@
 package com.example.madcamp2024wjhnh.ui.home
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.madcamp2024wjhnh.DayInfoActivity
 import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.Travel
 
@@ -129,14 +132,11 @@ class TravelAdapter(
 
     override fun onBindViewHolder(holder: TravelViewHolder, position: Int) {
         val travel = travels[position]
-        travel.photoResId?.let { holder.photoImageView.setImageResource(it) }
-        holder.titleTextView.text = travel.title
-        holder.addressTextView.text = travel.address
-        holder.descriptionTextView.text = travel.description
+//        travel.photoResId?.let { holder.photoImageView.setImageResource(it) }
+//        holder.titleTextView.text = travel.title
+//        holder.addressTextView.text = travel.address
+//        holder.descriptionTextView.text = travel.description
 
-        holder.itemView.setOnClickListener {
-            // 클릭 이벤트 처리
-        }
     }
 
     override fun getItemCount(): Int = travels.size

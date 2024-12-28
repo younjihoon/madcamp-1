@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DayInfo 설명" />
+
+    <EditText
+        android:id="@+id/addNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="몇 번째 날 인가요"
+        android:inputType="number" />
+    <EditText
+        android:id="@+id/addAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="어디에 다녀 왔나요" />
+    <EditText
+        android:id="@+id/addDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="설명을 입력하세요" />
+    <ImageView
+        android:id="@+id/addImages"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_foreground" />
+    <Button
+        android:id="@+id/addimagePickerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Pick Image"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout>
