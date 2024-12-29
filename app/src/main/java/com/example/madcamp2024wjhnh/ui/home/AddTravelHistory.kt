@@ -27,6 +27,28 @@ class AddTravelHistory : Fragment() {
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
     private var selectedImageUri: Uri? = null
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // ActivityResultLauncher 초기화
+        imagePickerLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                selectedImageUri = data?.data
+
+                binding.dialogImageView.setImageURI(selectedImageUri)
+
+//                if (selectedImageUri != null) {
+//                    binding.dialogImageView.setImageURI(selectedImageUri)
+//                } else {
+//                    Toast.makeText(requireContext(), "이미지를 선택하지 못했습니다.", Toast.LENGTH_SHORT).show()
+//                }
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -44,8 +66,10 @@ class AddTravelHistory : Fragment() {
     }
 
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
-        imagePickerLauncher.launch(intent)
+        val intent = Intent(Intent.ACTION_PICK).apply {
+            type = "image/*"
+        }
+        imagePickerLauncher.launch(intent) // 초기화된 Launcher 사용
     }
 
     private fun saveTravelHistory() {
@@ -54,11 +78,7 @@ class AddTravelHistory : Fragment() {
         val date = binding.etTravelDate.text.toString()
         val tags = binding.etTravelTags.text.toString()
         val memo = binding.etTravelMemo.text.toString()
-
-        if (selectedImageUri == null) {
-            Toast.makeText(requireContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_SHORT).show()
-            return
-        }
+        val thumbnail = selectedImageUri ?: Uri.EMPTY // thumbnail에 선택된 이미지 URI 할당
 
         if (title.isEmpty() || place.isEmpty() || date.isEmpty()) {
             Toast.makeText(requireContext(), "필수 입력값을 모두 작성해주세요.", Toast.LENGTH_SHORT).show()
@@ -71,7 +91,7 @@ class AddTravelHistory : Fragment() {
             date = date,
             tags = tags,
             memo = memo,
-            thumbnail = selectedImageUri!!,
+            thumbnail = thumbnail,
             DayInfos = mutableListOf(
                 DayInfo(0, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY)),
                 DayInfo(1, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY))

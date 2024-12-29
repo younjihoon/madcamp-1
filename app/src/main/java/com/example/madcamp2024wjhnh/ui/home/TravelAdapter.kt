@@ -42,13 +42,7 @@ class TravelAdapter(
     override fun onBindViewHolder(holder: TravelViewHolder, position: Int) {
         val travel = travels[position]
 
-        if (travel.thumbnail != Uri.EMPTY) {
-            holder.photoImageView.setImageURI(travel.thumbnail)
-        } else {
-            holder.photoImageView.setImageResource(R.drawable.ic_launcher_foreground)
-            Log.d("TravelAdapter", "Thumbnail is empty for: ${travel.title}")
-        }
-
+        holder.photoImageView.setImageURI(travel.thumbnail)
         holder.titleTextView.text = travel.title
         holder.placeTextView.text = travel.place
         holder.dateTextView.text = travel.date

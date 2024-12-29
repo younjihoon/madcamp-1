@@ -46,9 +46,9 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
 
         // RecyclerView 설정
         travelAdapter = TravelAdapter(requireContext(), travelList) { travel ->
@@ -102,7 +102,6 @@ class HomeFragment : Fragment() {
         val tagsEditText = dialogView.findViewById<EditText>(R.id.et_travel_tags)
         val memoEditText = dialogView.findViewById<EditText>(R.id.et_travel_memo)
         val imagePickerButton = dialogView.findViewById<Button>(R.id.imagePickerButton)
-//        val imageView = dialogView.findViewById<ImageView>(R.id.dialogImageView)
         val saveButton = dialogView.findViewById<Button>(R.id.saveButton)
 
         imagePickerButton.setOnClickListener {
@@ -124,6 +123,7 @@ class HomeFragment : Fragment() {
             val tags = tagsEditText.text.toString()
             val memo = memoEditText.text.toString().trim()
 
+            // 필수 필드 확인
             if (title.isNotEmpty() && place.isNotEmpty() && date.isNotEmpty()) {
                 val newTravel = Travel(
                     title = title,
@@ -131,11 +131,11 @@ class HomeFragment : Fragment() {
                     date = date,
                     tags = tags,
                     memo = memo,
-                    thumbnail = selectedImageUri ?: Uri.EMPTY, // 선택된 이미지 URI를 thumbnail로 설정
+                    thumbnail = selectedImageUri ?: Uri.EMPTY, // URI가 없으면 EMPTY로 설정
                     DayInfos = mutableListOf()
                 )
                 sharedViewModel.setNewTravel(newTravel)
-                dialog.dismiss() // 다이얼로그 닫기
+                dialog.dismiss()
             } else {
                 // 필수 입력값이 비어있을 경우 사용자 알림
                 titleEditText.error = "제목을 입력하세요"
