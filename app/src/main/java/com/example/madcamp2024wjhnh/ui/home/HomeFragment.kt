@@ -139,6 +139,7 @@ class HomeFragment : Fragment() {
                     DayInfos = mutableListOf()
                 )
                 sharedViewModel.setNewTravel(newTravel)
+                Toast.makeText(requireContext(), "새로운 여행이 저장되었습니다.", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             } else {
                 // 필수 입력값이 비어있을 경우 사용자 알림
@@ -147,7 +148,6 @@ class HomeFragment : Fragment() {
                 dateEditText.error = "날짜를 입력하세요"
             }
         }
-
         dialog.show()
     }
 

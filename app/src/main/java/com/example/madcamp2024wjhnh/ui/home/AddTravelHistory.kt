@@ -83,8 +83,6 @@ class AddTravelHistory : Fragment() {
 
         sharedViewModel.setNewTravel(newTravel)
 
-        Toast.makeText(requireContext(), "새로운 여행이 저장되었습니다.", Toast.LENGTH_SHORT).show()
-
         // 현재 프래그먼트 종료
         requireActivity().supportFragmentManager.popBackStack()
     }
