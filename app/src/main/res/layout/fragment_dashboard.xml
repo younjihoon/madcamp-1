@@ -56,6 +56,7 @@
 
     </LinearLayout>
 
+
     <!-- RecyclerView: 목록 표시 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/placesRecyclerView"

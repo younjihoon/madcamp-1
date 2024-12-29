@@ -48,7 +48,6 @@ class DashboardFragment : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // 입력 전 처리 (사용하지 않음)
             }
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 // 텍스트가 변경될 때마다 호출
                 filterPhotos(s.toString())
