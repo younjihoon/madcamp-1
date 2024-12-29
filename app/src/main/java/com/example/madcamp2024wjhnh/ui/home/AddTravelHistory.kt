@@ -1,25 +1,22 @@
 package com.example.madcamp2024wjhnh.ui.home
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.madcamp2024wjhnh.R
+import com.example.madcamp2024wjhnh.SharedViewModel
+import com.example.madcamp2024wjhnh.data.DayInfo
 import com.example.madcamp2024wjhnh.data.Travel
 import com.example.madcamp2024wjhnh.databinding.DialogAddTravelDetailBinding
-import com.example.madcamp2024wjhnh.SharedViewModel
-import androidx.lifecycle.ViewModelProvider
-import com.example.madcamp2024wjhnh.data.DayInfo
-
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 
 class AddTravelHistory : Fragment() {
 
@@ -27,11 +24,8 @@ class AddTravelHistory : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var sharedViewModel: SharedViewModel
-
-
+    private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
     private var selectedImageUri: Uri? = null
-    private val PICK_IMAGE_REQUEST = 1 // 요청 코드 상수 정의
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,25 +37,15 @@ class AddTravelHistory : Fragment() {
 
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
-        binding.imagePickerButton.setOnClickListener { openGallery() }
-        binding.saveButton.setOnClickListener { saveTravelHistory() }
+        binding.imagePickerButton.setOnClickListener { openGallery() } // 이미지 선택 버튼 클릭 리스너
+        binding.saveButton.setOnClickListener { saveTravelHistory() } // 저장 버튼 클릭 리스너
 
         return root
     }
 
     private fun openGallery() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, PICK_IMAGE_REQUEST)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK) {
-            selectedImageUri = data?.data
-            Log.e("Error","$data")
-            binding.dialogImageView.setImageURI(selectedImageUri)
-        }
+        val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
+        imagePickerLauncher.launch(intent)
     }
 
     private fun saveTravelHistory() {
@@ -70,13 +54,16 @@ class AddTravelHistory : Fragment() {
         val date = binding.etTravelDate.text.toString()
         val tags = binding.etTravelTags.text.toString()
         val memo = binding.etTravelMemo.text.toString()
-//        val image = selectedImageUri?.toString() ?: ""
 
+        if (selectedImageUri == null) {
+            Toast.makeText(requireContext(), "이미지를 선택하지 않았습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
-//        if (title.isEmpty() || place.isEmpty() || date.isEmpty() || tags.isEmpty() || memo.isEmpty()) {
-//            Toast.makeText(requireContext(), "모든 필드를 채우세요", Toast.LENGTH_SHORT).show()
-//            return
-//        }
+        if (title.isEmpty() || place.isEmpty() || date.isEmpty()) {
+            Toast.makeText(requireContext(), "필수 입력값을 모두 작성해주세요.", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         val newTravel = Travel(
             title = title,
@@ -84,18 +71,19 @@ class AddTravelHistory : Fragment() {
             date = date,
             tags = tags,
             memo = memo,
+            thumbnail = selectedImageUri!!,
             DayInfos = mutableListOf(
                 DayInfo(0, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY)),
                 DayInfo(1, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY))
             )
-//            thumbnail = image
         )
 
         sharedViewModel.setNewTravel(newTravel)
 
+        Toast.makeText(requireContext(), "새로운 여행이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+
         // 현재 프래그먼트 종료
         requireActivity().supportFragmentManager.popBackStack()
-
     }
 
     override fun onDestroyView() {

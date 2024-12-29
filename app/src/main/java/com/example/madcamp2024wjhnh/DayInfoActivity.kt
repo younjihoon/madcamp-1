@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import okhttp3.internal.notify
 
+
 class DayInfoActivity: AppCompatActivity() {
     private lateinit var binding: ActivityDayInfoBinding
     private lateinit var dayInfoRecyclerView: RecyclerView
@@ -44,12 +45,13 @@ class DayInfoActivity: AppCompatActivity() {
         date = "date",
         tags = "tags",
         memo = "memo",
+        thumbnail = Uri.EMPTY,
         DayInfos = mutableListOf(
             DayInfo(0, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY)),
             DayInfo(1, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY))
         )
-//            thumbnail = image
         )
+
         dayInfoList.addAll(travel.DayInfos)
         adapter = DayInfoAdapter(dayInfoList) { dayInfo ->
             val intent = Intent(this, DayInfoDetailActivity::class.java)

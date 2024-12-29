@@ -27,13 +27,22 @@ class SharedViewModel : ViewModel() {
 
     /////////
 
-    private val _travels = MutableLiveData<List<Travel>>(emptyList())
-    val travels: LiveData<List<Travel>> get() = _travels
+//    private val _travels = MutableLiveData<List<Travel>>(emptyList())
+//    val travels: LiveData<List<Travel>> get() = _travels
+//
+//    fun setNewTravel(travel: Travel) {
+//        val updatedList = _travels.value.orEmpty().toMutableList()
+//        updatedList.add(travel)
+//        _travels.value = updatedList
+//    }
+
+    private val _travels = MutableLiveData<MutableList<Travel>>(mutableListOf())
+    val travels: LiveData<MutableList<Travel>> get() = _travels
 
     fun setNewTravel(travel: Travel) {
-        val updatedList = _travels.value.orEmpty().toMutableList()
-        updatedList.add(travel)
-        _travels.value = updatedList
+        _travels.value?.add(travel)
+        _travels.value = _travels.value // LiveData 업데이트 트리거
     }
+
 
 }

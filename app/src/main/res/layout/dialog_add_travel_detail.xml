@@ -22,13 +22,6 @@
         android:text="Pick Image"
         android:layout_gravity="center_horizontal" />
 
-<!--    <EditText-->
-<!--        android:id="@+id/et_travel_image"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:hint="image" />-->
-
-
     <EditText
         android:id="@+id/et_travel_title"
         android:layout_width="match_parent"

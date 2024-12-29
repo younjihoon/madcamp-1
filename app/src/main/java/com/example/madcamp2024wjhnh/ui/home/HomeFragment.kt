@@ -1,5 +1,6 @@
 package com.example.madcamp2024wjhnh.ui.home
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,15 +9,17 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madcamp2024wjhnh.DayInfoActivity
 import com.example.madcamp2024wjhnh.R
-import com.example.madcamp2024wjhnh.data.DayInfo
 import com.example.madcamp2024wjhnh.data.Travel
 import com.example.madcamp2024wjhnh.databinding.FragmentHomeBinding
-import com.example.madcamp2024wjhnh.ui.home.TravelAdapter
 import androidx.lifecycle.ViewModelProvider
 import com.example.madcamp2024wjhnh.SharedViewModel
 
@@ -32,6 +35,10 @@ class HomeFragment : Fragment() {
     private val travelList = mutableListOf<Travel>() // 여행 데이터 리스트
 
     private lateinit var sharedViewModel: SharedViewModel
+    private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
+
+    private var selectedImageUri: Uri? = null
+    private var dialogView: View? = null
 
 
     override fun onCreateView(
@@ -42,19 +49,6 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        // 샘플 데이터
-//        travelList.addAll(
-//            listOf(
-//                Travel(
-//                    title = "Trip to the Beach",
-//                    place = "Seaside, CA",
-//                    date = "01/01~01/15",
-//                    tags = "#Relaxation#Sunny",
-//                    memo = "Enjoyed a peaceful day by the sea."
-////                    thumbnail = "Uri" // thumbnail 필드를 다시 활성화
-//                )
-//            )
-//        )
 
         // RecyclerView 설정
         travelAdapter = TravelAdapter(requireContext(), travelList) { travel ->
@@ -73,18 +67,31 @@ class HomeFragment : Fragment() {
             travelAdapter.notifyDataSetChanged()
         }
 
-        // 플로팅 버튼 클릭 시 AddTravelHistory 열기
+        imagePickerLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data = result.data
+                selectedImageUri = data?.data
+
+                if (selectedImageUri != null) {
+                    // 다이얼로그 내 이미지뷰 업데이트
+                    val dialogImageView = dialogView?.findViewById<ImageView>(R.id.dialogImageView)
+                    dialogImageView?.setImageURI(selectedImageUri)
+                } else {
+                    Toast.makeText(requireContext(), "이미지를 선택하지 못했습니다.", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        // 목록 생성 아이콘 클릭
         binding.fabAddItem.setOnClickListener {
-            // AddTravelHistory 화면으로 이동
-           // requireActivity().supportFragmentManager.beginTransaction()
-             //   .replace(R.id.nav_host_fragment_activity_main, AddTravelHistory())
-               // .addToBackStack(null)
-                //.commit()
             showAddTravelDialog(travelAdapter)
         }
         return root
     }
 
+    // 새 여행 기록 목록 생성 뷰
     private fun showAddTravelDialog(travelAdapter: TravelAdapter) {
         val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_travel_detail, null)
 
@@ -94,7 +101,14 @@ class HomeFragment : Fragment() {
         val dateEditText = dialogView.findViewById<EditText>(R.id.et_travel_date)
         val tagsEditText = dialogView.findViewById<EditText>(R.id.et_travel_tags)
         val memoEditText = dialogView.findViewById<EditText>(R.id.et_travel_memo)
-        val addButton = dialogView.findViewById<Button>(R.id.saveButton)
+        val imagePickerButton = dialogView.findViewById<Button>(R.id.imagePickerButton)
+//        val imageView = dialogView.findViewById<ImageView>(R.id.dialogImageView)
+        val saveButton = dialogView.findViewById<Button>(R.id.saveButton)
+
+        imagePickerButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
+            imagePickerLauncher.launch(intent)
+        }
 
         // 다이얼로그 생성 및 설정
         val dialog = AlertDialog.Builder(requireContext())
@@ -103,7 +117,7 @@ class HomeFragment : Fragment() {
             .create()
 
         // 추가 버튼 클릭 이벤트 처리
-        addButton.setOnClickListener {
+        saveButton.setOnClickListener {
             val title = titleEditText.text.toString().trim()
             val place = placeEditText.text.toString().trim()
             val date = dateEditText.text.toString().trim()
@@ -117,9 +131,9 @@ class HomeFragment : Fragment() {
                     date = date,
                     tags = tags,
                     memo = memo,
+                    thumbnail = selectedImageUri ?: Uri.EMPTY, // 선택된 이미지 URI를 thumbnail로 설정
                     DayInfos = mutableListOf()
                 )
-                addNewTravel(newTravel) // 새로운 여행 데이터 추가
                 sharedViewModel.setNewTravel(newTravel)
                 dialog.dismiss() // 다이얼로그 닫기
             } else {
@@ -133,10 +147,6 @@ class HomeFragment : Fragment() {
         dialog.show()
     }
 
-    private fun addNewTravel(travel: Travel) {
-        travelList.add(travel) // 리스트에 추가
-        travelAdapter.notifyItemInserted(travelList.size - 1) // RecyclerView 업데이트
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
