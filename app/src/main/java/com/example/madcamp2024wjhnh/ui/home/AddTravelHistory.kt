@@ -29,24 +29,6 @@ class AddTravelHistory : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // ActivityResultLauncher 초기화
-        imagePickerLauncher = registerForActivityResult(
-            ActivityResultContracts.StartActivityForResult()
-        ) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data = result.data
-                selectedImageUri = data?.data
-
-                binding.dialogImageView.setImageURI(selectedImageUri)
-
-//                if (selectedImageUri != null) {
-//                    binding.dialogImageView.setImageURI(selectedImageUri)
-//                } else {
-//                    Toast.makeText(requireContext(), "이미지를 선택하지 못했습니다.", Toast.LENGTH_SHORT).show()
-//                }
-            }
-        }
     }
 
     override fun onCreateView(
@@ -60,6 +42,7 @@ class AddTravelHistory : Fragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
 
         binding.imagePickerButton.setOnClickListener { openGallery() } // 이미지 선택 버튼 클릭 리스너
+
         binding.saveButton.setOnClickListener { saveTravelHistory() } // 저장 버튼 클릭 리스너
 
         return root

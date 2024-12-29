@@ -56,11 +56,11 @@ class HomeFragment : Fragment() {
             intent.putExtra("travel", travel)
             startActivity(intent)
         }
+
         binding.travelRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.travelRecyclerView.adapter = travelAdapter
 
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-
         sharedViewModel.travels.observe(viewLifecycleOwner) { travels ->
             travelList.clear()
             travelList.addAll(travels) // ViewModel의 데이터를 가져와 RecyclerView에 반영
@@ -77,10 +77,16 @@ class HomeFragment : Fragment() {
                 if (selectedImageUri != null) {
                     // 다이얼로그 내 이미지뷰 업데이트
                     val dialogImageView = dialogView?.findViewById<ImageView>(R.id.dialogImageView)
-                    dialogImageView?.setImageURI(selectedImageUri)
+                    if (dialogImageView != null) {
+                        dialogImageView.setImageURI(selectedImageUri)
+                    } else {
+                        Toast.makeText(requireContext(), "이미지뷰를 찾을 수 없습니다.", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Toast.makeText(requireContext(), "이미지를 선택하지 못했습니다.", Toast.LENGTH_SHORT).show()
                 }
+            } else {
+                Toast.makeText(requireContext(), "갤러리 선택이 취소되었습니다.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -93,23 +99,21 @@ class HomeFragment : Fragment() {
 
     // 새 여행 기록 목록 생성 뷰
     private fun showAddTravelDialog(travelAdapter: TravelAdapter) {
-        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_travel_detail, null)
+        dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_travel_detail, null)
 
-        // 다이얼로그 내부 뷰 참조
-        val titleEditText = dialogView.findViewById<EditText>(R.id.et_travel_title)
-        val placeEditText = dialogView.findViewById<EditText>(R.id.et_travel_place)
-        val dateEditText = dialogView.findViewById<EditText>(R.id.et_travel_date)
-        val tagsEditText = dialogView.findViewById<EditText>(R.id.et_travel_tags)
-        val memoEditText = dialogView.findViewById<EditText>(R.id.et_travel_memo)
-        val imagePickerButton = dialogView.findViewById<Button>(R.id.imagePickerButton)
-        val saveButton = dialogView.findViewById<Button>(R.id.saveButton)
+        val titleEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_title)
+        val placeEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_place)
+        val dateEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_date)
+        val tagsEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_tags)
+        val memoEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_memo)
+        val imagePickerButton = dialogView!!.findViewById<Button>(R.id.imagePickerButton)
+        val saveButton = dialogView!!.findViewById<Button>(R.id.saveButton)
 
         imagePickerButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
             imagePickerLauncher.launch(intent)
         }
 
-        // 다이얼로그 생성 및 설정
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
             .setCancelable(true)
