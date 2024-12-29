@@ -19,18 +19,35 @@
         <meta-data
             android:name="com.naver.maps.map.xzzsdlxqnz"
             android:value="xBOfrAQ5BuUrzuJswQ0Wa8OjdBGalZTYH6KFMx7I" />
+
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name">
+            android:name=".SplashActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name" />
         <activity android:name=".DayInfoActivity" />
         <activity android:name=".DayInfoDetailActivity" />
+
+<!--        <activity-->
+<!--            android:name=".MainActivity"-->
+<!--            android:exported="true"-->
+<!--            android:label="@string/app_name">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+<!--        <activity android:name=".DayInfoActivity" />-->
+<!--        <activity android:name=".DayInfoDetailActivity" />-->
     </application>
 
 </manifest>

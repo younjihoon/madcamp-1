@@ -16,10 +16,10 @@
         <!-- 왼쪽 이미지 -->
         <ImageView
             android:id="@+id/iv_photo"
-            android:layout_width="172dp"
-            android:layout_height="155dp"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
             android:layout_marginEnd="8dp"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
         <!-- 오른쪽 텍스트 정보 -->
         <LinearLayout
@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -41,37 +41,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tv_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tv_tags"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="15sp" />
 
             <TextView
                 android:id="@+id/tv_memo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_thumbnail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
     </LinearLayout>

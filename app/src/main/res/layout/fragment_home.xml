@@ -7,28 +7,44 @@
     android:layout_height="match_parent"
     tools:context=".ui.home.HomeFragment"
     android:background="#FFFFFF">
+
+    <!-- 상단 바 -->
+    <TextView
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="내 여행"
+        android:textColor="@android:color/black"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:textSize="18sp"
+        android:background="@drawable/border_gray"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <!-- RecyclerView: 목록 표시 -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/travelRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        android:clipToPadding="false"
+        android:paddingBottom="60dp" />
 
-
+    <!-- FloatingActionButton -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="276dp"
         android:contentDescription="@string/add_item"
         android:src="@drawable/ic_add"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:translationY="-50dp" /> <!-- 하단에서 200dp 위로 이동 -->
 </androidx.constraintlayout.widget.ConstraintLayout>
