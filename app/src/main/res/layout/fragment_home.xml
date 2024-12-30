@@ -13,7 +13,7 @@
         android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="내 여행"
+        android:text="My Trip Diary"
         android:textColor="@android:color/black"
         android:gravity="center"
         android:textStyle="bold"
@@ -39,12 +39,15 @@
     <!-- FloatingActionButton -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
         android:layout_margin="16dp"
         android:contentDescription="@string/add_item"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/baseline_add_circle_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:translationY="-50dp" />
+        android:translationY="-50dp"
+        app:fabSize="normal"
+        app:maxImageSize="67dp"
+        android:padding="0dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
