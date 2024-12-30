@@ -36,14 +36,17 @@ class TravelViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun getTravelById(id: Int, callback: (TravelR?) -> Unit) {
+        Log.e("[TravelVM]","getTravelById find with $id")
         viewModelScope.launch {
+            Log.e("[TravelVM]","vm launched : find with $id")
+//            val allTravels = travelDao.getAllTravels()
+//            Log.e("[TravelVM]", "All travels: $allTravels")
+//            allTravels.observeForever { travels ->
+//                Log.e("[TravelVM]", "All travels: $travels")
+//            }
             val travel = travelDao.getTravelById(id)
+            Log.e("[TravelVM]","what travel found : $travel")
             callback(travel)
-            Log.e("error","what travel found : $travel")
-            val allTravels = travelDao.getAllTravels()
-            allTravels.observeForever { travels ->
-                Log.e("debug", "All travels: $travels")
-            }
         }
     }
 
