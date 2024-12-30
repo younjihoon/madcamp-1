@@ -68,5 +68,27 @@ class TravelViewModel(application: Application) : AndroidViewModel(application) 
             }
         }
     }
+    fun updateById(travelId: Int, dayInfos: MutableList<DayInfo>, callback: (Boolean) -> Unit) {
+        viewModelScope.launch {
+            try {
+                // Fetch the existing TravelR by ID
+                val travel = travelDao.getTravelById(travelId)
+                if (travel != null) {
+                    // Update DayInfos and save
+                    travel.DayInfos = dayInfos
+                    travelDao.update(travel) // Full entity update
+                    Log.d("[TravelViewModel]debug", "Updated TravelR with ID: $travelId")
+                    callback(true)
+                } else {
+                    Log.d("[TravelViewModel]debug", "TravelR with ID: $travelId not found")
+                    callback(false)
+                }
+            } catch (e: Exception) {
+                Log.e("[TravelViewModel]error", "Failed to update TravelR with ID: $travelId", e)
+                callback(false)
+            }
+        }
+    }
+
 
 }

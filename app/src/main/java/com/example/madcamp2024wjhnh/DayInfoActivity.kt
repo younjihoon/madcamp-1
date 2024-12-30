@@ -21,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.madcamp2024wjhnh.data.DayInfoListConverter
 import com.example.madcamp2024wjhnh.data.TravelR
 import okhttp3.internal.notify
 
@@ -29,7 +30,8 @@ class DayInfoActivity: AppCompatActivity() {
     private lateinit var binding: ActivityDayInfoBinding
     private lateinit var dayInfoRecyclerView: RecyclerView
     private lateinit var addDayInfoButton: Button
-    private lateinit var travelR : TravelR
+    private var travelRId : Int = 0
+    private lateinit var travelDayInfo : MutableList<DayInfo>
     private lateinit var adapter : DayInfoAdapter
     private lateinit var imageAdapter : DayInfoImageAddAdapter
     private lateinit var travelViewModel: TravelViewModel
@@ -44,23 +46,14 @@ class DayInfoActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         travelViewModel = ViewModelProvider(this)[TravelViewModel::class.java]
-        val travelRId = intent.getIntExtra("travelId",100)
-        Log.i("intent_received","$travelRId")
-        travelR = TravelR(
-            id = travelRId,
-            title = "title",
-            place = "",
-            date = "date",
-            tags = "tags",
-            memo = "memo",
-            thumbnail = Uri.EMPTY, // URI가 없으면 EMPTY로 설정
-            DayInfos = mutableListOf()
-        )
+        travelRId = intent.getIntExtra("travelId",100)
+        Log.i("[DayInfoActivity]intent_received","$travelRId")
+        travelDayInfo = mutableListOf()
         travelViewModel.getTravelById(travelRId) { restravelR ->
             if (restravelR != null) {
-                travelR = restravelR
-                dayInfoList.addAll(travelR.DayInfos)
-                Log.e("New dayinfolist","$dayInfoList")
+                travelDayInfo = restravelR.DayInfos
+                dayInfoList.addAll(travelDayInfo)
+                Log.e("[DayInfoActivity]New dayinfolist","$dayInfoList")
                 adapter = DayInfoAdapter(dayInfoList) { dayInfo ->
                     val intent = Intent(this, DayInfoDetailActivity::class.java)
                     intent.putExtra("dayInfo", dayInfo)
@@ -78,7 +71,7 @@ class DayInfoActivity: AppCompatActivity() {
                 }
             }
             else {
-                Log.e("NULL","travelR is NULL")
+                Log.e("[DayInfoActivity]NULL","travelR is NULL")
             }
         }
     }
@@ -106,9 +99,15 @@ class DayInfoActivity: AppCompatActivity() {
                     val newDayInfo = DayInfo(number, address, description, photoList)
                     dayInfoList.add(newDayInfo)
                     adapter.notifyItemInserted(dayInfoList.size - 1)
-                    travelR.DayInfos.clear()
-                    travelR.DayInfos.addAll(dayInfoList)
-                    travelViewModel.update(travelR)
+                    travelDayInfo.clear()
+                    travelDayInfo.addAll(dayInfoList)
+                    travelViewModel.updateById(travelRId, travelDayInfo) { success ->
+                        if (success) {
+                            Log.d("[DayInfoActivity]debug", "TravelR updated successfully!")
+                        } else {
+                            Log.d("[DayInfoActivity]debug", "Failed to update TravelR.")
+                        }
+                    }
                 }
                 dialog.dismiss()
             }
@@ -130,7 +129,7 @@ class DayInfoActivity: AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             val clipData = data?.clipData
-            Log.e("Error","No image : $clipData")
+            Log.e("[DayInfoActivity]Error","No image : $clipData")
             if (clipData != null) {
                 // 다중 선택
                 for (i in 0 until clipData.itemCount) {

@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.madcamp2024wjhnh.data.Photo
 import com.example.madcamp2024wjhnh.data.Travel
+import com.example.madcamp2024wjhnh.data.TravelR
 
 class SharedViewModel : ViewModel() {
 
@@ -25,6 +26,13 @@ class SharedViewModel : ViewModel() {
         return _photos.value ?: emptyList()
     }
 
+    fun updatePhoto(updatedPhoto: Photo) {
+        val updatedPhotos = _photos.value?.map { photo ->
+            if (photo.imageResId == updatedPhoto.imageResId) updatedPhoto else photo
+        } ?: return // null인 경우 함수 종료
+
+        _photos.value = updatedPhotos
+    }
     /////////
 
 //    private val _travels = MutableLiveData<List<Travel>>(emptyList())
@@ -36,15 +44,15 @@ class SharedViewModel : ViewModel() {
 //        _travels.value = updatedList
 //    }
 
-    private val _travels = MutableLiveData<MutableList<Travel>>(mutableListOf())
-    val travels: LiveData<MutableList<Travel>> get() = _travels
+    private val _travels = MutableLiveData<MutableList<TravelR>>(mutableListOf())
+    val travels: LiveData<MutableList<TravelR>> get() = _travels
 
-    fun setNewTravel(travel: Travel) {
+    fun setNewTravel(travel: TravelR) {
         _travels.value?.add(travel)
         _travels.value = _travels.value // LiveData 업데이트 트리거
     }
 
-    fun updateTravel(position: Int, updatedTravel: Travel) {
+    fun updateTravel(position: Int, updatedTravel: TravelR) {
         val updatedTravels = _travels.value?.toMutableList() ?: mutableListOf()
         updatedTravels[position] = updatedTravel
         _travels.value = updatedTravels
@@ -56,12 +64,10 @@ class SharedViewModel : ViewModel() {
         _travels.value = updatedList
     }
 
-    fun updatePhoto(updatedPhoto: Photo) {
-        val updatedPhotos = _photos.value?.map { photo ->
-            if (photo.imageResId == updatedPhoto.imageResId) updatedPhoto else photo
-        } ?: return // null인 경우 함수 종료
-
-        _photos.value = updatedPhotos
+    fun replaceTravel(travels : List<TravelR>) {
+        _travels.value = travels.toMutableList()
     }
+
+
 
 }

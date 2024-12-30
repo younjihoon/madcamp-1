@@ -49,6 +49,7 @@ class HomeFragment : Fragment() {
     private var dialogView: View? = null
 
     private lateinit var travelViewModel: TravelViewModel
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,23 +59,28 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
+        Log.e("[HomeFragment]","started")
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        Log.e("[HomeFragment]","$sharedViewModel")
         travelViewModel = ViewModelProvider(requireActivity())[TravelViewModel::class.java]
-        travelViewModel.allTravels.observeForever { travels ->
-            Log.e("debug", "All travels: $travels")
-            travelList.addAll(travels.subList(travelList.size,travels.size))
-            travelAdapter.notifyItemRangeInserted(travelList.size,travels.size)
-        }
-        travelAdapter = TravelAdapter(requireContext(), travelList) { travel ->
+        Log.e("[HomeFragment]","$travelViewModel")
+        travelAdapter = TravelAdapter(this,requireContext(), travelList) { travel ->
+            Log.e("[HomeFragment]","travelAdapter")
             val intent = Intent(requireContext(), DayInfoActivity::class.java)
-            Log.i("Intent","$travel")
+            Log.e("[HomeFragment]","intent: $intent")
             intent.putExtra("travelId", travel.id)
             startActivity(intent)
+        }
+        sharedViewModel.travels.observe(viewLifecycleOwner) { travels ->
+            travelList.clear() // Clear the existing list
+            Log.e("[HomeFragment]","travelList: $travelList")
+            travelList.addAll(travels) // Add all items from the LiveData list
+            Log.e("[HomeFragment]","travelList: $travelList")
+            travelAdapter.notifyDataSetChanged() // Notify the adapter if it's bound to a RecyclerView
         }
 
         binding.travelRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.travelRecyclerView.adapter = travelAdapter
-
 
         imagePickerLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -150,9 +156,9 @@ class HomeFragment : Fragment() {
                     thumbnail = selectedImageUri ?: Uri.EMPTY, // URI가 없으면 EMPTY로 설정
                     DayInfos = mutableListOf()
                 )
-                Log.e("NOTATION","new travel inserted in travelViewModel, $newTravelR")
+                Log.e("NOTATION","new travel inserted in travelViewModel, $newTravel")
                 var roomID : Int = 0
-                travelViewModel.insert(newTravelR) { id ->
+                travelViewModel.insert(newTravel) { id ->
                     Log.d("debug", "New travel inserted with ID: $id")
                     // 이후 ID를 활용한 작업
                     roomID = id
@@ -167,6 +173,7 @@ class HomeFragment : Fragment() {
                         DayInfos = mutableListOf()
                     )
                     travelList.add(newTravel)
+                    sharedViewModel.setNewTravel(newTravel)
                     travelAdapter.notifyItemInserted(travelList.size-1)
                 }
                 Toast.makeText(requireContext(), "새로운 여행이 저장되었습니다.", Toast.LENGTH_SHORT).show()
@@ -224,7 +231,7 @@ class HomeFragment : Fragment() {
         return titleView
     }
 
-    private fun showEditTravelDialog(travel: Travel, position: Int) {
+    private fun showEditTravelDialog(travel: TravelR, position: Int) {
         dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_travel_detail, null)
 
         val titleEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_title)
@@ -234,8 +241,9 @@ class HomeFragment : Fragment() {
         val memoEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_memo)
         val imagePickerButton = dialogView!!.findViewById<Button>(R.id.imagePickerButton)
         val saveButton = dialogView!!.findViewById<Button>(R.id.saveButton)
-
+        val imageView = dialogView!!.findViewById<ImageView>(R.id.dialogImageView)
         // 기존 데이터 세팅
+        imageView.contentDescription = travel.id.toString()
         titleEditText.setText(travel.title)
         placeEditText.setText(travel.place)
         dateEditText.setText(travel.date)
@@ -256,6 +264,7 @@ class HomeFragment : Fragment() {
             .create()
 
         saveButton.setOnClickListener {
+            val updatedId = imageView.contentDescription.toString().toInt()
             val updatedTitle = titleEditText.text.toString().trim()
             val updatedPlace = placeEditText.text.toString().trim()
             val updatedDate = dateEditText.text.toString().trim()
@@ -272,6 +281,7 @@ class HomeFragment : Fragment() {
                 travel.thumbnail = selectedImageUri ?: Uri.EMPTY
 
                 sharedViewModel.updateTravel(position, travel) // ViewModel 데이터 업데이트
+                travelViewModel.update(travel)
                 Toast.makeText(requireContext(), "여행 기록이 수정되었습니다.", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             } else {
@@ -285,17 +295,18 @@ class HomeFragment : Fragment() {
     }
 
     // TravelAdapter와 상호작용
-    fun openEditDialog(travel: Travel, position: Int) {
+    fun openEditDialog(travel: TravelR, position: Int) {
         showEditTravelDialog(travel, position)
     }
 
-    private fun showDeleteConfirmationDialog(travel: Travel, position: Int) {
+    private fun showDeleteConfirmationDialog(travel: TravelR, position: Int) {
 //        dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_delete_travel, null)
         AlertDialog.Builder(requireContext())
             .setTitle("Delete Travel")
             .setMessage("Are you sure you want to delete this travel?")
             .setPositiveButton("Yes") { _, _ ->
                 sharedViewModel.deleteTravel(position) // ViewModel에서 삭제
+                travelViewModel.delete(travel)
                 Toast.makeText(context, "Travel deleted", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("No", null)
@@ -303,12 +314,18 @@ class HomeFragment : Fragment() {
     }
 
     // TravelAdapter와 상호작용
-    fun openDeleteDialog(travel: Travel, position: Int) {
+    fun openDeleteDialog(travel: TravelR, position: Int) {
         showDeleteConfirmationDialog(travel, position)
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        travelViewModel.allTravels.observeForever { travels ->
+            Log.e("debug", "All travels: $travels")
+            if (travels != null) {
+                sharedViewModel.replaceTravel(travels)
+            }
+        }
         _binding = null
     }
 }
