@@ -124,8 +124,8 @@ class HomeFragment : Fragment() {
         val startDateButton = dialogView!!.findViewById<Button>(R.id.startDateButton)
         val endDateButton = dialogView!!.findViewById<Button>(R.id.endDateButton)
 
-        var startdate = "Start Date"
-        var enddate = "End Date"
+        var startdate = "00/00/00"
+        var enddate = "00/00/00"
         startDateButton.text = startdate
         endDateButton.text = enddate
 
