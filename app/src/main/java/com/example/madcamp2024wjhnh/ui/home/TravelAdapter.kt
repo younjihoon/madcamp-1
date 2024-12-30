@@ -25,7 +25,7 @@ import androidx.appcompat.app.AlertDialog
 
 class TravelAdapter(
     private val context: Context,
-    private val travels: MutableList<Travel>,
+    private val travels: MutableList<TravelR>,
     private val onItemClick: (TravelR) -> Unit
 ) : RecyclerView.Adapter<TravelAdapter.TravelViewHolder>() {
 

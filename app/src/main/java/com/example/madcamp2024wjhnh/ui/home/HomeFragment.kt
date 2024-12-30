@@ -35,9 +35,8 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var travelAdapter: TravelAdapter
-    private val travelList = mutableListOf<Travel>() // 여행 데이터 리스트
+    private val travelList = mutableListOf<TravelR>() // 여행 데이터 리스트
 
-    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
 
     private var selectedImageUri: Uri? = null
@@ -55,8 +54,11 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         travelViewModel = ViewModelProvider(requireActivity())[TravelViewModel::class.java]
-
-        // RecyclerView 설정
+        travelViewModel.allTravels.observeForever { travels ->
+            Log.e("debug", "All travels: $travels")
+            travelList.addAll(travels.subList(travelList.size,travels.size))
+            travelAdapter.notifyItemRangeInserted(travelList.size,travels.size)
+        }
         travelAdapter = TravelAdapter(requireContext(), travelList) { travel ->
             val intent = Intent(requireContext(), DayInfoActivity::class.java)
             Log.i("Intent","$travel")
@@ -67,12 +69,6 @@ class HomeFragment : Fragment() {
         binding.travelRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.travelRecyclerView.adapter = travelAdapter
 
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        sharedViewModel.travels.observe(viewLifecycleOwner) { travels ->
-            travelList.clear()
-            travelList.addAll(travels) // ViewModel의 데이터를 가져와 RecyclerView에 반영
-            travelAdapter.notifyDataSetChanged()
-        }
 
         imagePickerLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
@@ -152,7 +148,7 @@ class HomeFragment : Fragment() {
                     Log.d("debug", "New travel inserted with ID: $id")
                     // 이후 ID를 활용한 작업
                     roomID = id
-                    val newTravel = Travel(
+                    val newTravel = TravelR(
                         id = roomID,
                         title = title,
                         place = place,
@@ -162,10 +158,9 @@ class HomeFragment : Fragment() {
                         thumbnail = selectedImageUri ?: Uri.EMPTY, // URI가 없으면 EMPTY로 설정
                         DayInfos = mutableListOf()
                     )
-                    sharedViewModel.setNewTravel(newTravel)
-                    Log.e("NOTATION","new travel inserted in sharedViewModel, $newTravel")
+                    travelList.add(newTravel)
+                    travelAdapter.notifyItemInserted(travelList.size-1)
                 }
-
                 Toast.makeText(requireContext(), "새로운 여행이 저장되었습니다.", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             } else {

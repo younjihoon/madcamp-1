@@ -31,41 +31,4 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     fun getPhotos(): List<Photo> {
         return _photos.value ?: emptyList()
     }
-
-    /////////
-
-//    private val _travels = MutableLiveData<List<Travel>>(emptyList())
-//    val travels: LiveData<List<Travel>> get() = _travels
-//
-//    fun setNewTravel(travel: Travel) {
-//        val updatedList = _travels.value.orEmpty().toMutableList()
-//        updatedList.add(travel)
-//        _travels.value = updatedList
-//    }
-
-    private val _travels = MutableLiveData<MutableList<Travel>>(mutableListOf())
-    val travels: LiveData<MutableList<Travel>> get() = _travels
-
-    fun setNewTravel(travel: Travel) {
-        _travels.value?.add(travel)
-        _travels.value = _travels.value // LiveData 업데이트 트리거
-        Log.e("LOGGER","added ${_travels.value}")
-    }
-    fun addPhotoToDayInfo(travelTitle: String, newDayInfo: DayInfo) {
-        val currentTravels = _travels.value
-        if (currentTravels != null) {
-            Log.e("NOTNULL","currentTravels is not null in shared viewmodel")
-            val targetTravel = currentTravels.find { it.title == travelTitle }
-            if (targetTravel == null) {
-                Log.e("NULL","targetTravel is null $currentTravels,$travelTitle ")
-                return
-            }
-            targetTravel.DayInfos.add(newDayInfo)
-            Log.e("NOTNULL","targetTravel is not null in shared viewmodel")
-        }
-        else {
-            Log.e("NULL","currentTravels is null in shared viewmodel")
-        }
-    }
-
 }
