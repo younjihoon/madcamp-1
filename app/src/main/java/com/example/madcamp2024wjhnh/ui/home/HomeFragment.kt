@@ -174,8 +174,8 @@ class HomeFragment : Fragment() {
 
 
             // 필수 필드 확인
-            if (title.isNotEmpty()) { //&& selectedImageUri != Uri.EMPTY && selectedImageUri != null
-                val newTravel = Travel(
+            if (title.isNotEmpty() && selectedImageUri != Uri.EMPTY && selectedImageUri != null) {
+                val newTravel = TravelR(
                     title = title,
                     place = place,
                     date = date,
@@ -217,7 +217,7 @@ class HomeFragment : Fragment() {
         dialog.show()
     }
 
-    private fun showEditTravelDialog(travel: Travel, position: Int) {
+    private fun showEditTravelDialog(travel: TravelR, position: Int) {
         dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_travel_detail, null)
 
         val titleEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_title)
@@ -302,7 +302,7 @@ class HomeFragment : Fragment() {
             val updatedEndDate = enddateButton.text.toString().trim()
             val updatedDate = "$updatedStartDate ~ $updatedEndDate"
 
-            if (updatedTitle.isNotEmpty() && updatedPlace.isNotEmpty() && updatedDate.isNotEmpty()) {
+            if (updatedTitle.isNotEmpty() && selectedImageUri != Uri.EMPTY && selectedImageUri != null) {
                 // 여행 데이터 업데이트
                 travel.title = updatedTitle
                 travel.place = updatedPlace
@@ -328,7 +328,7 @@ class HomeFragment : Fragment() {
     }
 
 
-    private fun showDeleteConfirmationDialog(travel: Travel, position: Int) {
+    private fun showDeleteConfirmationDialog(travel: TravelR, position: Int) {
         AlertDialog.Builder(requireContext())
             .setTitle("Delete Travel")
             .setMessage("Are you sure you want to delete this travel?")
@@ -343,11 +343,11 @@ class HomeFragment : Fragment() {
     }
 
     // ========== Adapter에서 호출하기 위해 public 함수로 열어 둠 ==========
-    fun openEditDialog(travel: Travel, position: Int) {
+    fun openEditDialog(travel: TravelR, position: Int) {
         showEditTravelDialog(travel, position)
     }
 
-    fun openDeleteDialog(travel: Travel, position: Int) {
+    fun openDeleteDialog(travel: TravelR, position: Int) {
         showDeleteConfirmationDialog(travel, position)
     }
 

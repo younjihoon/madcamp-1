@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp2024wjhnh.DayInfoActivity
 import com.example.madcamp2024wjhnh.R
-import com.example.madcamp2024wjhnh.data.Travel
 import com.example.madcamp2024wjhnh.data.TravelR
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
