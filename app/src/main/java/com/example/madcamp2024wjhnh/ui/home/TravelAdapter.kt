@@ -20,6 +20,7 @@ import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.Travel
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.example.madcamp2024wjhnh.SharedViewModel
 
 
 class TravelAdapter(
@@ -58,10 +59,21 @@ class TravelAdapter(
             onItemClick(travel) // 클릭된 DayInfo를 콜백으로 전달
         }
         holder.editButton.setOnClickListener {
-            fragment.openEditDialog(travel, position) // HomeFragment 메서드 호출
+//            fragment.openEditDialog(travel, position) // HomeFragment 메서드 호출
+            AlertDialog.Builder(context)
+                .setTitle("Select Action")
+                .setItems(arrayOf("Edit", "Delete")) { _, which ->
+                    when (which) {
+                        0 -> fragment.openEditDialog(travel, position) // 편집 다이얼로그 열기
+                        1 -> fragment.openDeleteDialog(travel, position) // 삭제 확인 다이얼로그 열기
+                    }
+                }
+                .show()
         }
     }
 
     override fun getItemCount(): Int = travels.size
+
+
 }
 

@@ -50,5 +50,9 @@ class SharedViewModel : ViewModel() {
         _travels.value = updatedTravels
     }
 
-
+    fun deleteTravel(position: Int) {
+        val updatedList = _travels.value?.toMutableList() ?: mutableListOf()
+        updatedList.removeAt(position)
+        _travels.value = updatedList
+    }
 }

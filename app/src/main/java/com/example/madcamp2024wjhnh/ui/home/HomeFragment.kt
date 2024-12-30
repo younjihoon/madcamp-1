@@ -48,8 +48,12 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        travelAdapter = TravelAdapter(this, requireContext(), travelList) { travel ->
-            val intent = Intent(requireContext(), DayInfoActivity::class.java)
+//        if (context == null) {
+//            throw IllegalStateException("Fragment is not attached to a context")
+//        }
+
+        travelAdapter = TravelAdapter(this, requireActivity(), travelList) { travel ->
+            val intent = Intent(requireActivity(), DayInfoActivity::class.java)
             intent.putExtra("travel", travel)
             startActivity(intent)
         }
@@ -215,6 +219,24 @@ class HomeFragment : Fragment() {
     // TravelAdapter와 상호작용
     fun openEditDialog(travel: Travel, position: Int) {
         showEditTravelDialog(travel, position)
+    }
+
+    private fun showDeleteConfirmationDialog(travel: Travel, position: Int) {
+//        dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_delete_travel, null)
+        AlertDialog.Builder(context!!)
+            .setTitle("Delete Travel")
+            .setMessage("Are you sure you want to delete this travel?")
+            .setPositiveButton("Yes") { _, _ ->
+                sharedViewModel.deleteTravel(position) // ViewModel에서 삭제
+                Toast.makeText(context, "Travel deleted", Toast.LENGTH_SHORT).show()
+            }
+            .setNegativeButton("No", null)
+            .show()
+    }
+
+    // TravelAdapter와 상호작용
+    fun openDeleteDialog(travel: Travel, position: Int) {
+        showDeleteConfirmationDialog(travel, position)
     }
 
     override fun onDestroyView() {
