@@ -1,19 +1,23 @@
 package com.example.madcamp2024wjhnh.ui.home
 
 import android.app.Activity
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madcamp2024wjhnh.DayInfoActivity
@@ -22,6 +26,8 @@ import com.example.madcamp2024wjhnh.data.Travel
 import com.example.madcamp2024wjhnh.databinding.FragmentHomeBinding
 import androidx.lifecycle.ViewModelProvider
 import com.example.madcamp2024wjhnh.SharedViewModel
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class HomeFragment : Fragment() {
@@ -48,9 +54,6 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-//        if (context == null) {
-//            throw IllegalStateException("Fragment is not attached to a context")
-//        }
 
         travelAdapter = TravelAdapter(this, requireActivity(), travelList) { travel ->
             val intent = Intent(requireActivity(), DayInfoActivity::class.java)
@@ -106,11 +109,13 @@ class HomeFragment : Fragment() {
 
         val titleEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_title)
         val placeEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_place)
-        val dateEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_date)
         val tagsEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_tags)
         val memoEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_memo)
         val imagePickerButton = dialogView!!.findViewById<Button>(R.id.imagePickerButton)
         val saveButton = dialogView!!.findViewById<Button>(R.id.saveButton)
+        val datePickerButton = dialogView!!.findViewById<Button>(R.id.datePickerButton)
+        var dateRange: String = "날짜를 선택하세요" // 초기값 설정
+        datePickerButton.text = dateRange
 
 
         imagePickerButton.setOnClickListener {
@@ -127,12 +132,12 @@ class HomeFragment : Fragment() {
         saveButton.setOnClickListener {
             val title = titleEditText.text.toString().trim()
             val place = placeEditText.text.toString().trim()
-            val date = dateEditText.text.toString().trim()
+            val date = datePickerButton.text.toString().trim()
             val tags = tagsEditText.text.toString()
             val memo = memoEditText.text.toString().trim()
 
             // 필수 필드 확인
-            if (title.isNotEmpty() && place.isNotEmpty() && date.isNotEmpty()) {
+            if (title.isNotEmpty() && selectedImageUri != Uri.EMPTY && selectedImageUri != null) { //
                 val newTravel = Travel(
                     title = title,
                     place = place,
@@ -147,13 +152,55 @@ class HomeFragment : Fragment() {
                 dialog.dismiss()
             } else {
                 // 필수 입력값이 비어있을 경우 사용자 알림
-                titleEditText.error = "제목을 입력하세요"
-                placeEditText.error = "장소를 입력하세요"
-                dateEditText.error = "날짜를 입력하세요"
+                if (title.isEmpty()) titleEditText.error = "제목을 입력하세요"
+                if (selectedImageUri == null || selectedImageUri == Uri.EMPTY) {
+                    Toast.makeText(requireContext(), "이미지를 선택하세요.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
+        datePickerButton.setOnClickListener {
+            val calendar = Calendar.getInstance()
+
+            // 시작 날짜 선택
+            val startDatePicker = DatePickerDialog(requireContext(), { _, year, month, dayOfMonth ->
+                val startDate = Calendar.getInstance().apply {
+                    set(year, month, dayOfMonth) // 시작 날짜 설정
+                }
+
+                // 종료 날짜 선택
+                val endDatePicker = DatePickerDialog(requireContext(), { _, endYear, endMonth, endDayOfMonth ->
+                    val endDate = Calendar.getInstance().apply {
+                        set(endYear, endMonth, endDayOfMonth) // 종료 날짜 설정
+                    }
+
+                    // 날짜 범위를 설정하고 버튼에 표시
+                    val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
+                    val dateRange = "${dateFormat.format(startDate.time)} ~ ${dateFormat.format(endDate.time)}"
+                    datePickerButton.text = dateRange // 버튼에 날짜 범위 표시
+                }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+
+                // 종료 날짜 선택기의 제목을 중앙 정렬
+                endDatePicker.setCustomTitle(createCenteredTitle("여행 종료 날짜를 선택하세요"))
+                endDatePicker.show()
+            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH))
+
+            // 시작 날짜 선택기의 제목을 중앙 정렬
+            startDatePicker.setCustomTitle(createCenteredTitle("여행 시작 날짜를 선택하세요"))
+            startDatePicker.show()
+        }
+
         dialog.show()
+    }
+
+    private fun createCenteredTitle(title: String): View {
+        val titleView = TextView(requireContext())
+        titleView.text = title
+        titleView.textSize = 20f
+        titleView.setPadding(10, 20, 10, 20)
+        titleView.gravity = Gravity.CENTER
+        titleView.setTextColor(ContextCompat.getColor(requireContext(), android.R.color.black))
+        return titleView
     }
 
     private fun showEditTravelDialog(travel: Travel, position: Int) {
@@ -161,7 +208,7 @@ class HomeFragment : Fragment() {
 
         val titleEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_title)
         val placeEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_place)
-        val dateEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_date)
+        val dateEditText = dialogView!!.findViewById<Button>(R.id.datePickerButton)
         val tagsEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_tags)
         val memoEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_memo)
         val imagePickerButton = dialogView!!.findViewById<Button>(R.id.imagePickerButton)
@@ -223,7 +270,7 @@ class HomeFragment : Fragment() {
 
     private fun showDeleteConfirmationDialog(travel: Travel, position: Int) {
 //        dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_edit_delete_travel, null)
-        AlertDialog.Builder(context!!)
+        AlertDialog.Builder(requireContext())
             .setTitle("Delete Travel")
             .setMessage("Are you sure you want to delete this travel?")
             .setPositiveButton("Yes") { _, _ ->

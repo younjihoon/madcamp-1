@@ -35,11 +35,11 @@
         android:layout_height="wrap_content"
         android:hint="place" />
 
-    <EditText
-        android:id="@+id/et_travel_date"
+    <Button
+        android:id="@+id/datePickerButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="date" />
+        android:text="날짜를 선택하세요" />
 
     <EditText
         android:id="@+id/et_travel_tags"
