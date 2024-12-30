@@ -53,6 +53,16 @@
             android:background="@android:drawable/editbox_background"
             android:hint="검색어를 입력하세요"
             android:inputType="text" />
+
+        <ImageButton
+            android:id="@+id/favoritesButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="즐겨찾기 보기"
+            android:padding="8dp"
+            android:src="@drawable/ic_star_outline" />
+
     </LinearLayout>
 
 

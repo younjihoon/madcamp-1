@@ -15,7 +15,8 @@ import com.example.madcamp2024wjhnh.data.Photo
 
 class PhotoAdapter(
     private val context: Context,
-    private var photos: List<Photo> // var로 변경하여 업데이트 가능하도록 설정
+    private var photos: List<Photo>, // var로 변경하여 업데이트 가능하도록 설정
+    private val onFavoriteStatusChanged: (Photo) -> Unit // 즐겨찾기 상태 변경 콜백
 ) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
 
     class PhotoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -44,6 +45,8 @@ class PhotoAdapter(
         )
         holder.favoriteButton.setOnClickListener {
             photo.isFavorite = !photo.isFavorite // 상태 반전
+            notifyItemChanged(position) // 변경된 아이템 업데이트
+            onFavoriteStatusChanged(photo) // 상태 변경 콜백 호출
             holder.favoriteButton.setImageResource(
                 if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
             )

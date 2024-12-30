@@ -22,6 +22,7 @@ class DashboardFragment : Fragment() {
     private lateinit var sharedViewModel: SharedViewModel
     private lateinit var adapter: PhotoAdapter
     private var allPhotos: List<Photo> = listOf() // 전체 사진 목록
+    private var isFavoritesView: Boolean = false // 현재 즐겨찾기 보기 상태를 나타냄
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,24 +40,41 @@ class DashboardFragment : Fragment() {
         allPhotos = sharedViewModel.getPhotos() // ViewModel에서 전체 사진 데이터를 가져옴
 
         // RecyclerView 설정
-        adapter = PhotoAdapter(requireContext(), allPhotos)
+//        adapter = PhotoAdapter(requireContext(), allPhotos)
+        adapter = PhotoAdapter(requireContext(), allPhotos) { updatedPhoto ->
+            if (isFavoritesView && !updatedPhoto.isFavorite) {
+                // 즐겨찾기 상태가 변경되고, 즐겨찾기 보기 상태일 경우
+                updateFavoritesView()
+            }
+        }
         binding.placesRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
         binding.placesRecyclerView.adapter = adapter
 
         // 검색창에 TextWatcher 추가
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // 입력 전 처리 (사용하지 않음)
-            }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // 텍스트가 변경될 때마다 호출
-                filterPhotos(s.toString())
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // 입력 후 처리 (사용하지 않음)
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { filterPhotos(s.toString()) }
+            override fun afterTextChanged(s: Editable?) {}
         })
+
+        // Favorites 버튼 클릭 이벤트 처리
+        binding.favoritesButton.setOnClickListener {
+            isFavoritesView = !isFavoritesView // 상태 반전
+
+            if (isFavoritesView) {
+                updateFavoritesView()
+                binding.favoritesButton.setImageResource(R.drawable.ic_star_filled) // 아이콘 변경
+            } else {
+                adapter.updateData(allPhotos)
+                binding.favoritesButton.setImageResource(R.drawable.ic_star_outline) // 아이콘 복원
+            }
+        }
+    }
+
+    private fun updateFavoritesView() {
+        // 즐겨찾기 항목만 필터링
+        val favoriteItems = allPhotos.filter { it.isFavorite }
+        adapter.updateData(favoriteItems)
     }
 
     private fun filterPhotos(query: String) {
