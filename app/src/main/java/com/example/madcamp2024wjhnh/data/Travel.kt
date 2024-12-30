@@ -49,13 +49,52 @@ class UriConverter {
 
 class DayInfoListConverter {
     @TypeConverter
-    fun fromDayInfoList(list: MutableList<DayInfo>): String = Gson().toJson(list)
+    fun fromDayInfoList(list: MutableList<DayInfo>): String {
+        val tmpList = mutableListOf<Map<String, Any>>() // Temporary list to hold JSON-compatible maps
+
+        for (dayInfo in list) {
+            val photoListStrings = dayInfo.photoList.map { UriConverter().fromUri(it) } // Convert URIs to strings
+            val tmpJson = mapOf(
+                "number" to dayInfo.number.toString(),
+                "address" to dayInfo.address.joinToString(separator = ","), // Convert list to string
+                "description" to dayInfo.description,
+                "photoList" to photoListStrings.joinToString(separator = ",") // Convert photo URIs to string
+            )
+            tmpList.add(tmpJson) // Add the map to the temporary list
+        }
+
+        return Gson().toJson(tmpList) // Convert the entire list to a JSON string
+    }
 
     @TypeConverter
     fun toDayInfoList(json: String): MutableList<DayInfo> {
-        val type = object : TypeToken<MutableList<DayInfo>>() {}.type
-        return Gson().fromJson(json, type)
+        val tmpList = mutableListOf<DayInfo>()
+        val gson = Gson()
+        val listType = object : TypeToken<List<Map<String, String>>>() {}.type
+
+        // Parse JSON string into a list of maps
+        val parsedList: List<Map<String, String>> = gson.fromJson(json, listType)
+
+        for (item in parsedList) {
+            // Extract data from the map
+            val number = item["number"]?.toIntOrNull() ?: 0
+            val address = item["address"]?.split(",")?.toMutableList() ?: mutableListOf()
+            val description = item["description"] ?: ""
+            val photoList = item["photoList"]?.split(",")?.map { UriConverter().toUri(it) }?.toMutableList() ?: mutableListOf()
+
+            // Create DayInfo object
+            val dayInfo = DayInfo(
+                number = number,
+                address = address,
+                description = description,
+                photoList = photoList
+            )
+            tmpList.add(dayInfo)
+        }
+
+        return tmpList
     }
+
 }
 
 
