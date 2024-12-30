@@ -55,4 +55,13 @@ class SharedViewModel : ViewModel() {
         updatedList.removeAt(position)
         _travels.value = updatedList
     }
+
+    fun updatePhoto(updatedPhoto: Photo) {
+        val updatedPhotos = _photos.value?.map { photo ->
+            if (photo.imageResId == updatedPhoto.imageResId) updatedPhoto else photo
+        } ?: return // null인 경우 함수 종료
+
+        _photos.value = updatedPhotos
+    }
+
 }
