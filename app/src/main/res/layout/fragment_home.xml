@@ -46,5 +46,5 @@
         android:src="@drawable/ic_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:translationY="-50dp" /> <!-- 하단에서 200dp 위로 이동 -->
+        android:translationY="-50dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

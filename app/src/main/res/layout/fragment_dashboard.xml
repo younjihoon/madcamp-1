@@ -34,25 +34,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- 검색창 -->
-        <EditText
-            android:id="@+id/searchEditText"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:background="@android:drawable/editbox_background"
-            android:hint="검색어를 입력하세요"
-            android:inputType="text" />
-
         <!-- 돋보기 아이콘 버튼 -->
         <ImageButton
             android:id="@+id/searchButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@null"
+            android:contentDescription="검색 버튼"
             android:padding="8dp"
-            android:src="@android:drawable/ic_menu_search"
-            android:contentDescription="검색 버튼" />
+            android:src="@android:drawable/ic_menu_search" />
+
+        <!-- 검색창 -->
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="328dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@android:drawable/editbox_background"
+            android:hint="검색어를 입력하세요"
+            android:inputType="text" />
+
+        <ImageButton
+            android:id="@+id/favoritesButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@null"
+            android:contentDescription="즐겨찾기 보기"
+            android:padding="8dp"
+            android:src="@drawable/ic_star_outline" />
 
     </LinearLayout>
 

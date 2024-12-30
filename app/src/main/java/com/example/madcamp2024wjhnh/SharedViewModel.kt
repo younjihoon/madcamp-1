@@ -1,18 +1,12 @@
 package com.example.madcamp2024wjhnh
 
-import android.app.Application
-import android.content.Context
-import android.net.Uri
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.madcamp2024wjhnh.data.DayInfo
 import com.example.madcamp2024wjhnh.data.Photo
 import com.example.madcamp2024wjhnh.data.Travel
 
-class SharedViewModel(application: Application) : AndroidViewModel(application) {
+class SharedViewModel : ViewModel() {
 
     private val _photos = MutableLiveData<List<Photo>>()
     val photos: LiveData<List<Photo>> get() = _photos
@@ -20,7 +14,6 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     // photos 초기화
     fun setPhotos(photoList: List<Photo>) {
         _photos.value = photoList
-        Log.e("LOGGER","added ${_photos.value}")
     }
 
     // 즐겨찾기 필터링
@@ -31,4 +24,44 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
     fun getPhotos(): List<Photo> {
         return _photos.value ?: emptyList()
     }
+
+    /////////
+
+//    private val _travels = MutableLiveData<List<Travel>>(emptyList())
+//    val travels: LiveData<List<Travel>> get() = _travels
+//
+//    fun setNewTravel(travel: Travel) {
+//        val updatedList = _travels.value.orEmpty().toMutableList()
+//        updatedList.add(travel)
+//        _travels.value = updatedList
+//    }
+
+    private val _travels = MutableLiveData<MutableList<Travel>>(mutableListOf())
+    val travels: LiveData<MutableList<Travel>> get() = _travels
+
+    fun setNewTravel(travel: Travel) {
+        _travels.value?.add(travel)
+        _travels.value = _travels.value // LiveData 업데이트 트리거
+    }
+
+    fun updateTravel(position: Int, updatedTravel: Travel) {
+        val updatedTravels = _travels.value?.toMutableList() ?: mutableListOf()
+        updatedTravels[position] = updatedTravel
+        _travels.value = updatedTravels
+    }
+
+    fun deleteTravel(position: Int) {
+        val updatedList = _travels.value?.toMutableList() ?: mutableListOf()
+        updatedList.removeAt(position)
+        _travels.value = updatedList
+    }
+
+    fun updatePhoto(updatedPhoto: Photo) {
+        val updatedPhotos = _photos.value?.map { photo ->
+            if (photo.imageResId == updatedPhoto.imageResId) updatedPhoto else photo
+        } ?: return // null인 경우 함수 종료
+
+        _photos.value = updatedPhotos
+    }
+
 }
