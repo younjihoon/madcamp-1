@@ -1,10 +1,13 @@
 package com.example.madcamp2024wjhnh.ui.home
 
 import android.app.Activity
+import android.content.Context
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,16 +18,20 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madcamp2024wjhnh.DayInfoActivity
 import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.Travel
+import com.example.madcamp2024wjhnh.data.TravelR
 import com.example.madcamp2024wjhnh.databinding.FragmentHomeBinding
 import androidx.lifecycle.ViewModelProvider
 import com.example.madcamp2024wjhnh.SharedViewModel
 import java.text.SimpleDateFormat
 import java.util.*
+import com.example.madcamp2024wjhnh.TravelViewModel
+import com.example.madcamp2024wjhnh.data.AppDatabase
 
 
 class HomeFragment : Fragment() {
@@ -33,14 +40,15 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var travelAdapter: TravelAdapter
-    private val travelList = mutableListOf<Travel>() // 여행 데이터 리스트
+    private val travelList = mutableListOf<TravelR>() // 여행 데이터 리스트
 
-    private lateinit var sharedViewModel: SharedViewModel
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
 
     private var selectedImageUri: Uri? = null
     private var dialogView: View? = null
 
+    private lateinit var travelViewModel: TravelViewModel
+    private lateinit var sharedViewModel: SharedViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,32 +58,29 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
-
-        // 1) Adapter 초기화
-        travelAdapter = TravelAdapter(
-            this,
-            requireActivity(),
-            travelList
-        ) { travel ->
-            // 아이템 클릭 시 DayInfoActivity로 이동
-            val intent = Intent(requireActivity(), DayInfoActivity::class.java)
-            intent.putExtra("travel", travel) // 여기서 'travel'은 커스텀 데이터 클래스
+        Log.e("[HomeFragment]","started")
+        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
+        Log.e("[HomeFragment]","$sharedViewModel")
+        travelViewModel = ViewModelProvider(requireActivity())[TravelViewModel::class.java]
+        Log.e("[HomeFragment]","$travelViewModel")
+        travelAdapter = TravelAdapter(this,requireContext(), travelList) { travel ->
+            Log.e("[HomeFragment]","travelAdapter")
+            val intent = Intent(requireContext(), DayInfoActivity::class.java)
+            Log.e("[HomeFragment]","intent: $intent")
+            intent.putExtra("travelId", travel.id)
             startActivity(intent)
         }
+        sharedViewModel.travels.observe(viewLifecycleOwner) { travels ->
+            travelList.clear() // Clear the existing list
+            Log.e("[HomeFragment]","travelList: $travelList")
+            travelList.addAll(travels) // Add all items from the LiveData list
+            Log.e("[HomeFragment]","travelList: $travelList")
+            travelAdapter.notifyDataSetChanged() // Notify the adapter if it's bound to a RecyclerView
+        }
 
-        // 2) RecyclerView 설정
         binding.travelRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.travelRecyclerView.adapter = travelAdapter
 
-        // 3) ViewModel 연결
-        sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        sharedViewModel.travels.observe(viewLifecycleOwner) { travels ->
-            travelList.clear()
-            travelList.addAll(travels) // ViewModel의 데이터를 가져와 RecyclerView에 반영
-            travelAdapter.notifyDataSetChanged()
-        }
-
-        // 4) 갤러리 런처
         imagePickerLauncher = registerForActivityResult(
             ActivityResultContracts.StartActivityForResult()
         ) { result ->
@@ -101,15 +106,14 @@ class HomeFragment : Fragment() {
 
         // 목록 생성 아이콘 클릭
         binding.fabAddItem.setOnClickListener {
-            showAddTravelDialog()
+            showAddTravelDialog(travelAdapter)
         }
         return root
     }
 
-
-    private fun showAddTravelDialog() {
-        dialogView = LayoutInflater.from(requireContext())
-            .inflate(R.layout.dialog_add_travel_detail, null)
+    // 새 여행 기록 목록 생성 뷰
+    private fun showAddTravelDialog(travelAdapter: TravelAdapter) {
+        dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_travel_detail, null)
 
         val titleEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_title)
         val placeEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_place)
@@ -162,7 +166,7 @@ class HomeFragment : Fragment() {
         saveButton.setOnClickListener {
             val title = titleEditText.text.toString().trim()
             val place = placeEditText.text.toString().trim()
-            val tags = tagsEditText.text.toString().trim()
+            val tags = tagsEditText.text.toString()
             val memo = memoEditText.text.toString().trim()
             val sd = startDateButton.text.toString().trim()
             val ed = endDateButton.text.toString().trim()
@@ -180,16 +184,34 @@ class HomeFragment : Fragment() {
                     thumbnail = selectedImageUri ?: Uri.EMPTY, // URI가 없으면 EMPTY로 설정
                     DayInfos = mutableListOf()
                 )
-                sharedViewModel.setNewTravel(newTravel)
-
+                Log.e("NOTATION","new travel inserted in travelViewModel, $newTravel")
+                var roomID : Int = 0
+                travelViewModel.insert(newTravel) { id ->
+                    Log.d("debug", "New travel inserted with ID: $id")
+                    // 이후 ID를 활용한 작업
+                    roomID = id
+                    val newTravel = TravelR(
+                        id = roomID,
+                        title = title,
+                        place = place,
+                        date = date,
+                        tags = tags,
+                        memo = memo,
+                        thumbnail = selectedImageUri ?: Uri.EMPTY, // URI가 없으면 EMPTY로 설정
+                        DayInfos = mutableListOf()
+                    )
+                    travelList.add(newTravel)
+                    sharedViewModel.setNewTravel(newTravel)
+                    travelAdapter.notifyItemInserted(travelList.size-1)
+                }
                 Toast.makeText(requireContext(), "새로운 여행이 저장되었습니다.", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             } else {
                 // 필수 입력값이 비어있을 경우 사용자 알림
                 if (title.isEmpty()) titleEditText.error = "제목을 입력하세요"
-//                if (selectedImageUri == null || selectedImageUri == Uri.EMPTY) {
-//                    Toast.makeText(requireContext(), "이미지를 선택하세요.", Toast.LENGTH_SHORT).show()
-//                }
+                if (selectedImageUri == null || selectedImageUri == Uri.EMPTY) {
+                    Toast.makeText(requireContext(), "이미지를 선택하세요.", Toast.LENGTH_SHORT).show()
+                }
             }
         }
         dialog.show()
@@ -212,7 +234,9 @@ class HomeFragment : Fragment() {
         val existingStartDate = if (dateParts.isNotEmpty()) dateParts[0] else ""
         val existingEndDate = if (dateParts.size > 1) dateParts[1] else ""
 
+        val imageView = dialogView!!.findViewById<ImageView>(R.id.dialogImageView)
         // 기존 데이터 세팅
+        imageView.contentDescription = travel.id.toString()
         titleEditText.setText(travel.title)
         placeEditText.setText(travel.place)
         tagsEditText.setText(travel.tags)
@@ -221,7 +245,6 @@ class HomeFragment : Fragment() {
         enddateButton.text = existingEndDate
         dialogImageView.setImageURI(travel.thumbnail)
         selectedImageUri = travel.thumbnail
-
 
         imagePickerButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
@@ -270,6 +293,7 @@ class HomeFragment : Fragment() {
 
         // 추가 버튼 클릭 이벤트 처리
         saveButton.setOnClickListener {
+            val updatedId = imageView.contentDescription.toString().toInt()
             val updatedTitle = titleEditText.text.toString().trim()
             val updatedPlace = placeEditText.text.toString().trim()
             val updatedTags = tagsEditText.text.toString().trim()
@@ -278,8 +302,7 @@ class HomeFragment : Fragment() {
             val updatedEndDate = enddateButton.text.toString().trim()
             val updatedDate = "$updatedStartDate ~ $updatedEndDate"
 
-
-            if (updatedTitle.isNotEmpty()) {
+            if (updatedTitle.isNotEmpty() && updatedPlace.isNotEmpty() && updatedDate.isNotEmpty()) {
                 // 여행 데이터 업데이트
                 travel.title = updatedTitle
                 travel.place = updatedPlace
@@ -289,6 +312,7 @@ class HomeFragment : Fragment() {
                 travel.thumbnail = selectedImageUri ?: Uri.EMPTY
 
                 sharedViewModel.updateTravel(position, travel) // ViewModel 데이터 업데이트
+                travelViewModel.update(travel)
                 Toast.makeText(requireContext(), "여행 기록이 수정되었습니다.", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             } else {
@@ -310,6 +334,8 @@ class HomeFragment : Fragment() {
             .setMessage("Are you sure you want to delete this travel?")
             .setPositiveButton("Yes") { _, _ ->
                 sharedViewModel.deleteTravel(position)
+                sharedViewModel.deleteTravel(position) // ViewModel에서 삭제
+                travelViewModel.delete(travel)
                 Toast.makeText(context, "Travel deleted", Toast.LENGTH_SHORT).show()
             }
             .setNegativeButton("No", null)
@@ -327,6 +353,12 @@ class HomeFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        travelViewModel.allTravels.observeForever { travels ->
+            Log.e("debug", "All travels: $travels")
+            if (travels != null) {
+                sharedViewModel.replaceTravel(travels)
+            }
+        }
         _binding = null
     }
 }

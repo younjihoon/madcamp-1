@@ -1,7 +1,12 @@
 package com.example.madcamp2024wjhnh
 
+import android.content.Context
 import android.content.Intent
+import android.Manifest.permission
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
@@ -11,22 +16,30 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.madcamp2024wjhnh.databinding.ActivityMainBinding
 import com.naver.maps.map.NaverMapSdk
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
 import com.example.madcamp2024wjhnh.data.DayInfo
 import com.example.madcamp2024wjhnh.data.Photo
 import com.example.madcamp2024wjhnh.data.Travel
+import com.google.android.gms.common.internal.service.Common
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
         // Naver Map 인증 실패 리스너 등록
         NaverMapSdk.getInstance(this).client =
             NaverMapSdk.NaverCloudPlatformClient("xzzsdlxqnz")
@@ -36,8 +49,20 @@ class MainActivity : AppCompatActivity() {
                 handleAuthFailed(exception)
             }
         var sharedViewModel = ViewModelProvider(this)[SharedViewModel::class.java]
+        val travelViewModel = ViewModelProvider(this)[TravelViewModel::class.java]
+        travelViewModel.allTravels.observeForever { travels ->
+            Log.e("[MainActivity]", "All travels: $travels")
+            sharedViewModel.replaceTravel(travels)
+        }
+        if (ContextCompat.checkSelfPermission(this, READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            requestPermission()
+        } else {
+            // 권한이 이미 허용된 경우
+            Log.d("Permission", "권한이 이미 허용되었습니다.")
+        }
         val photos = loadPhotosFromCSV()
         sharedViewModel.setPhotos(photos)
+        Log.e("[MainActivity]", "All photos: $photos")
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -47,7 +72,39 @@ class MainActivity : AppCompatActivity() {
         //--
         //--
     }
+    private fun requestPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, READ_EXTERNAL_STORAGE)) {
+            AlertDialog.Builder(this)
+                .setTitle("권한 필요")
+                .setMessage("앱에서 파일을 읽으려면 권한이 필요합니다.")
+                .setPositiveButton("확인") { _, _ ->
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(READ_EXTERNAL_STORAGE),
+                        REQUEST_CODE
+                    )
+                }
+                .setNegativeButton("취소", null)
+                .show()
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(READ_EXTERNAL_STORAGE),
+                REQUEST_CODE
+            )
+        }
+    }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Log.d("Permission", "권한이 허용되었습니다.")
+            } else {
+                Log.d("Permission", "권한이 거부되었습니다.")
+            }
+        }
+    }
     private fun handleAuthFailed(exception: NaverMapSdk.AuthFailedException) {
         // Logcat에 에러 메시지 출력
         android.util.Log.e(

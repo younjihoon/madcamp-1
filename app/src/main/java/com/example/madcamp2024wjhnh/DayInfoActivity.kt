@@ -18,8 +18,11 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.madcamp2024wjhnh.data.DayInfoListConverter
+import com.example.madcamp2024wjhnh.data.TravelR
 import okhttp3.internal.notify
 
 
@@ -27,11 +30,14 @@ class DayInfoActivity: AppCompatActivity() {
     private lateinit var binding: ActivityDayInfoBinding
     private lateinit var dayInfoRecyclerView: RecyclerView
     private lateinit var addDayInfoButton: Button
+    private var travelRId : Int = 0
+    private lateinit var travelDayInfo : MutableList<DayInfo>
+    private lateinit var adapter : DayInfoAdapter
+    private lateinit var imageAdapter : DayInfoImageAddAdapter
+    private lateinit var travelViewModel: TravelViewModel
     private val dayInfoList = mutableListOf<DayInfo>()
     private val context : Context = this
     private val imageList = mutableListOf<Uri>()
-    private lateinit var adapter : DayInfoAdapter
-    private lateinit var imageAdapter : DayInfoImageAddAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,33 +45,34 @@ class DayInfoActivity: AppCompatActivity() {
         binding = ActivityDayInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val travel = intent.getParcelableExtra<Travel>("travel")?:Travel(
-            title = "title",
-            place = "place",
-            date = "24/01//01",
-            tags = "tags",
-            memo = "memo",
-            thumbnail = Uri.EMPTY,
-            DayInfos = mutableListOf(
-                DayInfo(0, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY)),
-                DayInfo(1, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY))
-            )
-        )
+        travelViewModel = ViewModelProvider(this)[TravelViewModel::class.java]
+        travelRId = intent.getIntExtra("travelId",100)
+        Log.i("[DayInfoActivity]intent_received","$travelRId")
+        travelDayInfo = mutableListOf()
+        travelViewModel.getTravelById(travelRId) { restravelR ->
+            if (restravelR != null) {
+                travelDayInfo = restravelR.DayInfos
+                dayInfoList.addAll(travelDayInfo)
+                Log.e("[DayInfoActivity]New dayinfolist","$dayInfoList")
+                adapter = DayInfoAdapter(dayInfoList) { dayInfo ->
+                    val intent = Intent(this, DayInfoDetailActivity::class.java)
+                    intent.putExtra("dayInfo", dayInfo)
+                    startActivity(intent)
+                }
+                //Log.e("ERROR","HEREHEREHEREHERE")
+                dayInfoRecyclerView = binding.dayInfoRecyclerView
+                dayInfoRecyclerView.adapter = adapter
+                dayInfoRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        dayInfoList.addAll(travel.DayInfos)
-        adapter = DayInfoAdapter(dayInfoList) { dayInfo ->
-            val intent = Intent(this, DayInfoDetailActivity::class.java)
-            intent.putExtra("dayInfo", dayInfo)
-            startActivity(intent)
-        }
-
-        dayInfoRecyclerView = binding.dayInfoRecyclerView
-        dayInfoRecyclerView.adapter = adapter
-        dayInfoRecyclerView.layoutManager = LinearLayoutManager(this)
-
-        addDayInfoButton = binding.addDayInfoButton
-        addDayInfoButton.setOnClickListener {
-            showAddDayInfoDialog(adapter)
+                addDayInfoButton = binding.addDayInfoButton
+                addDayInfoButton.setOnClickListener {
+                    imageList.clear()
+                    showAddDayInfoDialog(adapter)
+                }
+            }
+            else {
+                Log.e("[DayInfoActivity]NULL","travelR is NULL")
+            }
         }
     }
 
@@ -81,7 +88,6 @@ class DayInfoActivity: AppCompatActivity() {
         val dialogNumberEditText = dialogView.findViewById<EditText>(R.id.addNumber)
         val dialogAddressEditText = dialogView.findViewById<EditText>(R.id.addAddress)
         val dialogDescriptionEditText = dialogView.findViewById<EditText>(R.id.addDescription)
-
         AlertDialog.Builder(this)
             .setView(dialogView)
             .setPositiveButton("추가") { dialog, _ ->
@@ -93,6 +99,15 @@ class DayInfoActivity: AppCompatActivity() {
                     val newDayInfo = DayInfo(number, address, description, photoList)
                     dayInfoList.add(newDayInfo)
                     adapter.notifyItemInserted(dayInfoList.size - 1)
+                    travelDayInfo.clear()
+                    travelDayInfo.addAll(dayInfoList)
+                    travelViewModel.updateById(travelRId, travelDayInfo) { success ->
+                        if (success) {
+                            Log.d("[DayInfoActivity]debug", "TravelR updated successfully!")
+                        } else {
+                            Log.d("[DayInfoActivity]debug", "Failed to update TravelR.")
+                        }
+                    }
                 }
                 dialog.dismiss()
             }
@@ -114,7 +129,7 @@ class DayInfoActivity: AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             val clipData = data?.clipData
-            Log.e("Error","No image : $clipData")
+            Log.e("[DayInfoActivity]Error","No image : $clipData")
             if (clipData != null) {
                 // 다중 선택
                 for (i in 0 until clipData.itemCount) {
