@@ -5,11 +5,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Travel(
-    val title: String,
-    val place: String,
-    val date: String,
-    val tags: String,
-    val memo: String,
-    val thumbnail: Uri,
-    val DayInfos: MutableList<DayInfo>
+    var title: String,
+    var place: String,
+    var date: String,
+    var tags: String,
+    var memo: String,
+    var thumbnail: Uri,
+    var DayInfos: MutableList<DayInfo>
 ) : Parcelable

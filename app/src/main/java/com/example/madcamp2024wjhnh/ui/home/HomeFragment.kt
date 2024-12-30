@@ -148,6 +148,7 @@ class HomeFragment : Fragment() {
                 dateEditText.error = "날짜를 입력하세요"
             }
         }
+
         dialog.show()
     }
 
