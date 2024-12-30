@@ -18,8 +18,10 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.madcamp2024wjhnh.data.TravelR
 import okhttp3.internal.notify
 
 
@@ -27,11 +29,13 @@ class DayInfoActivity: AppCompatActivity() {
     private lateinit var binding: ActivityDayInfoBinding
     private lateinit var dayInfoRecyclerView: RecyclerView
     private lateinit var addDayInfoButton: Button
+    private lateinit var travelR : TravelR
+    private lateinit var adapter : DayInfoAdapter
+    private lateinit var imageAdapter : DayInfoImageAddAdapter
+    private lateinit var travelViewModel: TravelViewModel
     private val dayInfoList = mutableListOf<DayInfo>()
     private val context : Context = this
     private val imageList = mutableListOf<Uri>()
-    private lateinit var adapter : DayInfoAdapter
-    private lateinit var imageAdapter : DayInfoImageAddAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,33 +43,43 @@ class DayInfoActivity: AppCompatActivity() {
         binding = ActivityDayInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val travel = intent.getParcelableExtra<Travel>("travel")?:Travel(
-                title = "title",
-        place = "place",
-        date = "date",
-        tags = "tags",
-        memo = "memo",
-        thumbnail = Uri.EMPTY,
-        DayInfos = mutableListOf(
-            DayInfo(0, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY)),
-            DayInfo(1, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY))
+        travelViewModel = ViewModelProvider(this)[TravelViewModel::class.java]
+        val travelRId = intent.getIntExtra("travelId",100)
+        Log.i("intent_received","$travelRId")
+        travelR = TravelR(
+            id = travelRId,
+            title = "title",
+            place = "",
+            date = "date",
+            tags = "tags",
+            memo = "memo",
+            thumbnail = Uri.EMPTY, // URI가 없으면 EMPTY로 설정
+            DayInfos = mutableListOf()
         )
-        )
+        travelViewModel.getTravelById(travelRId) { restravelR ->
+            if (restravelR != null) {
+                travelR = restravelR
+                dayInfoList.addAll(travelR.DayInfos)
+                Log.e("New dayinfolist","$dayInfoList")
+                adapter = DayInfoAdapter(dayInfoList) { dayInfo ->
+                    val intent = Intent(this, DayInfoDetailActivity::class.java)
+                    intent.putExtra("dayInfo", dayInfo)
+                    startActivity(intent)
+                }
+                //Log.e("ERROR","HEREHEREHEREHERE")
+                dayInfoRecyclerView = binding.dayInfoRecyclerView
+                dayInfoRecyclerView.adapter = adapter
+                dayInfoRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        dayInfoList.addAll(travel.DayInfos)
-        adapter = DayInfoAdapter(dayInfoList) { dayInfo ->
-            val intent = Intent(this, DayInfoDetailActivity::class.java)
-            intent.putExtra("dayInfo", dayInfo)
-            startActivity(intent)
-        }
-
-        dayInfoRecyclerView = binding.dayInfoRecyclerView
-        dayInfoRecyclerView.adapter = adapter
-        dayInfoRecyclerView.layoutManager = LinearLayoutManager(this)
-
-        addDayInfoButton = binding.addDayInfoButton
-        addDayInfoButton.setOnClickListener {
-            showAddDayInfoDialog(adapter)
+                addDayInfoButton = binding.addDayInfoButton
+                addDayInfoButton.setOnClickListener {
+                    imageList.clear()
+                    showAddDayInfoDialog(adapter)
+                }
+            }
+            else {
+                Log.e("NULL","travelR is NULL")
+            }
         }
     }
 
@@ -81,7 +95,6 @@ class DayInfoActivity: AppCompatActivity() {
         val dialogNumberEditText = dialogView.findViewById<EditText>(R.id.addNumber)
         val dialogAddressEditText = dialogView.findViewById<EditText>(R.id.addAddress)
         val dialogDescriptionEditText = dialogView.findViewById<EditText>(R.id.addDescription)
-
         AlertDialog.Builder(this)
             .setView(dialogView)
             .setPositiveButton("추가") { dialog, _ ->
@@ -93,6 +106,9 @@ class DayInfoActivity: AppCompatActivity() {
                     val newDayInfo = DayInfo(number, address, description, photoList)
                     dayInfoList.add(newDayInfo)
                     adapter.notifyItemInserted(dayInfoList.size - 1)
+                    travelR.DayInfos.clear()
+                    travelR.DayInfos.addAll(dayInfoList)
+                    travelViewModel.update(travelR)
                 }
                 dialog.dismiss()
             }

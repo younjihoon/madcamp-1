@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp2024wjhnh.DayInfoActivity
 import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.Travel
+import com.example.madcamp2024wjhnh.data.TravelR
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 
@@ -25,7 +26,7 @@ import androidx.appcompat.app.AlertDialog
 class TravelAdapter(
     private val context: Context,
     private val travels: MutableList<Travel>,
-    private val onItemClick: (Travel) -> Unit
+    private val onItemClick: (TravelR) -> Unit
 ) : RecyclerView.Adapter<TravelAdapter.TravelViewHolder>() {
 
     class TravelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -46,15 +47,25 @@ class TravelAdapter(
 
     override fun onBindViewHolder(holder: TravelViewHolder, position: Int) {
         val travel = travels[position]
-
         holder.photoImageView.setImageURI(travel.thumbnail)
         holder.titleTextView.text = travel.title
         holder.placeTextView.text = travel.place
         holder.dateTextView.text = travel.date
         holder.tagsTextView.text = travel.tags
         holder.memoTextView.text = travel.memo
+        Log.e("TravelAdapter","travel id : ${travel.id}")
+        val newTravelR = TravelR(
+            id = travel.id,
+            title = travel.title,
+            place = travel.place,
+            date = travel.date,
+            tags = travel.tags,
+            memo = travel.memo,
+            thumbnail = travel.thumbnail,
+            DayInfos = mutableListOf()
+        )
         holder.itemView.setOnClickListener {
-            onItemClick(travel) // 클릭된 DayInfo를 콜백으로 전달
+            onItemClick(newTravelR) // 클릭된 DayInfo를 콜백으로 전달
         }
 
 //        holder.editButton.setOnClickListener {

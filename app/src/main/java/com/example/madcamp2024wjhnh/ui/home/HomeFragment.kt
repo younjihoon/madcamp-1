@@ -1,9 +1,11 @@
 package com.example.madcamp2024wjhnh.ui.home
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,11 +21,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.madcamp2024wjhnh.DayInfoActivity
 import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.Travel
+import com.example.madcamp2024wjhnh.data.TravelR
 import com.example.madcamp2024wjhnh.databinding.FragmentHomeBinding
 import androidx.lifecycle.ViewModelProvider
 import com.example.madcamp2024wjhnh.SharedViewModel
-
-
+import com.example.madcamp2024wjhnh.TravelViewModel
+import com.example.madcamp2024wjhnh.data.AppDatabase
 
 
 class HomeFragment : Fragment() {
@@ -40,6 +43,7 @@ class HomeFragment : Fragment() {
     private var selectedImageUri: Uri? = null
     private var dialogView: View? = null
 
+    private lateinit var travelViewModel: TravelViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,10 +54,13 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        travelViewModel = ViewModelProvider(requireActivity())[TravelViewModel::class.java]
+
         // RecyclerView 설정
         travelAdapter = TravelAdapter(requireContext(), travelList) { travel ->
             val intent = Intent(requireContext(), DayInfoActivity::class.java)
-            intent.putExtra("travel", travel)
+            Log.i("Intent","$travel")
+            intent.putExtra("travelId", travel.id)
             startActivity(intent)
         }
 
@@ -129,7 +136,8 @@ class HomeFragment : Fragment() {
 
             // 필수 필드 확인
             if (title.isNotEmpty() && place.isNotEmpty() && date.isNotEmpty()) {
-                val newTravel = Travel(
+
+                val newTravelR = TravelR(
                     title = title,
                     place = place,
                     date = date,
@@ -138,7 +146,26 @@ class HomeFragment : Fragment() {
                     thumbnail = selectedImageUri ?: Uri.EMPTY, // URI가 없으면 EMPTY로 설정
                     DayInfos = mutableListOf()
                 )
-                sharedViewModel.setNewTravel(newTravel)
+                Log.e("NOTATION","new travel inserted in travelViewModel, $newTravelR")
+                var roomID : Int = 0
+                travelViewModel.insert(newTravelR) { id ->
+                    Log.d("debug", "New travel inserted with ID: $id")
+                    // 이후 ID를 활용한 작업
+                    roomID = id
+                    val newTravel = Travel(
+                        id = roomID,
+                        title = title,
+                        place = place,
+                        date = date,
+                        tags = tags,
+                        memo = memo,
+                        thumbnail = selectedImageUri ?: Uri.EMPTY, // URI가 없으면 EMPTY로 설정
+                        DayInfos = mutableListOf()
+                    )
+                    sharedViewModel.setNewTravel(newTravel)
+                    Log.e("NOTATION","new travel inserted in sharedViewModel, $newTravel")
+                }
+
                 Toast.makeText(requireContext(), "새로운 여행이 저장되었습니다.", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             } else {
