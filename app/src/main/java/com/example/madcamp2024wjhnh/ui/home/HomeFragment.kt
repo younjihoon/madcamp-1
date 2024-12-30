@@ -113,7 +113,8 @@ class HomeFragment : Fragment() {
 
     // 새 여행 기록 목록 생성 뷰
     private fun showAddTravelDialog(travelAdapter: TravelAdapter) {
-        dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_travel_detail, null)
+        dialogView =
+            LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_travel_detail, null)
 
         val titleEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_title)
         val placeEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_place)
@@ -141,25 +142,37 @@ class HomeFragment : Fragment() {
 
         startDateButton.setOnClickListener {
             val calendar = Calendar.getInstance()
-            DatePickerDialog(requireContext(), { _, year, month, dayOfMonth ->
-                val startDate = Calendar.getInstance().apply {
-                    set(year, month, dayOfMonth)
-                }
-                val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
-                startDateButton.text = dateFormat.format(startDate.time)
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+            DatePickerDialog(
+                requireContext(),
+                { _, year, month, dayOfMonth ->
+                    val startDate = Calendar.getInstance().apply {
+                        set(year, month, dayOfMonth)
+                    }
+                    val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
+                    startDateButton.text = dateFormat.format(startDate.time)
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
         // 종료일 버튼
         endDateButton.setOnClickListener {
             val calendar = Calendar.getInstance()
-            DatePickerDialog(requireContext(), { _, year, month, dayOfMonth ->
-                val endDate = Calendar.getInstance().apply {
-                    set(year, month, dayOfMonth)
-                }
-                val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
-                endDateButton.text = dateFormat.format(endDate.time)
-            }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show()
+            DatePickerDialog(
+                requireContext(),
+                { _, year, month, dayOfMonth ->
+                    val endDate = Calendar.getInstance().apply {
+                        set(year, month, dayOfMonth)
+                    }
+                    val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
+                    endDateButton.text = dateFormat.format(endDate.time)
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
         }
 
         // 추가 버튼 클릭 이벤트 처리
@@ -172,20 +185,25 @@ class HomeFragment : Fragment() {
             val ed = endDateButton.text.toString().trim()
             val date = "$sd ~ $ed"
 
+            val processedTags = tags.split(" ")
+                .filter { it.isNotBlank() } // 빈 문자열 제거
+                .joinToString(" ") { "#$it" }
+
 
             // 필수 필드 확인
-            if (title.isNotEmpty() && selectedImageUri != Uri.EMPTY && selectedImageUri != null) {
+            if (title.isNotEmpty()) {
+//            if (title.isNotEmpty() && selectedImageUri != Uri.EMPTY && selectedImageUri != null) {
                 val newTravel = TravelR(
                     title = title,
                     place = place,
                     date = date,
-                    tags = tags,
+                    tags = processedTags,
                     memo = memo,
                     thumbnail = selectedImageUri ?: Uri.EMPTY, // URI가 없으면 EMPTY로 설정
                     DayInfos = mutableListOf()
                 )
-                Log.e("NOTATION","new travel inserted in travelViewModel, $newTravel")
-                var roomID : Int = 0
+                Log.e("NOTATION", "new travel inserted in travelViewModel, $newTravel")
+                var roomID: Int = 0
                 travelViewModel.insert(newTravel) { id ->
                     Log.d("debug", "New travel inserted with ID: $id")
                     // 이후 ID를 활용한 작업
@@ -218,7 +236,8 @@ class HomeFragment : Fragment() {
     }
 
     private fun showEditTravelDialog(travel: TravelR, position: Int) {
-        dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_travel_detail, null)
+        dialogView = LayoutInflater.from(requireContext())
+            .inflate(R.layout.dialog_add_travel_detail, null)
 
         val titleEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_title)
         val placeEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_place)
@@ -239,7 +258,11 @@ class HomeFragment : Fragment() {
         imageView.contentDescription = travel.id.toString()
         titleEditText.setText(travel.title)
         placeEditText.setText(travel.place)
-        tagsEditText.setText(travel.tags)
+        tagsEditText.setText(
+            travel.tags.split("#")
+                .filter { it.isNotBlank() }
+                .joinToString(" ")
+        )
         memoEditText.setText(travel.memo)
         startdateButton.text = existingStartDate
         enddateButton.text = existingEndDate
@@ -302,12 +325,18 @@ class HomeFragment : Fragment() {
             val updatedEndDate = enddateButton.text.toString().trim()
             val updatedDate = "$updatedStartDate ~ $updatedEndDate"
 
-            if (updatedTitle.isNotEmpty() && selectedImageUri != Uri.EMPTY && selectedImageUri != null) {
+            val processedupdatedTags = updatedTags.split(" ")
+                .filter { it.isNotBlank() } // 빈 문자열 제거
+                .joinToString(" ") { "#$it" }
+
+
+            if (updatedTitle.isNotEmpty()) {
+//            if (updatedTitle.isNotEmpty() && selectedImageUri != Uri.EMPTY && selectedImageUri != null) {
                 // 여행 데이터 업데이트
                 travel.title = updatedTitle
                 travel.place = updatedPlace
                 travel.date = updatedDate
-                travel.tags = updatedTags
+                travel.tags = processedupdatedTags
                 travel.memo = updatedMemo
                 travel.thumbnail = selectedImageUri ?: Uri.EMPTY
 
