@@ -48,32 +48,12 @@
                     android:layout_marginBottom="4dp"
                     android:textSize="15sp" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tv_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="4dp">
-
-                    <TextView
-                        android:id="@+id/tv_start_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp" />
-
-                    <TextView
-                        android:id="@+id/tv_date_separator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" ~ "
-                        android:textSize="15sp"
-                        android:paddingHorizontal="4dp" />
-
-                    <TextView
-                        android:id="@+id/tv_end_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="15sp" />
-                </LinearLayout>
+                    android:layout_marginBottom="4dp"
+                    android:textSize="15sp" />
 
                 <TextView
                     android:id="@+id/tv_tags"

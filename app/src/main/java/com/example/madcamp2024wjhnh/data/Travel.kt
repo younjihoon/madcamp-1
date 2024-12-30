@@ -8,8 +8,7 @@ import java.util.Calendar
 data class Travel(
     var title: String,
     var place: String,
-    var startDate: String,
-    var endDate: String,
+    var date: String,
     var tags: String,
     var memo: String,
     var thumbnail: Uri,

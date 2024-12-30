@@ -37,8 +37,7 @@ class TravelAdapter(
         val tagsTextView: TextView = itemView.findViewById(R.id.tv_tags)
         val memoTextView: TextView = itemView.findViewById(R.id.tv_memo)
         val editButton: ImageButton = itemView.findViewById(R.id.btn_edit) // 편집 버튼
-        val startDateButton: TextView = itemView.findViewById(R.id.tv_start_date) // 시작 날짜 버튼
-        val endDateButton: TextView = itemView.findViewById(R.id.tv_end_date) // 종료 날짜 버튼
+        val dateTextView: TextView = itemView.findViewById(R.id.tv_date) // 시작 날짜 버튼
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TravelViewHolder {
@@ -54,8 +53,7 @@ class TravelAdapter(
         holder.placeTextView.text = travel.place
         holder.tagsTextView.text = travel.tags
         holder.memoTextView.text = travel.memo
-        holder.startDateButton.text = travel.startDate
-        holder.endDateButton.text = travel.endDate
+        holder.dateTextView.text = travel.date
 
         holder.itemView.setOnClickListener {
             onItemClick(travel) // 클릭된 DayInfo를 콜백으로 전달

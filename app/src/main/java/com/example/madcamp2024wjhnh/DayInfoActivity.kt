@@ -42,8 +42,7 @@ class DayInfoActivity: AppCompatActivity() {
         val travel = intent.getParcelableExtra<Travel>("travel")?:Travel(
             title = "title",
             place = "place",
-            startDate = "24/01//01",
-            endDate = "24/01/07",
+            date = "24/01//01",
             tags = "tags",
             memo = "memo",
             thumbnail = Uri.EMPTY,

@@ -121,7 +121,7 @@ class HomeFragment : Fragment() {
         val endDateButton = dialogView!!.findViewById<Button>(R.id.endDateButton)
 
         var startdate = "Start Date"
-        var enddate: String = "End Date"
+        var enddate = "End Date"
         startDateButton.text = startdate
         endDateButton.text = enddate
 
@@ -166,14 +166,15 @@ class HomeFragment : Fragment() {
             val memo = memoEditText.text.toString().trim()
             val sd = startDateButton.text.toString().trim()
             val ed = endDateButton.text.toString().trim()
+            val date = "$sd ~ $ed"
+
 
             // 필수 필드 확인
             if (title.isNotEmpty()) { //&& selectedImageUri != Uri.EMPTY && selectedImageUri != null
                 val newTravel = Travel(
                     title = title,
                     place = place,
-                    startDate = sd,
-                    endDate = ed,
+                    date = date,
                     tags = tags,
                     memo = memo,
                     thumbnail = selectedImageUri ?: Uri.EMPTY, // URI가 없으면 EMPTY로 설정
@@ -191,10 +192,6 @@ class HomeFragment : Fragment() {
 //                }
             }
         }
-
-        // 시작일 버튼
-
-
         dialog.show()
     }
 
@@ -211,13 +208,17 @@ class HomeFragment : Fragment() {
         val enddateButton = dialogView!!.findViewById<Button>(R.id.endDateButton)
         val dialogImageView = dialogView!!.findViewById<ImageView>(R.id.dialogImageView)
 
+        val dateParts = travel.date.split(" ~ ")
+        val existingStartDate = if (dateParts.isNotEmpty()) dateParts[0] else ""
+        val existingEndDate = if (dateParts.size > 1) dateParts[1] else ""
+
         // 기존 데이터 세팅
         titleEditText.setText(travel.title)
         placeEditText.setText(travel.place)
         tagsEditText.setText(travel.tags)
         memoEditText.setText(travel.memo)
-        startdateButton.text = travel.startDate
-        enddateButton.text = travel.endDate
+        startdateButton.text = existingStartDate
+        enddateButton.text = existingEndDate
         dialogImageView.setImageURI(travel.thumbnail)
         selectedImageUri = travel.thumbnail
 
@@ -232,6 +233,41 @@ class HomeFragment : Fragment() {
             .setCancelable(true)
             .create()
 
+        startdateButton.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            DatePickerDialog(
+                requireContext(),
+                { _, year, month, dayOfMonth ->
+                    val selectedDate = Calendar.getInstance().apply {
+                        set(year, month, dayOfMonth)
+                    }
+                    val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
+                    startdateButton.text = dateFormat.format(selectedDate.time)
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
+
+        // 종료일 선택
+        enddateButton.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            DatePickerDialog(
+                requireContext(),
+                { _, year, month, dayOfMonth ->
+                    val selectedDate = Calendar.getInstance().apply {
+                        set(year, month, dayOfMonth)
+                    }
+                    val dateFormat = SimpleDateFormat("yy/MM/dd", Locale.getDefault())
+                    enddateButton.text = dateFormat.format(selectedDate.time)
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            ).show()
+        }
+
         // 추가 버튼 클릭 이벤트 처리
         saveButton.setOnClickListener {
             val updatedTitle = titleEditText.text.toString().trim()
@@ -240,14 +276,14 @@ class HomeFragment : Fragment() {
             val updatedMemo = memoEditText.text.toString().trim()
             val updatedStartDate = startdateButton.text.toString().trim()
             val updatedEndDate = enddateButton.text.toString().trim()
+            val updatedDate = "$updatedStartDate ~ $updatedEndDate"
 
 
             if (updatedTitle.isNotEmpty()) {
                 // 여행 데이터 업데이트
                 travel.title = updatedTitle
                 travel.place = updatedPlace
-                travel.startDate = updatedStartDate
-                travel.endDate = updatedEndDate
+                travel.date = updatedDate
                 travel.tags = updatedTags
                 travel.memo = updatedMemo
                 travel.thumbnail = selectedImageUri ?: Uri.EMPTY
