@@ -17,6 +17,9 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
+import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
@@ -64,6 +67,7 @@ class DayInfoActivity: AppCompatActivity() {
         adapter = DayInfoAdapter(dayInfoList) { dayInfo ->
             val fragment = DayInfoDetailFragment.newInstance(dayInfo, travelRId)
             // Replace the current fragment
+            findViewById<FrameLayout>(R.id.fragment_frame).elevation = 20f
             (context as? AppCompatActivity)?.supportFragmentManager?.beginTransaction()
                 ?.replace(R.id.scrollView, fragment) // Use the correct container ID
                 ?.addToBackStack(null) // Optional: Add to back stack
@@ -81,6 +85,7 @@ class DayInfoActivity: AppCompatActivity() {
         dayInfoRecyclerView.layoutManager = LinearLayoutManager(this)
 
         addDayInfoButton = binding.addDayInfoButton
+
         addDayInfoButton.setOnClickListener {
             imageList.clear()
             showAddDayInfoDialog(adapter)
@@ -106,24 +111,24 @@ class DayInfoActivity: AppCompatActivity() {
                 val address = dialogAddressEditText.text.toString().split(",").toMutableList()
                 val description = dialogDescriptionEditText.text.toString()
                 val photoList = imageList
-                if (number != null) {
-                    val newDayInfo = DayInfo(number, address, description, photoList)
-                    dayInfoList.add(newDayInfo)
-                    adapter.notifyItemInserted(dayInfoList.size - 1)
-                    travelDayInfos.clear()
-                    travelDayInfos.addAll(dayInfoList)
-                    travelViewModel.updateById(travelRId, travelDayInfos) { success ->
-                        if (success) {
-                            Log.d("[DayInfoActivity]debug", "TravelR updated successfully!")
-                        } else {
-                            Log.d("[DayInfoActivity]debug", "Failed to update TravelR.")
+                if (photoList.isEmpty()) Toast.makeText(this, "이미지를 선택하세요.", Toast.LENGTH_SHORT).show()
+                else{
+                    if (number != null) {
+                        val newDayInfo = DayInfo(number, address, description, photoList)
+                        dayInfoList.add(newDayInfo)
+                        adapter.notifyItemInserted(dayInfoList.size - 1)
+                        travelDayInfos.clear()
+                        travelDayInfos.addAll(dayInfoList)
+                        travelViewModel.updateById(travelRId, travelDayInfos) { success ->
+                            if (success) {
+                                Log.d("[DayInfoActivity]debug", "TravelR updated successfully!")
+                            } else {
+                                Log.d("[DayInfoActivity]debug", "Failed to update TravelR.")
+                            }
                         }
                     }
+                    dialog.dismiss()
                 }
-                dialog.dismiss()
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                dialog.dismiss()
             }
             .create()
             .show()
