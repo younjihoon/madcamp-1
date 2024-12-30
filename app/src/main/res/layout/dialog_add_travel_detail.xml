@@ -35,11 +35,40 @@
         android:layout_height="wrap_content"
         android:hint="place" />
 
-    <Button
-        android:id="@+id/datePickerButton"
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="날짜를 선택하세요" />
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/startDateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Start Date" />
+
+
+        <TextView
+            android:id="@+id/dateSeparator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="20dp"
+            android:gravity="center"
+            android:text="~"
+            android:textColor="@android:color/black"
+            android:textSize="25sp" />
+
+        <Button
+            android:id="@+id/endDateButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End Date" />
+    </LinearLayout>
+
 
     <EditText
         android:id="@+id/et_travel_tags"

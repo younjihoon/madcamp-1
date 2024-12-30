@@ -34,11 +34,11 @@ class TravelAdapter(
         val photoImageView: ImageView = itemView.findViewById(R.id.iv_photo)
         val titleTextView: TextView = itemView.findViewById(R.id.tv_title)
         val placeTextView: TextView = itemView.findViewById(R.id.tv_place)
-        val dateTextView: TextView = itemView.findViewById(R.id.tv_date)
         val tagsTextView: TextView = itemView.findViewById(R.id.tv_tags)
         val memoTextView: TextView = itemView.findViewById(R.id.tv_memo)
         val editButton: ImageButton = itemView.findViewById(R.id.btn_edit) // 편집 버튼
-
+        val startDateButton: TextView = itemView.findViewById(R.id.tv_start_date) // 시작 날짜 버튼
+        val endDateButton: TextView = itemView.findViewById(R.id.tv_end_date) // 종료 날짜 버튼
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TravelViewHolder {
@@ -52,14 +52,16 @@ class TravelAdapter(
         holder.photoImageView.setImageURI(travel.thumbnail)
         holder.titleTextView.text = travel.title
         holder.placeTextView.text = travel.place
-        holder.dateTextView.text = travel.date
         holder.tagsTextView.text = travel.tags
         holder.memoTextView.text = travel.memo
+        holder.startDateButton.text = travel.startDate
+        holder.endDateButton.text = travel.endDate
+
         holder.itemView.setOnClickListener {
             onItemClick(travel) // 클릭된 DayInfo를 콜백으로 전달
         }
+
         holder.editButton.setOnClickListener {
-//            fragment.openEditDialog(travel, position) // HomeFragment 메서드 호출
             AlertDialog.Builder(context)
                 .setTitle("Select Action")
                 .setItems(arrayOf("Edit", "Delete")) { _, which ->
@@ -73,7 +75,5 @@ class TravelAdapter(
     }
 
     override fun getItemCount(): Int = travels.size
-
-
 }
 

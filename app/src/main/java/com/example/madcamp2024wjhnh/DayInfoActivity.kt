@@ -40,16 +40,17 @@ class DayInfoActivity: AppCompatActivity() {
         setContentView(binding.root)
 
         val travel = intent.getParcelableExtra<Travel>("travel")?:Travel(
-                title = "title",
-        place = "place",
-        date = "date",
-        tags = "tags",
-        memo = "memo",
-        thumbnail = Uri.EMPTY,
-        DayInfos = mutableListOf(
-            DayInfo(0, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY)),
-            DayInfo(1, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY))
-        )
+            title = "title",
+            place = "place",
+            startDate = "24/01//01",
+            endDate = "24/01/07",
+            tags = "tags",
+            memo = "memo",
+            thumbnail = Uri.EMPTY,
+            DayInfos = mutableListOf(
+                DayInfo(0, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY)),
+                DayInfo(1, mutableListOf("주소"), "description", mutableListOf(Uri.EMPTY))
+            )
         )
 
         dayInfoList.addAll(travel.DayInfos)
