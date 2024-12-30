@@ -24,8 +24,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.madcamp2024wjhnh.SharedViewModel
 
 
-
-
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
@@ -50,8 +48,7 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        // RecyclerView 설정
-        travelAdapter = TravelAdapter(requireContext(), travelList) { travel ->
+        travelAdapter = TravelAdapter(this, requireContext(), travelList) { travel ->
             val intent = Intent(requireContext(), DayInfoActivity::class.java)
             intent.putExtra("travel", travel)
             startActivity(intent)
@@ -95,6 +92,8 @@ class HomeFragment : Fragment() {
             showAddTravelDialog(travelAdapter)
         }
         return root
+
+
     }
 
     // 새 여행 기록 목록 생성 뷰
@@ -108,6 +107,7 @@ class HomeFragment : Fragment() {
         val memoEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_memo)
         val imagePickerButton = dialogView!!.findViewById<Button>(R.id.imagePickerButton)
         val saveButton = dialogView!!.findViewById<Button>(R.id.saveButton)
+
 
         imagePickerButton.setOnClickListener {
             val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
@@ -152,6 +152,70 @@ class HomeFragment : Fragment() {
         dialog.show()
     }
 
+    private fun showEditTravelDialog(travel: Travel, position: Int) {
+        dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_add_travel_detail, null)
+
+        val titleEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_title)
+        val placeEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_place)
+        val dateEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_date)
+        val tagsEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_tags)
+        val memoEditText = dialogView!!.findViewById<EditText>(R.id.et_travel_memo)
+        val imagePickerButton = dialogView!!.findViewById<Button>(R.id.imagePickerButton)
+        val saveButton = dialogView!!.findViewById<Button>(R.id.saveButton)
+
+        // 기존 데이터 세팅
+        titleEditText.setText(travel.title)
+        placeEditText.setText(travel.place)
+        dateEditText.setText(travel.date)
+        tagsEditText.setText(travel.tags)
+        memoEditText.setText(travel.memo)
+        val dialogImageView = dialogView!!.findViewById<ImageView>(R.id.dialogImageView)
+        dialogImageView.setImageURI(travel.thumbnail)
+        selectedImageUri = travel.thumbnail
+
+        imagePickerButton.setOnClickListener {
+            val intent = Intent(Intent.ACTION_PICK).apply { type = "image/*" }
+            imagePickerLauncher.launch(intent)
+        }
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(true)
+            .create()
+
+        saveButton.setOnClickListener {
+            val updatedTitle = titleEditText.text.toString().trim()
+            val updatedPlace = placeEditText.text.toString().trim()
+            val updatedDate = dateEditText.text.toString().trim()
+            val updatedTags = tagsEditText.text.toString()
+            val updatedMemo = memoEditText.text.toString().trim()
+
+            if (updatedTitle.isNotEmpty() && updatedPlace.isNotEmpty() && updatedDate.isNotEmpty()) {
+                // 여행 데이터 업데이트
+                travel.title = updatedTitle
+                travel.place = updatedPlace
+                travel.date = updatedDate
+                travel.tags = updatedTags
+                travel.memo = updatedMemo
+                travel.thumbnail = selectedImageUri ?: Uri.EMPTY
+
+                sharedViewModel.updateTravel(position, travel) // ViewModel 데이터 업데이트
+                Toast.makeText(requireContext(), "여행 기록이 수정되었습니다.", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            } else {
+                titleEditText.error = "제목을 입력하세요"
+                placeEditText.error = "장소를 입력하세요"
+                dateEditText.error = "날짜를 입력하세요"
+            }
+        }
+
+        dialog.show()
+    }
+
+    // TravelAdapter와 상호작용
+    fun openEditDialog(travel: Travel, position: Int) {
+        showEditTravelDialog(travel, position)
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

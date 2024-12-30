@@ -44,5 +44,11 @@ class SharedViewModel : ViewModel() {
         _travels.value = _travels.value // LiveData 업데이트 트리거
     }
 
+    fun updateTravel(position: Int, updatedTravel: Travel) {
+        val updatedTravels = _travels.value?.toMutableList() ?: mutableListOf()
+        updatedTravels[position] = updatedTravel
+        _travels.value = updatedTravels
+    }
+
 
 }
