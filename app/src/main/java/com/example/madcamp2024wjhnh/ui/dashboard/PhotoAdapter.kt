@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ToggleButton
@@ -20,6 +21,8 @@ class PhotoAdapter(
     class PhotoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val photoImageView: ImageView = itemView.findViewById(R.id.photoImageView)
         val titleTextView: TextView = itemView.findViewById(R.id.photoTitleTextView)
+        val favoriteButton: ImageButton = itemView.findViewById(R.id.favoriteButton)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewHolder {
@@ -36,6 +39,16 @@ class PhotoAdapter(
         holder.itemView.setOnClickListener {
             showPhotoDialog(photo, position)
         }
+        holder.favoriteButton.setImageResource(
+            if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
+        )
+        holder.favoriteButton.setOnClickListener {
+            photo.isFavorite = !photo.isFavorite // 상태 반전
+            holder.favoriteButton.setImageResource(
+                if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
+            )
+        }
+
     }
 
     override fun getItemCount(): Int = photos.size
