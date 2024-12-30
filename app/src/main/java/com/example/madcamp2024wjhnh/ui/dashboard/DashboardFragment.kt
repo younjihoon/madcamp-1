@@ -81,6 +81,7 @@ class DashboardFragment : Fragment() {
         // 검색어에 따라 사진 데이터 필터링
         val filteredPhotos = allPhotos.filter { photo ->
             photo.title.contains(query, ignoreCase = true) // 제목에 검색어 포함 여부 확인
+            photo.description.contains(query, ignoreCase = true)
         }
         adapter.updateData(filteredPhotos) // 어댑터 데이터 업데이트
     }
