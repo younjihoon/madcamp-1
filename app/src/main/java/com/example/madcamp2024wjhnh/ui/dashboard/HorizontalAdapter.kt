@@ -1,6 +1,7 @@
 package com.example.madcamp2024wjhnh.ui.dashboard
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,11 +9,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.Photo
 
-class HorizontalAdapter(private val context: Context, private val items: List<Photo>) :
+class HorizontalAdapter(private val context: Context, private val items: List<Photo>,private val onFavoriteStatusChanged: (Photo) -> Unit ) :
     RecyclerView.Adapter<HorizontalAdapter.HorizontalViewHolder>() {
 
     inner class HorizontalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -29,6 +31,7 @@ class HorizontalAdapter(private val context: Context, private val items: List<Ph
 
     override fun onBindViewHolder(holder: HorizontalViewHolder, position: Int) {
         val photo = items[position]
+
         holder.textView.text = items[position].title
         holder.imageView.setImageResource(items[position].imageResId)
         holder.itemView.setOnClickListener {
@@ -38,8 +41,10 @@ class HorizontalAdapter(private val context: Context, private val items: List<Ph
             if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
         )
         holder.favoriteButton.setOnClickListener {
+            Log.e("[HoriAdapter]","favoriteButton pressed")
             photo.isFavorite = !photo.isFavorite // 상태 반전
             notifyItemChanged(position) // 변경된 아이템 업데이트
+            onFavoriteStatusChanged(photo)
             holder.favoriteButton.setImageResource(
                 if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
             )

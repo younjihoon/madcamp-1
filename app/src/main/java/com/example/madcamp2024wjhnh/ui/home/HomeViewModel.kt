@@ -3,6 +3,7 @@ package com.example.madcamp2024wjhnh.ui.home
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.madcamp2024wjhnh.data.Section
 
 class HomeViewModel : ViewModel() {
 
@@ -10,4 +11,5 @@ class HomeViewModel : ViewModel() {
         value = "This is home Fragment"
     }
     val text: LiveData<String> = _text
+
 }
