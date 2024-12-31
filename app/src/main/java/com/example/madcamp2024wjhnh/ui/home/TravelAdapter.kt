@@ -46,6 +46,7 @@ class TravelAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TravelViewHolder {
+        Log.e("[TravelAdapter]","CREATE")
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_travel, parent, false)
         return TravelViewHolder(view)
     }

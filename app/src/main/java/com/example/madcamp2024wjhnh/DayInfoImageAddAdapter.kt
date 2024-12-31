@@ -37,8 +37,13 @@ class DayInfoImageAddAdapter (
         if (holder is AddImageViewHolder) {
             holder.itemView.setOnClickListener { onAddImageClick() }
         } else if (holder is ImageViewHolder) {
-            val imageUri = imageList[position - 1] // 첫 번째 아이템은 버튼이므로 -1
+            val imageUri = imageList[position - 1]
             holder.imageView.setImageURI(imageUri)
+            holder.itemView.setOnClickListener {
+                imageList.removeAt(position - 1)
+                notifyItemRemoved(position) // RecyclerView 갱신
+                notifyItemRangeChanged(position, itemCount - position)
+            }
         }
     }
 
