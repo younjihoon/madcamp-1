@@ -55,6 +55,7 @@
                     android:padding="10dp"
                     android:textStyle="bold"
                     android:enabled="false"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:background="@android:color/transparent"
                     android:text="Day" />
@@ -66,6 +67,7 @@
                     android:padding="10dp"
                     android:textStyle="bold"
                     android:enabled="false"
+                    android:singleLine="true"
                     android:textColor="@color/black"
                     android:inputType="number"
                     android:background="@android:color/transparent"
@@ -82,6 +84,7 @@
                 android:textSize="16sp"
                 android:padding="10dp"
                 android:enabled="false"
+                android:singleLine="true"
                 android:textColor="@color/black"
                 android:text="123 Main Street"
                 android:background="@drawable/textedit_disabled" />
