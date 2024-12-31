@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/dialogImageView"
-        android:layout_width="153dp"
-        android:layout_height="133dp"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
         app:cardCornerRadius="30dp"
@@ -25,27 +25,25 @@
         app:cardCornerRadius="30dp"
         android:backgroundTint="#79A0C1"
         android:textColor="#FFFFFF"
-        android:textSize="14sp"
+        android:textSize="15sp"
         android:text="대표 이미지" />
 
     <EditText
         android:id="@+id/et_travel_title"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:singleLine="true"
-        android:hint="title" />
-        android:textSize="14sp"
+        android:textSize="15sp"
         android:hint="여행 제목" />
 
     <EditText
         android:id="@+id/et_travel_place"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:singleLine="true"
-        android:hint="place" />
-        android:textSize="14sp"
+        android:textSize="15sp"
         android:hint="여행지" />
 
 
@@ -64,7 +62,8 @@
             app:cardCornerRadius="30dp"
             android:backgroundTint="#79A0C1"
             android:textColor="#FFFFFF"
-            android:text="00/00/00" />
+            android:text="00/00/00"
+            android:textSize="14sp"/>
 
 
         <TextView
@@ -85,30 +84,28 @@
             app:cardCornerRadius="30dp"
             android:backgroundTint="#79A0C1"
             android:textColor="#FFFFFF"
-            android:text="00/00/00" />
+            android:text="00/00/00"
+            android:textSize="14sp"/>
     </LinearLayout>
 
 
     <EditText
         android:id="@+id/et_travel_tags"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
         android:textSize="14sp"
-        android:hint="태그는 공백으로 구분됩니다"/>
-        android:singleLine="true"
-        android:hint="tags"/>
+        android:hint="태그는 공백으로 구분됩니다"
+        android:singleLine="true"/>
 
     <EditText
         android:id="@+id/et_travel_memo"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:textSize="14sp"
+        android:textSize="15sp"
         android:hint="한 줄 메모"
-        android:layout_marginBottom="15dp" />
         android:singleLine="true"
-        android:hint="memo"
         android:layout_marginBottom="16dp" />
 
     <Button
@@ -118,5 +115,6 @@
         app:cardCornerRadius="30dp"
         android:backgroundTint="#79A0C1"
         android:textColor="#FFFFFF"
-        android:text="저장"/>
+        android:text="저장"
+        android:textSize="15sp"/>
 </LinearLayout>
