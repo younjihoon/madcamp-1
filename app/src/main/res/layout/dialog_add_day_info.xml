@@ -4,31 +4,62 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="18dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="DayInfo 설명" />
-
-    <EditText
-        android:id="@+id/addNumber"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="몇 번째 날 인가요"
-        android:inputType="number" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:gravity="center_vertical"
+        android:paddingTop="10dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/addNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint=""
+            android:textSize="23dp"
+            android:inputType="number"
+            android:maxHeight="30dp"
+            android:padding="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="일차"
+            android:textSize="23dp" />
+    </LinearLayout>
+
     <EditText
         android:id="@+id/addAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
-        android:hint="어디에 다녀 왔나요" />
+        android:hint="어디에 다녀왔나요?"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"/>
+
     <EditText
         android:id="@+id/addDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:maxHeight="120dp"
-        android:hint="설명을 입력하세요" />
+        android:hint="어떤 일들이 있었나요?"
+        android:paddingTop="10dp"
+        android:paddingBottom="20dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="사진으로 소중한 추억을 간직하세요 !"
+        android:layout_gravity="center_horizontal"
+        android:textSize="18dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="10dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/addImagesRecyclerView"
         android:layout_width="match_parent"
