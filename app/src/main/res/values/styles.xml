@@ -2,8 +2,33 @@
 <resources>
     <!-- Custom DatePicker Theme -->
     <style name="CustomDatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/black</item>
-        <item name="android:textColorPrimary">@color/black</item>
-        <item name="android:background">@color/pastel_blue</item>
+        <item name="colorAccent">@color/deep_pastel_blue</item>
+        <item name="android:textColorPrimary">@color/gray</item>
+        <item name="android:background">@color/light_pastel_blue</item>
+        <item name="colorOnPrimary">@color/deep_gray</item>
+        <item name="materialCalendarStyle">@style/CustomCalendarStyle</item>
+    </style>
+
+    <style name="CustomCalendarStyle" parent="Widget.MaterialComponents.MaterialCalendar">
+        <item name="dayStyle">@style/CustomDayStyle</item>
+        <item name="daySelectedStyle">@style/CustomDaySelectedStyle</item>
+        <item name="dayTodayStyle">@style/CustomDayTodayStyle</item>
+    </style>
+
+    <!-- Custom Day Style -->
+    <style name="CustomDayStyle" parent="Widget.MaterialComponents.MaterialCalendar.Day">
+        <item name="android:textColor">@color/deep_gray</item>
+    </style>
+
+    <!-- Custom Selected Day Style -->
+    <style name="CustomDaySelectedStyle" parent="Widget.MaterialComponents.MaterialCalendar.Day.Selected">
+        <item name="android:background">@color/deep_pastel_blue</item>
+        <item name="android:textColor">@color/deep_gray</item>
+    </style>
+
+    <!-- Custom Today Style -->
+    <style name="CustomDayTodayStyle" parent="Widget.MaterialComponents.MaterialCalendar.Day.Today">
+        <item name="android:background">@color/deep_pastel_blue</item>
+        <item name="android:textColor">@color/white</item>
     </style>
 </resources>
