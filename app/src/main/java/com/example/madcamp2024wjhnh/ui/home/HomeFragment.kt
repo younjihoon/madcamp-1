@@ -32,6 +32,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import com.example.madcamp2024wjhnh.TravelViewModel
 import com.example.madcamp2024wjhnh.data.AppDatabase
+import com.google.android.material.datepicker.MaterialDatePicker
 
 
 class HomeFragment : Fragment() {
@@ -285,6 +286,8 @@ class HomeFragment : Fragment() {
             val calendar = Calendar.getInstance()
             DatePickerDialog(
                 requireContext(),
+                R.style.CustomDatePickerTheme, // 커스텀 테마 적용
+
                 { _, year, month, dayOfMonth ->
                     val selectedDate = Calendar.getInstance().apply {
                         set(year, month, dayOfMonth)
@@ -303,6 +306,8 @@ class HomeFragment : Fragment() {
             val calendar = Calendar.getInstance()
             DatePickerDialog(
                 requireContext(),
+                R.style.CustomDatePickerTheme, // 커스텀 테마 적용
+
                 { _, year, month, dayOfMonth ->
                     val selectedDate = Calendar.getInstance().apply {
                         set(year, month, dayOfMonth)
