@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ToggleButton
@@ -33,6 +34,8 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var naverMap: NaverMap
     private lateinit var sharedViewModel: SharedViewModel
     private val markersMap = mutableMapOf<Marker, Photo>() // 마커와 사진 데이터를 매핑
+//    private val onFavoriteStatusChanged: (Photo) -> Unit // 즐겨찾기 상태 변경 콜백
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,41 +77,47 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun showPhotoDialog(photo: Photo, marker: Marker) {
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_photo_detail, null)
-        val dialogImageView = dialogView.findViewById<ImageView>(R.id.dialogImageView)
-        val dialogTitleTextView = dialogView.findViewById<TextView>(R.id.dialogTitleTextView)
-        val dialogDescriptionTextView = dialogView.findViewById<TextView>(R.id.dialogDescriptionTextView)
-        val dialogLinkTextView = dialogView.findViewById<TextView>(R.id.dialogLinkTextView)
-        val dialogFavoriteToggleButton = dialogView.findViewById<ToggleButton>(R.id.favoriteToggleButton)
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_map_detail, null)
+        val maptitleTextView = dialogView.findViewById<TextView>(R.id.maptitle)
+        val maplinkTextView = dialogView.findViewById<TextView>(R.id.maplink)
+        val mapfavoriteButton = dialogView.findViewById<ImageButton>(R.id.mapfavoriteButton)
 
         // 데이터 설정
-        dialogImageView.setImageResource(photo.imageResId)
-        dialogTitleTextView.text = photo.title
-        dialogDescriptionTextView.text = photo.description
-        dialogLinkTextView.text = photo.link
+        maptitleTextView.text = photo.title
+        maplinkTextView.text = photo.link
 
+        mapfavoriteButton.setImageResource(
+            if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
+        )
 
-        // 즐겨찾기 토글 상태 설정
-        dialogFavoriteToggleButton.isChecked = photo.isFavorite
-
-        dialogFavoriteToggleButton.setOnCheckedChangeListener { _, isChecked ->
-            photo.isFavorite = isChecked
-            sharedViewModel.updatePhoto(photo) // ViewModel을 통해 데이터 업데이트
-
-            if (!isChecked) {
-                marker.map = null // 마커 제거
-                markersMap.remove(marker) // 매핑에서 제거
-            }
+        // 즐겨찾기 버튼 클릭 이벤트 처리
+        mapfavoriteButton.setOnClickListener {
+            photo.isFavorite = !photo.isFavorite
+            mapfavoriteButton.setImageResource(
+                if (photo.isFavorite) R.drawable.ic_star_filled
+                else {
+                    marker.map = null // 마커 제거
+                    markersMap.remove(marker) // 매핑에서 제거
+                    R.drawable.ic_star_outline
+                }
+            )
+//            notifyItemChanged(position) // RecyclerView 갱신
+//            onFavoriteStatusChanged(photo) // 상태 변경 콜백 호출
+            sharedViewModel.updatePhoto(photo) // 상태 업데이트를 sharedViewModel로 전달
         }
 
-        // 다이얼로그 생성
-        AlertDialog.Builder(requireContext())
+        val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogView)
-            .setPositiveButton("닫기") { dialog, _ ->
-                dialog.dismiss()
-            }
             .create()
-            .show()
+
+        // 다이얼로그를 화면 아래에 표시하기 위한 설정
+        dialog.window?.setBackgroundDrawableResource(android.R.color.white)
+        dialog.window?.attributes = dialog.window?.attributes?.apply {
+            gravity = android.view.Gravity.BOTTOM
+            width = ViewGroup.LayoutParams.MATCH_PARENT
+        }
+
+        dialog.show()
     }
 
     override fun onDestroyView() {
