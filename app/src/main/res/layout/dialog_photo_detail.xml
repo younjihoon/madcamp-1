@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardCornerRadius="30dp"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -13,34 +14,32 @@
         android:layout_height="200dp"
         android:scaleType="centerCrop"
         app:cardCornerRadius="30dp"
-        android:contentDescription="@string/photo" />
+        android:contentDescription="@string/photo"
+        android:layout_marginBottom="13dp"/>
 
     <LinearLayout
-        android:layout_width="306dp"
-        android:layout_height="wrap_content"
+        android:layout_width="380dp"
+        android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingBottom="8dp">
 
         <ImageButton
             android:id="@+id/favoriteToggleButton"
-            android:layout_width="46dp"
-            android:layout_height="46dp"
-            android:layout_gravity="end|top"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="4dp"
+            android:layout_width="43dp"
+            android:layout_height="43dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/ic_star_outline"
-            android:textColor="@android:color/black"
             android:contentDescription="@string/photo" />
 
         <TextView
             android:id="@+id/dialogTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:text="Title Here"
             android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -50,6 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:textSize="14sp"
+        android:layout_marginBottom="5dp"
         android:textColor="@android:color/black" />
 
     <TextView
@@ -57,6 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
         android:autoLink="web"
         android:textColor="@color/teal_700"
         android:textSize="14sp"
