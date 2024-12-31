@@ -1,7 +1,7 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     android:background="#FFFFFF">
@@ -13,6 +13,7 @@
         android:layout_height="133dp"
         android:layout_gravity="center_horizontal"
         android:scaleType="centerCrop"
+        app:cardCornerRadius="30dp"
         android:src="@drawable/ic_launcher_foreground" />
 
     <Button
@@ -21,24 +22,27 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
+        app:cardCornerRadius="30dp"
         android:backgroundTint="#79A0C1"
         android:textColor="#FFFFFF"
-        android:text="Pick Image" />
+        android:textSize="14sp"
+        android:text="대표 이미지" />
 
     <EditText
         android:id="@+id/et_travel_title"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-
-        android:hint="title" />
+        android:textSize="14sp"
+        android:hint="여행 제목" />
 
     <EditText
         android:id="@+id/et_travel_place"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:hint="place" />
+        android:textSize="14sp"
+        android:hint="여행지" />
 
 
 
@@ -53,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            app:cardCornerRadius="30dp"
             android:backgroundTint="#79A0C1"
             android:textColor="#FFFFFF"
             android:text="00/00/00" />
@@ -73,6 +78,7 @@
             android:id="@+id/endDateButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            app:cardCornerRadius="30dp"
             android:backgroundTint="#79A0C1"
             android:textColor="#FFFFFF"
             android:text="00/00/00" />
@@ -84,21 +90,24 @@
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:hint="tags"/>
+        android:textSize="14sp"
+        android:hint="태그는 공백으로 구분됩니다"/>
 
     <EditText
         android:id="@+id/et_travel_memo"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_gravity="center_horizontal"
-        android:hint="memo"
-        android:layout_marginBottom="16dp" />
+        android:textSize="14sp"
+        android:hint="한 줄 메모"
+        android:layout_marginBottom="15dp" />
 
     <Button
         android:id="@+id/saveButton"
         android:layout_width="match_parent"
         android:layout_height="55dp"
+        app:cardCornerRadius="30dp"
         android:backgroundTint="#79A0C1"
         android:textColor="#FFFFFF"
-        android:text="Save"/>
+        android:text="저장"/>
 </LinearLayout>

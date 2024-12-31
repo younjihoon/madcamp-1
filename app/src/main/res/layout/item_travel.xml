@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="20dp"
     app:layout_constraintBottom_toBottomOf="parent">
 
     <FrameLayout
@@ -25,6 +25,7 @@
                 android:layout_height="130dp"
                 android:layout_marginEnd="8dp"
                 android:scaleType="centerCrop"
+                app:cardCornerRadius="20dp"
                 android:src="@drawable/ic_launcher_foreground" />
 
             <!-- 오른쪽 텍스트 정보 -->
@@ -75,13 +76,15 @@
         <!-- 우측 상단 편집 아이콘 -->
         <ImageButton
             android:id="@+id/btn_edit"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="top|end"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_edit"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_edit_pencil"
             android:contentDescription="@string/edit_item"
-            android:padding="8dp"
-            app:tint="@android:color/darker_gray" />
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
+            android:padding="13dp"
+            />
     </FrameLayout>
 </androidx.cardview.widget.CardView>
