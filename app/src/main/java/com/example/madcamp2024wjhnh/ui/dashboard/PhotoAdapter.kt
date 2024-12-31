@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ToggleButton
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp2024wjhnh.R
 import com.example.madcamp2024wjhnh.data.Photo
@@ -67,9 +68,11 @@ class PhotoAdapter(
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_photo_detail, null)
         val dialogImageView = dialogView.findViewById<ImageView>(R.id.dialogImageView)
         val dialogTitleTextView = dialogView.findViewById<TextView>(R.id.dialogTitleTextView)
-        val dialogDescriptionTextView = dialogView.findViewById<TextView>(R.id.dialogDescriptionTextView)
+        val dialogDescriptionTextView =
+            dialogView.findViewById<TextView>(R.id.dialogDescriptionTextView)
         val dialogLinkTextView = dialogView.findViewById<TextView>(R.id.dialogLinkTextView)
-        val dialogFavoriteToggleButton = dialogView.findViewById<ImageButton>(R.id.favoriteToggleButton)
+        val dialogFavoriteToggleButton =
+            dialogView.findViewById<ImageButton>(R.id.favoriteToggleButton)
 
         // 데이터 설정
         dialogImageView.setImageResource(photo.imageResId)
@@ -97,13 +100,18 @@ class PhotoAdapter(
             onFavoriteStatusChanged(photo) // 상태 변경 콜백 호출
         }
 
-        // 다이얼로그 생성
-        AlertDialog.Builder(context)
+        val dialog = AlertDialog.Builder(context)
             .setView(dialogView)
-            .setPositiveButton("닫기") { dialog, _ ->
-                dialog.dismiss()
-            }
             .create()
-            .show()
+        dialog.show()
+//
+//        // 다이얼로그 생성
+//        AlertDialog.Builder(context)
+//            .setView(dialogView)
+//            .setPositiveButton("닫기") { dialog, _ ->
+//                dialog.dismiss()
+//            }
+//            .create()
+//            .show()
     }
 }
