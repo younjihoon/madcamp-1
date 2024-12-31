@@ -9,6 +9,6 @@
     <ImageView
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_add"
+        android:src="@drawable/baseline_add_circle_outline_24"
         android:contentDescription="imagePickerButton"/>
 </LinearLayout>
