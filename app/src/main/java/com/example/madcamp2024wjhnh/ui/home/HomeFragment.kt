@@ -144,6 +144,7 @@ class HomeFragment : Fragment() {
             val calendar = Calendar.getInstance()
             DatePickerDialog(
                 requireContext(),
+                R.style.CustomDatePickerTheme, // 커스텀 테마 적용
                 { _, year, month, dayOfMonth ->
                     val startDate = Calendar.getInstance().apply {
                         set(year, month, dayOfMonth)
@@ -162,6 +163,7 @@ class HomeFragment : Fragment() {
             val calendar = Calendar.getInstance()
             DatePickerDialog(
                 requireContext(),
+                R.style.CustomDatePickerTheme, // 커스텀 테마 적용
                 { _, year, month, dayOfMonth ->
                     val endDate = Calendar.getInstance().apply {
                         set(year, month, dayOfMonth)
