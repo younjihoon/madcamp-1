@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.ToggleButton
@@ -20,7 +21,7 @@ class HorizontalAdapter(private val context: Context, private val items: List<Ph
     inner class HorizontalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val textView: TextView = itemView.findViewById(R.id.photoTitleTextView)
         val imageView: ImageView = itemView.findViewById(R.id.photoImageView)
-        val favoriteButton: ImageView = itemView.findViewById(R.id.favoriteButton)
+        val favoriteButton: ImageButton = itemView.findViewById(R.id.favoriteButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HorizontalViewHolder {
@@ -60,7 +61,7 @@ class HorizontalAdapter(private val context: Context, private val items: List<Ph
         val dialogTitleTextView = dialogView.findViewById<TextView>(R.id.dialogTitleTextView)
         val dialogDescriptionTextView = dialogView.findViewById<TextView>(R.id.dialogDescriptionTextView)
         val dialogLinkTextView = dialogView.findViewById<TextView>(R.id.dialogLinkTextView)
-        val dialogFavoriteToggleButton = dialogView.findViewById<ToggleButton>(R.id.favoriteToggleButton)
+        val dialogFavoriteToggleButton = dialogView.findViewById<ImageButton>(R.id.favoriteToggleButton)
 
         // 데이터 설정
         dialogImageView.setImageResource(photo.imageResId)
@@ -68,11 +69,18 @@ class HorizontalAdapter(private val context: Context, private val items: List<Ph
         dialogDescriptionTextView.text = photo.description
         dialogLinkTextView.text = photo.link
 
-        // 즐겨찾기 토글 상태 설정
-        dialogFavoriteToggleButton.isChecked = photo.isFavorite
-        dialogFavoriteToggleButton.setOnCheckedChangeListener { _, isChecked ->
-            photo.isFavorite = isChecked
+        dialogFavoriteToggleButton.setImageResource(
+            if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
+        )
+
+        // 즐겨찾기 버튼 클릭 이벤트 처리
+        dialogFavoriteToggleButton.setOnClickListener {
+            photo.isFavorite = !photo.isFavorite
+            dialogFavoriteToggleButton.setImageResource(
+                if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
+            )
             notifyItemChanged(position) // RecyclerView 갱신
+            onFavoriteStatusChanged(photo) // 상태 변경 콜백 호출
         }
 
         // 다이얼로그 생성
