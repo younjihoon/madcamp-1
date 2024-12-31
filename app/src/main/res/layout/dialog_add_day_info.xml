@@ -21,11 +21,13 @@
         android:id="@+id/addAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:singleLine="true"
         android:hint="어디에 다녀 왔나요" />
     <EditText
         android:id="@+id/addDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxHeight="120dp"
         android:hint="설명을 입력하세요" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/addImagesRecyclerView"
