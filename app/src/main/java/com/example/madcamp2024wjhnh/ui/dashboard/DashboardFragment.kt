@@ -1,5 +1,6 @@
 package com.example.madcamp2024wjhnh.ui.dashboard
 
+import VerticalAdapter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -39,16 +40,26 @@ class DashboardFragment : Fragment() {
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         allPhotos = sharedViewModel.getPhotos() // ViewModel에서 전체 사진 데이터를 가져옴
 
-        // RecyclerView 설정
-//        adapter = PhotoAdapter(requireContext(), allPhotos)
-        adapter = PhotoAdapter(requireContext(), allPhotos) { updatedPhoto ->
-            if (isFavoritesView && !updatedPhoto.isFavorite) {
-                // 즐겨찾기 상태가 변경되고, 즐겨찾기 보기 상태일 경우
-                updateFavoritesView()
+        val tags = listOf<String>("이 집 잘하네", "서울여행 필수코스", "힐링이 필요해")
+        val tagPhoto = mutableListOf<MutableList<Photo>>()
+        for (tag in tags) {
+            tagPhoto.add(mutableListOf())
+        }
+        for ((i, photo) in allPhotos.withIndex()) {
+            when (i % 3) {
+                0 -> tagPhoto[0].add(photo) // "이 집 잘하네" 그룹에 추가
+                1 -> tagPhoto[1].add(photo) // "서울여행 필수코스" 그룹에 추가
+                2 -> tagPhoto[2].add(photo) // "힐링이 필요해" 그룹에 추가
             }
         }
-        binding.placesRecyclerView.layoutManager = GridLayoutManager(requireContext(), 3)
-        binding.placesRecyclerView.adapter = adapter
+        val sections = tagPhoto.mapIndexed { index, photos ->
+            com.example.madcamp2024wjhnh.data.Section(tags[index], photos)
+        }
+
+        val verticalRecyclerView = binding.placesRecyclerView
+        verticalRecyclerView.layoutManager = GridLayoutManager(requireContext(), 1)
+        verticalRecyclerView.adapter = VerticalAdapter(requireContext(),sections)
+
 
         // 검색창에 TextWatcher 추가
         binding.searchEditText.addTextChangedListener(object : TextWatcher {
