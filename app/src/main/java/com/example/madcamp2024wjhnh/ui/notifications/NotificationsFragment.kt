@@ -80,30 +80,55 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_map_detail, null)
         val maptitleTextView = dialogView.findViewById<TextView>(R.id.maptitle)
         val maplinkTextView = dialogView.findViewById<TextView>(R.id.maplink)
+        val mapdescriptionTextView = dialogView.findViewById<TextView>(R.id.mapdescription)
         val mapfavoriteButton = dialogView.findViewById<ImageButton>(R.id.mapfavoriteButton)
+
 
         // 데이터 설정
         maptitleTextView.text = photo.title
         maplinkTextView.text = photo.link
+        mapdescriptionTextView.text = photo.description
 
+        mapfavoriteButton.setImageResource(
+            if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
+        )
+
+        // 초기 즐겨찾기 상태 설정
         mapfavoriteButton.setImageResource(
             if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
         )
 
         // 즐겨찾기 버튼 클릭 이벤트 처리
         mapfavoriteButton.setOnClickListener {
-            photo.isFavorite = !photo.isFavorite
+            photo.isFavorite = !photo.isFavorite // 상태 반전
+
+            // 버튼 아이콘 즉시 갱신
             mapfavoriteButton.setImageResource(
-                if (photo.isFavorite) R.drawable.ic_star_filled
-                else {
-                    marker.map = null // 마커 제거
-                    markersMap.remove(marker) // 매핑에서 제거
-                    R.drawable.ic_star_outline
-                }
+                if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
             )
-//            notifyItemChanged(position) // RecyclerView 갱신
-//            onFavoriteStatusChanged(photo) // 상태 변경 콜백 호출
-            sharedViewModel.updatePhoto(photo) // 상태 업데이트를 sharedViewModel로 전달
+
+            if (photo.isFavorite) {
+                // 즐겨찾기 추가: 새 마커 생성
+                if (!markersMap.values.contains(photo)) { // 중복 방지
+                    val newMarker = Marker().apply {
+                        position = LatLng(photo.latitude, photo.longitude)
+                        icon = MarkerIcons.YELLOW
+                        map = naverMap
+                        setOnClickListener {
+                            showPhotoDialog(photo, this)
+                            true
+                        }
+                    }
+                    markersMap[newMarker] = photo
+                }
+            } else {
+                // 즐겨찾기 삭제: 기존 마커 제거
+                marker?.map = null
+                marker?.let { markersMap.remove(it) }
+            }
+
+            // ViewModel에 변경 사항 반영
+            sharedViewModel.updatePhoto(photo)
         }
 
         val dialog = AlertDialog.Builder(requireContext())
@@ -118,10 +143,5 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
         }
 
         dialog.show()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

@@ -83,13 +83,9 @@ class HorizontalAdapter(private val context: Context, private val items: List<Ph
             onFavoriteStatusChanged(photo) // 상태 변경 콜백 호출
         }
 
-        // 다이얼로그 생성
-        AlertDialog.Builder(context)
+        val dialog = AlertDialog.Builder(context)
             .setView(dialogView)
-            .setPositiveButton("닫기") { dialog, _ ->
-                dialog.dismiss()
-            }
             .create()
-            .show()
+        dialog.show()
     }
 }
