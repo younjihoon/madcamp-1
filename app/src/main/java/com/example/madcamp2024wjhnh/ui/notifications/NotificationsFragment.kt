@@ -1,6 +1,9 @@
 package com.example.madcamp2024wjhnh.ui.notifications
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +37,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
     private lateinit var naverMap: NaverMap
     private lateinit var sharedViewModel: SharedViewModel
     private val markersMap = mutableMapOf<Marker, Photo>() // 마커와 사진 데이터를 매핑
+    private lateinit var sharedPreferences : SharedPreferences
 //    private val onFavoriteStatusChanged: (Photo) -> Unit // 즐겨찾기 상태 변경 콜백
 
 
@@ -50,6 +54,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
                 childFragmentManager.beginTransaction().add(R.id.map_fragment, it).commit()
             }
         mapFragment.getMapAsync(this)
+        sharedPreferences = requireContext().getSharedPreferences("favorites", Context.MODE_PRIVATE)
 
         val root: View = binding.root
         return root
@@ -58,7 +63,17 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
-        val favoritePhotos = sharedViewModel.getFavoritePhotos()
+        val startlikedPlaces = sharedViewModel.getPhotos() // ViewModel에서 전체 사진 데이터를 가져옴
+        var favoritePhotos = mutableListOf<Photo>()
+        for (photo in startlikedPlaces) {
+            var likedPlaces = loadFavoriteIds()
+            Log.e("[DashboardF]","${likedPlaces} is likedPlaces")
+            if (photo.title in likedPlaces) {
+                photo.isFavorite = true
+                favoritePhotos.add(photo)
+                Log.e("[DashboardF]","${photo.title} is liked")
+            }
+        }
 
         for (photo in favoritePhotos) {
             val marker = Marker()
@@ -103,6 +118,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
             )
 //            notifyItemChanged(position) // RecyclerView 갱신
 //            onFavoriteStatusChanged(photo) // 상태 변경 콜백 호출
+            onFavoriteButtonClick(photo.title,photo.isFavorite)
             sharedViewModel.updatePhoto(photo) // 상태 업데이트를 sharedViewModel로 전달
         }
 
@@ -119,7 +135,31 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
 
         dialog.show()
     }
+    private fun saveFavoriteIds(favoriteIds: List<String>) {
+        val sharedPreferences = requireContext().getSharedPreferences("favorites", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putStringSet("favorite_ids", favoriteIds.toSet()) // List를 Set으로 변환하여 저장
+        editor.apply() // 비동기 저장
+        Log.e("DashboardF","Saved: ${favoriteIds}")
+    }
+    private fun loadFavoriteIds(): List<String> {
+        val sharedPreferences = requireContext().getSharedPreferences("favorites", Context.MODE_PRIVATE)
+        return sharedPreferences.getStringSet("favorite_ids", emptySet())!!.toList() // Set을 List로 변환
+    }
 
+    private fun onFavoriteButtonClick(photoId: String, isFavorite: Boolean) {
+        val favoriteIds = loadFavoriteIds().toMutableList()
+
+        if (isFavorite) {
+            if (!favoriteIds.contains(photoId)) {
+                favoriteIds.add(photoId) // 좋아요 추가
+            }
+        } else {
+            favoriteIds.remove(photoId) // 좋아요 취소
+        }
+
+        saveFavoriteIds(favoriteIds) // 업데이트된 리스트 저장
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
