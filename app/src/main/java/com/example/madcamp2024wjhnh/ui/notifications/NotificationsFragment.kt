@@ -25,6 +25,8 @@ import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.OverlayImage
 import com.naver.maps.map.util.MarkerIcons
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 
 class NotificationsFragment : Fragment(), OnMapReadyCallback {
 
@@ -60,6 +62,12 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
         return root
     }
 
+    private fun getResizedOverlayImage(resourceId: Int, width: Int, height: Int): OverlayImage {
+        val originalBitmap = BitmapFactory.decodeResource(resources, resourceId)
+        val resizedBitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, true)
+        return OverlayImage.fromBitmap(resizedBitmap)
+    }
+
     override fun onMapReady(naverMap: NaverMap) {
         this.naverMap = naverMap
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
@@ -79,9 +87,8 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
             var marker = Marker()
             marker.position = LatLng(photo.latitude, photo.longitude)
             marker.map = naverMap
-            marker.icon = MarkerIcons.YELLOW //https://navermaps.github.io/android-map-sdk/reference/com/naver/maps/map/util/MarkerIcons.html
-//            marker.icon = OverlayImage.fromResource(R.drawable.ic_pin_star)
-
+//            marker.icon = MarkerIcons.YELLOW //https://navermaps.github.io/android-map-sdk/reference/com/naver/maps/map/util/MarkerIcons.html
+            marker.icon = getResizedOverlayImage(R.drawable.ic_marker, 150, 200) // 크기 조정된 아이콘
             markersMap[marker] = photo
 
             marker.setOnClickListener {
@@ -90,6 +97,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
+
 
     private fun showPhotoDialog(photo: Photo, markerr: Marker) {
         var marker = markerr
@@ -124,7 +132,10 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
                 if (!markersMap.values.contains(photo)) { // 중복 방지
                     val newMarker = Marker().apply {
                         position = LatLng(photo.latitude, photo.longitude)
-                        icon = MarkerIcons.YELLOW
+//                        icon = MarkerIcons.YELLOW
+//                        icon = OverlayImage.fromResource(R.drawable.ic_marker)
+                        icon = getResizedOverlayImage(R.drawable.ic_marker, 150, 200) // 크기 조정된 아이콘
+
                         map = naverMap
                         setOnClickListener {
                             showPhotoDialog(photo, this)
