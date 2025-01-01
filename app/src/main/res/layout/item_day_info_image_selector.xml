@@ -12,5 +12,6 @@
         android:layout_marginTop="16dp"
         android:scrollbars="vertical"
         android:clipToPadding="false"
+        android:scaleType="centerCrop"
         android:padding="8dp" />
 </LinearLayout>

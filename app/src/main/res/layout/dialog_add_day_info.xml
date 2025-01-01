@@ -13,8 +13,7 @@
         android:layout_margin="20dp"
         android:background="@drawable/textedit_disabled"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingTop="10dp">
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/addNumber"

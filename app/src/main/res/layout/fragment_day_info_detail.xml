@@ -1,62 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:padding="16dp">
-
-
-    <LinearLayout
-        android:id="@+id/linearlayout"
+    android:background="@color/white">
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:layout_height="match_parent">
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/ThemeOverlay.MaterialComponents.ActionBar">
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/detailViewPager"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintDimensionRatio="1:1"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <Button
-            android:id="@+id/editButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="수정"
-            android:layout_marginBottom="15dp" />
-        <LinearLayout
-            android:id="@+id/linearlayout2"
+            android:id="@+id/innerLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="15dp">
+            android:background="@color/white"
+            android:gravity="center">
             <LinearLayout
                 android:id="@+id/linearlayout3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:background="@drawable/textedit_disabled">
+                android:layout_margin="16dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
                 <EditText
                     android:id="@+id/detailDayNumberEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    android:padding="10dp"
+                    android:paddingRight="1dp"
                     android:textStyle="bold"
                     android:enabled="false"
                     android:singleLine="true"
@@ -69,46 +47,115 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    android:padding="10dp"
+                    android:paddingLeft="1dp"
                     android:textStyle="bold"
                     android:enabled="false"
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:background="@android:color/transparent"
-                    android:text="일차" />
+                    android:text="일차의 여행기록" />
             </LinearLayout>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-            <EditText
-                android:id="@+id/detailAddressEditText"
+            <Button
+                android:id="@+id/editButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:padding="10dp"
-                android:enabled="false"
-                android:singleLine="true"
-                android:textColor="@color/black"
-                android:text="123 Main Street"
-                android:background="@drawable/textedit_disabled" />
-        </LinearLayout>
+                android:text="수정"
+                android:textSize="18sp"
+                android:layout_marginRight="10dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.5"
+                app:layout_constraintRight_toRightOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <EditText
-            android:id="@+id/detailDescriptionEditText"
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:id="@+id/linearlayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="vertical"
-            android:background="@drawable/textedit_disabled"
-            android:enabled="false"
-            android:padding="10dp"
-            android:text="Description goes here."
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-        <View
-            android:layout_width="1000dp"
-            android:layout_height="1000dp"
-            android:layout_weight="1"/>
+            app:layout_constraintEnd_toEndOf="parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
+
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/detailViewPager"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:paddingLeft="36dp"
+                        android:paddingRight="36dp"
+
+                        app:layout_constraintDimensionRatio="1:1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+                    <ImageButton
+                        android:id="@+id/btn_viewimageedit"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_gravity="top|end"
+                        android:layout_marginLeft="36dp"
+                        android:layout_marginRight="36dp"
+                        android:background="@android:color/transparent"
+                        android:src="@drawable/ic_edit_pencil"
+                        android:contentDescription="@string/edit_item"
+                        android:scaleType="centerCrop"
+                        android:adjustViewBounds="true"
+                        android:padding="10dp"
+                        android:visibility="invisible"
+                        app:layout_constraintStart_toStartOf="@+id/detailViewPager"
+                        app:layout_constraintTop_toTopOf="@+id/detailViewPager"
+                        />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="다녀온 곳: ">
+                    </TextView>
+                    <EditText
+                        android:id="@+id/detailAddressEditText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:padding="10dp"
+                        android:enabled="false"
+                        android:singleLine="true"
+                        android:textColor="@color/black"
+                        android:text="123 Main Street"
+                        android:background="@drawable/textedit_disabled" />
+                </LinearLayout>
+                <EditText
+                    android:id="@+id/detailDescriptionEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    android:background="@drawable/textedit_disabled"
+                    android:enabled="false"
+                    android:padding="10dp"
+                    android:text="Description goes here."
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
-</ScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

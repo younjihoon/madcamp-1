@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp2024wjhnh.data.DayInfo
-import com.example.madcamp2024wjhnh.data.Travel
 import com.example.madcamp2024wjhnh.databinding.ActivityDayInfoBinding
 import com.example.madcamp2024wjhnh.ui.DayInfoAdapter
 import android.content.Context
@@ -17,17 +15,12 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.madcamp2024wjhnh.data.DayInfoListConverter
-import com.example.madcamp2024wjhnh.data.TravelR
-import okhttp3.internal.notify
-import com.example.madcamp2024wjhnh.SharedViewModel
 
 class DayInfoActivity: AppCompatActivity() {
     private lateinit var binding: ActivityDayInfoBinding
@@ -66,10 +59,12 @@ class DayInfoActivity: AppCompatActivity() {
         }
         adapter = DayInfoAdapter(dayInfoList) { dayInfo ->
             val fragment = DayInfoDetailFragment.newInstance(dayInfo, travelRId)
+
+            // 애니메이션 설정
+            val transaction = (context as? AppCompatActivity)?.supportFragmentManager?.beginTransaction()
             // Replace the current fragment
             findViewById<FrameLayout>(R.id.fragment_frame).elevation = 20f
-            (context as? AppCompatActivity)?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.scrollView, fragment) // Use the correct container ID
+            transaction?.replace(R.id.fragmentView, fragment) // Use the correct container ID
                 ?.addToBackStack(null) // Optional: Add to back stack
                 ?.commit()
         }
@@ -77,6 +72,7 @@ class DayInfoActivity: AppCompatActivity() {
             if (!travels.isNullOrEmpty()) {
                 dayInfoList.clear()
                 dayInfoList.addAll(travels[0].DayInfos)
+                dayInfoList.sortBy { dayInfo -> dayInfo.number }
                 adapter.notifyDataSetChanged()
             }
         }
@@ -104,34 +100,41 @@ class DayInfoActivity: AppCompatActivity() {
         val dialogNumberEditText = dialogView.findViewById<EditText>(R.id.addNumber)
         val dialogAddressEditText = dialogView.findViewById<EditText>(R.id.addAddress)
         val dialogDescriptionEditText = dialogView.findViewById<EditText>(R.id.addDescription)
-        AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
-            .setPositiveButton("추가") { dialog, _ ->
-                val number = dialogNumberEditText.text.toString().toIntOrNull()
-                val address = dialogAddressEditText.text.toString().split(",").toMutableList()
-                val description = dialogDescriptionEditText.text.toString()
-                val photoList = imageList
-                if (photoList.isEmpty()) Toast.makeText(this, "이미지를 선택하세요.", Toast.LENGTH_SHORT).show()
-                else{
-                    if (number != null) {
-                        val newDayInfo = DayInfo(number, address, description, photoList)
-                        dayInfoList.add(newDayInfo)
-                        adapter.notifyItemInserted(dayInfoList.size - 1)
-                        travelDayInfos.clear()
-                        travelDayInfos.addAll(dayInfoList)
-                        travelViewModel.updateById(travelRId, travelDayInfos) { success ->
-                            if (success) {
-                                Log.d("[DayInfoActivity]debug", "TravelR updated successfully!")
-                            } else {
-                                Log.d("[DayInfoActivity]debug", "Failed to update TravelR.")
-                            }
+            .setPositiveButton("추가",null)
+            .create()
+
+        dialog.show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val photoList = ArrayList(imageList)
+            val number = dialogNumberEditText.text.toString().toIntOrNull()
+            val address = dialogAddressEditText.text.toString().split(",").toMutableList()
+            val description = dialogDescriptionEditText.text.toString()
+
+            if (photoList.isEmpty()) Toast.makeText(this, "이미지를 선택하세요.", Toast.LENGTH_SHORT).show()
+            else{
+                if (number != null) {
+                    val newDayInfo = DayInfo(number, address, description, photoList)
+                    dayInfoList.add(newDayInfo)
+                    dayInfoList.sortBy { dayInfo -> dayInfo.number }
+                    adapter.notifyDataSetChanged()
+                    travelDayInfos.clear()
+                    travelDayInfos.addAll(dayInfoList)
+                    travelViewModel.updateById(travelRId, travelDayInfos) { success ->
+                        if (success) {
+                            Log.d("[DayInfoActivity]debug", "TravelR updated successfully!")
+                        } else {
+                            Log.d("[DayInfoActivity]debug", "Failed to update TravelR.")
                         }
                     }
                     dialog.dismiss()
                 }
+                else Toast.makeText(this, "일차를 입력하세요.", Toast.LENGTH_SHORT).show()
+
             }
-            .create()
-            .show()
+        }
     }
 
     private fun openImagePicker() {
