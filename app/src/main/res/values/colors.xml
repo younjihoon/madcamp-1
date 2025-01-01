@@ -10,8 +10,18 @@
     <color name="gray">#808080</color>
     <color name="deep_gray">#606060</color>
     <color name="light_gray">#F0F0F0</color>
-    <color name="light_brown">#D2B48C</color>
+
+
+    <color name="beige">#D2B48C</color>
+    <color name="light_beige">#C5A582</color>
+    <color name="deep_beige">#C19A6B</color>
     <color name="camel">#C19A6B</color>
+
+    <color name="orange">#f8a02d</color>
+    <color name="bright_orange">#fe9100</color>
+    <color name="light_orange">#ffbe68</color>
+    <color name="deep_orange">#eb8315</color>
+
 
 
     <color name="light_pastel_blue">#B7D7F7</color>
