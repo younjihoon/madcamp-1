@@ -93,6 +93,7 @@ class HorizontalAdapter(private val context: Context, private val items: List<Ph
         val dialog = AlertDialog.Builder(context)
             .setView(dialogView)
             .create()
+        dialog.window?.setBackgroundDrawableResource(R.drawable.rounded_dialog)
         dialog.show()
     }
     private fun saveFavoriteIds(favoriteIds: List<String>) {

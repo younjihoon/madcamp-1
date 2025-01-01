@@ -25,14 +25,12 @@
         android:layout_height="wrap_content"
         android:text="My Trip Diary"
         android:textColor="@android:color/black"
+        android:background="@color/white"
         android:gravity="center"
         android:textStyle="bold"
         android:padding="16dp"
-        android:textSize="18sp"
-        android:background="@drawable/border_gray"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textSize="18sp"/>
+
 
     <!-- RecyclerView: 목록 표시 -->
     <androidx.recyclerview.widget.RecyclerView
