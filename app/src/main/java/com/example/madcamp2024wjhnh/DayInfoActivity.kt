@@ -72,6 +72,7 @@ class DayInfoActivity: AppCompatActivity() {
             if (!travels.isNullOrEmpty()) {
                 dayInfoList.clear()
                 dayInfoList.addAll(travels[0].DayInfos)
+                dayInfoList.sortBy { dayInfo -> dayInfo.number }
                 adapter.notifyDataSetChanged()
             }
         }
@@ -112,7 +113,8 @@ class DayInfoActivity: AppCompatActivity() {
                     if (number != null) {
                         val newDayInfo = DayInfo(number, address, description, photoList)
                         dayInfoList.add(newDayInfo)
-                        adapter.notifyItemInserted(dayInfoList.size - 1)
+                        dayInfoList.sortBy { dayInfo -> dayInfo.number }
+                        adapter.notifyDataSetChanged()
                         travelDayInfos.clear()
                         travelDayInfos.addAll(dayInfoList)
                         travelViewModel.updateById(travelRId, travelDayInfos) { success ->
