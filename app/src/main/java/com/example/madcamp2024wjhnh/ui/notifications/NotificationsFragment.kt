@@ -67,11 +67,11 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
         var favoritePhotos = mutableListOf<Photo>()
         for (photo in startlikedPlaces) {
             var likedPlaces = loadFavoriteIds()
-            Log.e("[DashboardF]","${likedPlaces} is likedPlaces")
+            Log.e("[NotiF]","${likedPlaces} is likedPlaces")
             if (photo.title in likedPlaces) {
                 photo.isFavorite = true
                 favoritePhotos.add(photo)
-                Log.e("[DashboardF]","${photo.title} is liked")
+                Log.e("[NotiF]","${photo.title} is liked")
             }
         }
 
@@ -136,9 +136,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
                     }
                     markersMap[newMarker] = photo
                 }
-            )
-//            onFavoriteButtonClick(photo.title,photo.isFavorite)
-            sharedViewModel.updatePhoto(photo) // 상태 업데이트를 sharedViewModel로 전달
+
             } else {
                 // 즐겨찾기 삭제: 기존 마커 제거
                 marker?.map = null
@@ -147,6 +145,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
 
             // ViewModel에 변경 사항 반영
             sharedViewModel.updatePhoto(photo)
+            onFavoriteButtonClick(photo.title,photo.isFavorite)
         }
 
         val dialog = AlertDialog.Builder(requireContext())
@@ -167,7 +166,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
         val editor = sharedPreferences.edit()
         editor.putStringSet("favorite_ids", favoriteIds.toSet()) // List를 Set으로 변환하여 저장
         editor.apply() // 비동기 저장
-        Log.e("DashboardF","Saved: ${favoriteIds}")
+        Log.e("[NotiF]","Saved: ${favoriteIds}")
     }
     private fun loadFavoriteIds(): List<String> {
         val sharedPreferences = requireContext().getSharedPreferences("favorites", Context.MODE_PRIVATE)
@@ -186,6 +185,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
         }
 
         saveFavoriteIds(favoriteIds) // 업데이트된 리스트 저장
+        Log.e("[NotiF]","new Saved: ${favoriteIds}")
     }
     override fun onDestroyView() {
         super.onDestroyView()
