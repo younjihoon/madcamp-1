@@ -1,6 +1,8 @@
 package com.example.madcamp2024wjhnh.ui.dashboard
 
 import VerticalAdapter
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -30,6 +32,7 @@ class DashboardFragment : Fragment() {
     private var isFavoritesView: Boolean = false // 현재 즐겨찾기 보기 상태를 나타냄
     private val tags = listOf<String>("이 집 잘하네", "서울여행 필수코스", "힐링이 필요해")
     private val tagPhoto = mutableListOf<MutableList<Photo>>()
+    private lateinit var sharedPreferences : SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +41,7 @@ class DashboardFragment : Fragment() {
     ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         dashboardViewModel = ViewModelProvider(requireActivity())[DashboardViewModel::class.java]
+        sharedPreferences = requireContext().getSharedPreferences("favorites", Context.MODE_PRIVATE)
 
         for (tag in tags) {
             tagPhoto.add(mutableListOf())
@@ -51,6 +55,16 @@ class DashboardFragment : Fragment() {
 
         sharedViewModel = ViewModelProvider(requireActivity())[SharedViewModel::class.java]
         allPhotos = sharedViewModel.getPhotos() // ViewModel에서 전체 사진 데이터를 가져옴
+        var startlikedPlaces = mutableListOf<Photo>()
+        for (photo in allPhotos) {
+            var likedPlaces = loadFavoriteIds()
+            Log.e("[DashboardF]","${likedPlaces} is likedPlaces")
+            if (photo.title in likedPlaces) {
+                photo.isFavorite = true
+                startlikedPlaces.add(photo)
+                Log.e("[DashboardF]","${photo.title} is liked")
+            }
+        }
         for ((i, photo) in allPhotos.withIndex()) {
             tagPhoto[i % tagPhoto.size].add(photo)
         }
@@ -112,6 +126,13 @@ class DashboardFragment : Fragment() {
             com.example.madcamp2024wjhnh.data.Section(tags[index], photos)
         }
         Log.e("[DashboardF]","notify: $newsections")
+        var likedPlaces = mutableListOf<String>()
+        for (section in newsections) {
+            for (photo in section.items) {
+                likedPlaces.add(photo.title)
+            }
+        }
+        saveFavoriteIds(likedPlaces.toList())
         adapter.updateSections(newsections)
     }
 
@@ -133,6 +154,33 @@ class DashboardFragment : Fragment() {
             com.example.madcamp2024wjhnh.data.Section(tags[index], photos)
         }
         adapter.updateSections(newsections)
+    }
+
+    private fun saveFavoriteIds(favoriteIds: List<String>) {
+        val sharedPreferences = requireContext().getSharedPreferences("favorites", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putStringSet("favorite_ids", favoriteIds.toSet()) // List를 Set으로 변환하여 저장
+        editor.apply() // 비동기 저장
+        Log.e("DashboardF","Saved: ${favoriteIds}")
+    }
+
+    private fun loadFavoriteIds(): List<String> {
+        val sharedPreferences = requireContext().getSharedPreferences("favorites", Context.MODE_PRIVATE)
+        return sharedPreferences.getStringSet("favorite_ids", emptySet())!!.toList() // Set을 List로 변환
+    }
+
+    private fun onFavoriteButtonClick(photoId: String, isFavorite: Boolean) {
+        val favoriteIds = loadFavoriteIds().toMutableList()
+
+        if (isFavorite) {
+            if (!favoriteIds.contains(photoId)) {
+                favoriteIds.add(photoId) // 좋아요 추가
+            }
+        } else {
+            favoriteIds.remove(photoId) // 좋아요 취소
+        }
+
+        saveFavoriteIds(favoriteIds) // 업데이트된 리스트 저장
     }
 
     override fun onDestroyView() {
