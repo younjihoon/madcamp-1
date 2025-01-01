@@ -197,7 +197,40 @@ class HomeFragment : Fragment() {
 
             // 필수 필드 확인
             if (title.isNotEmpty()) {
-//            if (title.isNotEmpty() && selectedImageUri != Uri.EMPTY && selectedImageUri != null) {
+//            if (title.isNotEmpty() && selectedImageUri != Uri.EMPTY && {
+////            if (title.isNotEmpty() && selectedImageUri != Uri.EMPTY && selectedImageUri != null) {
+//                val newTravel = TravelR(
+//                    title = title,
+//                    place = place,
+//                    date = date,
+//                    tags = processedTags,
+//                    memo = memo,
+//                    thumbnail = selectedImageUri ?: Uri.EMPTY, // URI가 없으면 EMPTY로 설정
+//                    DayInfos = mutableListOf()
+//                )
+//                Log.e("NOTATION", "new travel inserted in travelViewModel, $newTravel")
+//                var roomID: Int = 0
+//                travelViewModel.insert(newTravel) { id ->
+//                    Log.d("debug", "New travel inserted with ID: $id")
+//                    // 이후 ID를 활용한 작업
+//                    roomID = id
+//                    val newTravel = TravelR(
+//                        id = roomID,
+//                        title = title,
+//                        place = place,
+//                        date = date,
+//                        tags = tags,
+//                        memo = memo,
+//                        thumbnail = selectedImageUri ?: Uri.EMPTY, // URI가 없으면 EMPTY로 설정
+//                        DayInfos = mutableListOf()
+//                    )
+//                    travelList.add(newTravel)
+//                    sharedViewModel.setNewTravel(newTravel)
+//                    travelAdapter.notifyItemInserted(travelList.size-1)
+//                }
+//                Toast.makeText(requireContext(), "새로운 여행이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+//                dialog.dismiss()
+//            }selectedImageUri != null) {
                 val newTravel = TravelR(
                     title = title,
                     place = place,
