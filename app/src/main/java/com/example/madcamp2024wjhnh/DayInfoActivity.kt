@@ -98,6 +98,7 @@ class DayInfoActivity: AppCompatActivity() {
         imageRecyclerView.adapter = imageAdapter
 
         val dialogNumberEditText = dialogView.findViewById<EditText>(R.id.addNumber)
+        dialogNumberEditText.setText("${dayInfoList.size+1}")
         val dialogAddressEditText = dialogView.findViewById<EditText>(R.id.addAddress)
         val dialogDescriptionEditText = dialogView.findViewById<EditText>(R.id.addDescription)
         val dialog = AlertDialog.Builder(this)
