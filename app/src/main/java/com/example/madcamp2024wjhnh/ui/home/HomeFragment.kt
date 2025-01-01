@@ -374,7 +374,6 @@ class HomeFragment : Fragment() {
             .setMessage("Are you sure you want to delete this travel?")
             .setPositiveButton("Yes") { _, _ ->
                 sharedViewModel.deleteTravel(position)
-                sharedViewModel.deleteTravel(position) // ViewModel에서 삭제
                 travelViewModel.delete(travel)
                 Toast.makeText(context, "Travel deleted", Toast.LENGTH_SHORT).show()
             }
