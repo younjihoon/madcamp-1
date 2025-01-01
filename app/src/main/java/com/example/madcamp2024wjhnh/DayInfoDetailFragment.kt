@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -91,9 +92,6 @@ class DayInfoDetailFragment : Fragment() {
 
     private fun editButtonOnClick(editing: Boolean, i: Int) {
         Log.e("[DIDFragment]", "editing: $editing, i : $i")
-        binding.detailDayNumberEditText.isEnabled = editing
-        binding.detailAddressEditText.isEnabled = editing
-        binding.detailDescriptionEditText.isEnabled = editing
 
 
         imageAdapter = DayInfoImageAddAdapter(imageList) {
@@ -117,10 +115,13 @@ class DayInfoDetailFragment : Fragment() {
                 .show()
         }
         if (editing) {
+            binding.detailDayNumberEditText.isEnabled = editing
+            binding.detailAddressEditText.isEnabled = editing
+            binding.detailDescriptionEditText.isEnabled = editing
             binding.editButton.text = "완료"
             binding.btnViewimageedit.visibility = View.VISIBLE
-            binding.linearlayout3.background =
-                ContextCompat.getDrawable(requireContext(), R.drawable.rounded_background_outline)
+//            binding.linearlayout3.background =
+//                ContextCompat.getDrawable(requireContext(), R.drawable.rounded_background_outline)
             binding.detailAddressEditText.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.rounded_background_outline)
             binding.detailDescriptionEditText.background =
@@ -128,23 +129,35 @@ class DayInfoDetailFragment : Fragment() {
             this.editing = false
 
         } else {
-
-            binding.editButton.text = "수정"
-            binding.btnViewimageedit.visibility = View.INVISIBLE
-            binding.linearlayout3.background = null
-            binding.detailAddressEditText.background =
-                ContextCompat.getDrawable(requireContext(), R.drawable.textedit_disabled)
-            binding.detailDescriptionEditText.background =
-                ContextCompat.getDrawable(requireContext(), R.drawable.textedit_disabled)
-            this.editing = true
-            travel.DayInfos[i] = DayInfo(
-                binding.detailDayNumberEditText.text.toString().toInt(),
-                binding.detailAddressEditText.text.split(",").toMutableList(),
-                binding.detailDescriptionEditText.text.toString(),
-                imageList
-            )
-            travelViewModel.updateById(travelID, travel.DayInfos) {}
-            sharedViewModel.updateTravel(0,travel)
+            try {
+                if (binding.detailDayNumberEditText.text.toString().isEmpty()) {
+                    Toast.makeText(requireContext(), "일차를 입력해 주세요.", Toast.LENGTH_SHORT).show()
+                }
+                else {
+                    binding.detailDayNumberEditText.isEnabled = editing
+                    binding.detailAddressEditText.isEnabled = editing
+                    binding.detailDescriptionEditText.isEnabled = editing
+                    binding.editButton.text = "수정"
+                    binding.btnViewimageedit.visibility = View.INVISIBLE
+//            binding.linearlayout3.background = null
+                    binding.detailAddressEditText.background =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.textedit_disabled)
+                    binding.detailDescriptionEditText.background =
+                        ContextCompat.getDrawable(requireContext(), R.drawable.textedit_disabled)
+                    this.editing = true
+                    travel.DayInfos[i] = DayInfo(
+                        binding.detailDayNumberEditText.text.toString().toInt(),
+                        binding.detailAddressEditText.text.split(",").toMutableList(),
+                        binding.detailDescriptionEditText.text.toString(),
+                        imageList
+                    )
+                    travelViewModel.updateById(travelID, travel.DayInfos) {}
+                    sharedViewModel.updateTravel(0, travel)
+                }
+            }
+            catch (e: Exception) {
+                Toast.makeText(requireContext(), "항목을 다시 확인해 주세요.", Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
