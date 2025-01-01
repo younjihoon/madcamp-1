@@ -48,5 +48,6 @@
 | 김나혜     | [@nanahyeya](https://github.com/nanahyeya)   | knh8783@gmail.com      |
 
 ## Download APK
-[download](https://drive.google.com/file/d/1G4zI_RWFy0amg5cvcpFJcEmaEW87j9M0/view?usp=sharing)
+https://drive.google.com/file/d/1qTkXPZSGPzYg4xK2RGuJDrAapJ2TA2Ch/view?usp=sharing
+
 
