@@ -105,7 +105,7 @@ class DayInfoActivity: AppCompatActivity() {
             .setView(dialogView)
             .setPositiveButton("추가",null)
             .create()
-
+        dialog.window?.setBackgroundDrawableResource(R.drawable.rounded_dialog)
         dialog.show()
 
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
