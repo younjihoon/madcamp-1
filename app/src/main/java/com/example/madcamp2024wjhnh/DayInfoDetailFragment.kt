@@ -131,8 +131,7 @@ class DayInfoDetailFragment : Fragment() {
 
             binding.editButton.text = "수정"
             binding.btnViewimageedit.visibility = View.INVISIBLE
-            binding.linearlayout3.background =
-                ContextCompat.getDrawable(requireContext(), R.drawable.textedit_disabled)
+            binding.linearlayout3.background = null
             binding.detailAddressEditText.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.textedit_disabled)
             binding.detailDescriptionEditText.background =

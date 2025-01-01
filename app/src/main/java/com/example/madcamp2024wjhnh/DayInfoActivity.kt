@@ -59,10 +59,12 @@ class DayInfoActivity: AppCompatActivity() {
         }
         adapter = DayInfoAdapter(dayInfoList) { dayInfo ->
             val fragment = DayInfoDetailFragment.newInstance(dayInfo, travelRId)
+
+            // 애니메이션 설정
+            val transaction = (context as? AppCompatActivity)?.supportFragmentManager?.beginTransaction()
             // Replace the current fragment
             findViewById<FrameLayout>(R.id.fragment_frame).elevation = 20f
-            (context as? AppCompatActivity)?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.fragmentView, fragment) // Use the correct container ID
+            transaction?.replace(R.id.fragmentView, fragment) // Use the correct container ID
                 ?.addToBackStack(null) // Optional: Add to back stack
                 ?.commit()
         }
@@ -100,10 +102,11 @@ class DayInfoActivity: AppCompatActivity() {
         AlertDialog.Builder(this)
             .setView(dialogView)
             .setPositiveButton("추가") { dialog, _ ->
+                val photoList = imageList
                 val number = dialogNumberEditText.text.toString().toIntOrNull()
                 val address = dialogAddressEditText.text.toString().split(",").toMutableList()
                 val description = dialogDescriptionEditText.text.toString()
-                val photoList = imageList
+
                 if (photoList.isEmpty()) Toast.makeText(this, "이미지를 선택하세요.", Toast.LENGTH_SHORT).show()
                 else{
                     if (number != null) {
