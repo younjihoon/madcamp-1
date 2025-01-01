@@ -5,11 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.madcamp2024wjhnh.data.DayInfo
-import com.example.madcamp2024wjhnh.data.Travel
 import com.example.madcamp2024wjhnh.databinding.ActivityDayInfoBinding
 import com.example.madcamp2024wjhnh.ui.DayInfoAdapter
 import android.content.Context
@@ -17,17 +15,12 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import android.view.View
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.madcamp2024wjhnh.data.DayInfoListConverter
-import com.example.madcamp2024wjhnh.data.TravelR
-import okhttp3.internal.notify
-import com.example.madcamp2024wjhnh.SharedViewModel
 
 class DayInfoActivity: AppCompatActivity() {
     private lateinit var binding: ActivityDayInfoBinding
@@ -69,7 +62,7 @@ class DayInfoActivity: AppCompatActivity() {
             // Replace the current fragment
             findViewById<FrameLayout>(R.id.fragment_frame).elevation = 20f
             (context as? AppCompatActivity)?.supportFragmentManager?.beginTransaction()
-                ?.replace(R.id.scrollView, fragment) // Use the correct container ID
+                ?.replace(R.id.fragmentView, fragment) // Use the correct container ID
                 ?.addToBackStack(null) // Optional: Add to back stack
                 ?.commit()
         }

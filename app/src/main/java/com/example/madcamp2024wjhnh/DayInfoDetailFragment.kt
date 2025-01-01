@@ -103,8 +103,7 @@ class DayInfoDetailFragment : Fragment() {
         val imageRecyclerView = dialogView.findViewById<RecyclerView>(R.id.addImagesRecyclerView)
         imageRecyclerView.layoutManager = GridLayoutManager(requireActivity(), 3) // 3열 Grid
         imageRecyclerView.adapter = imageAdapter
-
-        if (editing) {
+        binding.btnViewimageedit.setOnClickListener {
             AlertDialog.Builder(requireActivity())
                 .setView(dialogView)
                 .setPositiveButton("확인") { dialog, _ ->
@@ -116,7 +115,10 @@ class DayInfoDetailFragment : Fragment() {
                 }
                 .create()
                 .show()
+        }
+        if (editing) {
             binding.editButton.text = "완료"
+            binding.btnViewimageedit.visibility = View.VISIBLE
             binding.linearlayout3.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.rounded_background_outline)
             binding.detailAddressEditText.background =
@@ -128,6 +130,7 @@ class DayInfoDetailFragment : Fragment() {
         } else {
 
             binding.editButton.text = "수정"
+            binding.btnViewimageedit.visibility = View.INVISIBLE
             binding.linearlayout3.background =
                 ContextCompat.getDrawable(requireContext(), R.drawable.textedit_disabled)
             binding.detailAddressEditText.background =

@@ -13,15 +13,13 @@
         android:layout_margin="20dp"
         android:background="@drawable/textedit_disabled"
         android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingTop="10dp">
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/addNumber"
             android:layout_width="59dp"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:enabled="false"
             android:inputType="number"
             android:padding="10dp"
             android:singleLine="true"
