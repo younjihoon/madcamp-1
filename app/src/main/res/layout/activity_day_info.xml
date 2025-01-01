@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 상단바 추가 -->
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,14 +26,12 @@
                 android:textSize="18sp"/>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- 기존 콘텐츠 -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraint"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <!-- RecyclerView for DayInfo Slots -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/dayInfoRecyclerView"
                 android:layout_width="match_parent"
@@ -46,7 +43,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <!-- Add (+) Button -->
             <Button
                 android:id="@+id/addDayInfoButton"
                 android:layout_width="wrap_content"
