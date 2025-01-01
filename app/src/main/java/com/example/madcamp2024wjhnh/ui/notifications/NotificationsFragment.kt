@@ -76,7 +76,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
         }
 
         for (photo in favoritePhotos) {
-            val marker = Marker()
+            var marker = Marker()
             marker.position = LatLng(photo.latitude, photo.longitude)
             marker.map = naverMap
             marker.icon = MarkerIcons.YELLOW //https://navermaps.github.io/android-map-sdk/reference/com/naver/maps/map/util/MarkerIcons.html
@@ -91,7 +91,8 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
-    private fun showPhotoDialog(photo: Photo, marker: Marker) {
+    private fun showPhotoDialog(photo: Photo, markerr: Marker) {
+        var marker = markerr
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_map_detail, null)
         val maptitleTextView = dialogView.findViewById<TextView>(R.id.maptitle)
         val maplinkTextView = dialogView.findViewById<TextView>(R.id.maplink)
@@ -135,6 +136,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
                         }
                     }
                     markersMap[newMarker] = photo
+                    marker = newMarker
                 }
 
             } else {
