@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -7,7 +8,7 @@
     android:padding="18dp">
 
     <LinearLayout
-        android:layout_width="120dp"
+        android:layout_width="110dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:layout_margin="20dp"
@@ -17,7 +18,7 @@
 
         <EditText
             android:id="@+id/addNumber"
-            android:layout_width="60dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:inputType="number"
@@ -47,8 +48,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
-        android:hint="어디에 다녀왔나요?"
-        android:paddingTop="10dp"
+        android:hint="기억에 남는 장소"
+        android:paddingTop="20dp"
         android:paddingBottom="20dp"/>
 
     <EditText
@@ -65,7 +66,7 @@
         android:text="사진으로 소중한 추억을 간직하세요 !"
         android:layout_gravity="center_horizontal"
         android:textSize="18dp"
-        android:paddingTop="15dp"
+        android:paddingTop="20dp"
         android:paddingBottom="10dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
