@@ -100,36 +100,41 @@ class DayInfoActivity: AppCompatActivity() {
         val dialogNumberEditText = dialogView.findViewById<EditText>(R.id.addNumber)
         val dialogAddressEditText = dialogView.findViewById<EditText>(R.id.addAddress)
         val dialogDescriptionEditText = dialogView.findViewById<EditText>(R.id.addDescription)
-        AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
             .setView(dialogView)
-            .setPositiveButton("추가") { dialog, _ ->
-                val photoList = imageList
-                val number = dialogNumberEditText.text.toString().toIntOrNull()
-                val address = dialogAddressEditText.text.toString().split(",").toMutableList()
-                val description = dialogDescriptionEditText.text.toString()
+            .setPositiveButton("추가",null)
+            .create()
 
-                if (photoList.isEmpty()) Toast.makeText(this, "이미지를 선택하세요.", Toast.LENGTH_SHORT).show()
-                else{
-                    if (number != null) {
-                        val newDayInfo = DayInfo(number, address, description, photoList)
-                        dayInfoList.add(newDayInfo)
-                        dayInfoList.sortBy { dayInfo -> dayInfo.number }
-                        adapter.notifyDataSetChanged()
-                        travelDayInfos.clear()
-                        travelDayInfos.addAll(dayInfoList)
-                        travelViewModel.updateById(travelRId, travelDayInfos) { success ->
-                            if (success) {
-                                Log.d("[DayInfoActivity]debug", "TravelR updated successfully!")
-                            } else {
-                                Log.d("[DayInfoActivity]debug", "Failed to update TravelR.")
-                            }
+        dialog.show()
+
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val photoList = ArrayList(imageList)
+            val number = dialogNumberEditText.text.toString().toIntOrNull()
+            val address = dialogAddressEditText.text.toString().split(",").toMutableList()
+            val description = dialogDescriptionEditText.text.toString()
+
+            if (photoList.isEmpty()) Toast.makeText(this, "이미지를 선택하세요.", Toast.LENGTH_SHORT).show()
+            else{
+                if (number != null) {
+                    val newDayInfo = DayInfo(number, address, description, photoList)
+                    dayInfoList.add(newDayInfo)
+                    dayInfoList.sortBy { dayInfo -> dayInfo.number }
+                    adapter.notifyDataSetChanged()
+                    travelDayInfos.clear()
+                    travelDayInfos.addAll(dayInfoList)
+                    travelViewModel.updateById(travelRId, travelDayInfos) { success ->
+                        if (success) {
+                            Log.d("[DayInfoActivity]debug", "TravelR updated successfully!")
+                        } else {
+                            Log.d("[DayInfoActivity]debug", "Failed to update TravelR.")
                         }
                     }
                     dialog.dismiss()
                 }
+                else Toast.makeText(this, "일차를 입력하세요.", Toast.LENGTH_SHORT).show()
+
             }
-            .create()
-            .show()
+        }
     }
 
     private fun openImagePicker() {
