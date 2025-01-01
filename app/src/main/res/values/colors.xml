@@ -10,6 +10,9 @@
     <color name="gray">#808080</color>
     <color name="deep_gray">#606060</color>
     <color name="light_gray">#F0F0F0</color>
+    <color name="light_brown">#D2B48C</color>
+    <color name="camel">#C19A6B</color>
+
 
     <color name="light_pastel_blue">#B7D7F7</color>
     <color name="pastel_blue">#A7C7E7</color>

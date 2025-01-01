@@ -3,12 +3,12 @@
     <style name="Theme.MyApplication1" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowFullscreen">true</item>
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/deep_pastel_blue</item>
-        <item name="colorPrimaryVariant">@color/pastel_blue</item>
+        <item name="colorPrimary">@color/light_brown</item>
+        <item name="colorPrimaryVariant">@color/camel</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/deep_pastel_blue</item>
-        <item name="colorSecondaryVariant">@color/pastel_blue</item>
+        <item name="colorSecondary">@color/light_gray</item>
+        <item name="colorSecondaryVariant">@color/camel</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
