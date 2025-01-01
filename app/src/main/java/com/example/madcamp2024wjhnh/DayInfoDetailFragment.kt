@@ -76,6 +76,27 @@ class DayInfoDetailFragment : Fragment() {
             imageList = dayInfo.photoList
             displayDayInfoDetails(dayInfo)
         }
+        imageAdapter = DayInfoImageAddAdapter(imageList) {
+            openImagePicker()
+        }
+
+        binding.btnViewimageedit.setOnClickListener {
+            val dialogView = LayoutInflater.from(context).inflate(R.layout.item_day_info_image_selector, null)
+            val imageRecyclerView = dialogView.findViewById<RecyclerView>(R.id.addImagesRecyclerView)
+            imageRecyclerView.layoutManager = GridLayoutManager(requireActivity(), 3) // 3열 Grid
+            imageRecyclerView.adapter = imageAdapter
+            val imageDialog = AlertDialog.Builder(requireActivity())
+                .setView(dialogView)
+                .setPositiveButton("확인") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .setNegativeButton("취소") { dialog, _ ->
+                    imageList = this.dayInfo.photoList
+                    dialog.dismiss()
+                }
+                .create()
+            imageDialog.show()
+        }
 
 
     }
@@ -94,26 +115,7 @@ class DayInfoDetailFragment : Fragment() {
         Log.e("[DIDFragment]", "editing: $editing, i : $i")
 
 
-        imageAdapter = DayInfoImageAddAdapter(imageList) {
-            openImagePicker()
-        }
-        val dialogView = LayoutInflater.from(context).inflate(R.layout.item_day_info_image_selector, null)
-        val imageRecyclerView = dialogView.findViewById<RecyclerView>(R.id.addImagesRecyclerView)
-        imageRecyclerView.layoutManager = GridLayoutManager(requireActivity(), 3) // 3열 Grid
-        imageRecyclerView.adapter = imageAdapter
-        binding.btnViewimageedit.setOnClickListener {
-            AlertDialog.Builder(requireActivity())
-                .setView(dialogView)
-                .setPositiveButton("확인") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .setNegativeButton("취소") { dialog, _ ->
-                    imageList = dayInfo.photoList
-                    dialog.dismiss()
-                }
-                .create()
-                .show()
-        }
+
         if (editing) {
             binding.detailDayNumberEditText.isEnabled = editing
             binding.detailAddressEditText.isEnabled = editing
@@ -195,16 +197,16 @@ class DayInfoDetailFragment : Fragment() {
                     val imageUri = clipData.getItemAt(i).uri
                     imageList.add(imageUri)
                 }
-                imageAdapter.notifyItemRangeInserted(imageList.size - clipData.itemCount,clipData.itemCount)
-                imageDisplayAdapter.notifyItemRangeInserted(imageList.size - clipData.itemCount,clipData.itemCount)
+                imageAdapter.notifyDataSetChanged()
+                imageDisplayAdapter.notifyDataSetChanged()
 
             } else {
                 // 단일 선택
                 val imageUri = data?.data
                 imageUri?.let {
                     imageList.add(it)
-                    imageAdapter.notifyItemInserted(imageList.size - 1)
-                    imageDisplayAdapter.notifyItemInserted(imageList.size - 1)
+                    imageAdapter.notifyDataSetChanged()
+                    imageDisplayAdapter.notifyDataSetChanged()
 
                 }
             }

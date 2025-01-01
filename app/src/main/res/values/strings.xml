@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application1</string>
+    <string name="app_name">여로</string>
     <string name="title_home">Trip Diary</string>
     <string name="title_dashboard">Trip Ideas</string>
     <string name="title_notifications"> Planned Routes</string>
