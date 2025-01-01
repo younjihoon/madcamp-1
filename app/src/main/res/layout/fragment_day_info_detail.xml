@@ -79,9 +79,11 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintEnd_toEndOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -97,6 +99,8 @@
                         android:layout_height="0dp"
                         android:paddingLeft="36dp"
                         android:paddingRight="36dp"
+                        android:paddingTop="5dp"
+                        android:paddingBottom="20dp"
 
                         app:layout_constraintDimensionRatio="1:1"
                         app:layout_constraintTop_toTopOf="parent"
@@ -115,7 +119,7 @@
                         android:contentDescription="@string/edit_item"
                         android:scaleType="centerCrop"
                         android:adjustViewBounds="true"
-                        android:padding="10dp"
+                        android:padding="5dp"
                         android:visibility="invisible"
                         app:layout_constraintStart_toStartOf="@+id/detailViewPager"
                         app:layout_constraintTop_toTopOf="@+id/detailViewPager"
@@ -125,35 +129,56 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="10dp"
+                    android:paddingBottom="5dp">
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:text="다녀온 곳: ">
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:textColor="@color/black"
+                        android:text="여행 장소 :  ">
                     </TextView>
+
                     <EditText
                         android:id="@+id/detailAddressEditText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:padding="10dp"
                         android:enabled="false"
+                        android:layout_gravity="center_horizontal"
                         android:singleLine="true"
-                        android:textColor="@color/black"
-                        android:text="123 Main Street"
-                        android:background="@drawable/textedit_disabled" />
+                        android:textColor="@color/deep_gray"
+                        android:hint="기억에 남는 장소" />
                 </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:padding="10dp"
+                    android:paddingStart="20dp"
+
+                    android:text="여행 일기">
+                </TextView>
+
                 <EditText
                     android:id="@+id/detailDescriptionEditText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:scrollbars="vertical"
-                    android:background="@drawable/textedit_disabled"
                     android:enabled="false"
-                    android:padding="10dp"
-                    android:text="Description goes here."
-                    android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:padding="15dp"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="10dp"
+                    android:text="어떤 일들이 있었나요?"
+                    android:textColor="@color/deep_gray"
+                    android:textSize="16sp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
