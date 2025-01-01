@@ -26,23 +26,19 @@
 
 ### 1-1. 여행 표지 등록
 - 여행 표지를 등록 및 수정, 삭제를 할 수 있습니다.
-
-![여행 표지를 등록 및 수정, 삭제를 할 수 있습니다.](assets/travel.gif)
+- ![여행 표지를 등록 및 수정, 삭제를 할 수 있습니다.](assets/travel.gif)
 
 ### 1-2. 여행 일지 작성
 - 각 여행별 일지를 작성할 수 있습니다.
-
-![각 여행별 일지를 작성할 수 있습니다.](assets/diary.gif)
+- ![각 여행별 일지를 작성할 수 있습니다.](assets/diary.gif)
 
 ### 2-1. 여행지 추천 및 즐겨찾기
 - 추천받은 여행지를 둘러보고, 즐겨찾기한 여행지를 지도에서 볼 수 있습니다.
-
-![추천받은 여행지를 둘러보고, 즐겨찾기한 여행지를 지도에서 볼 수 있습니다.](assets/star.gif)
+- ![추천받은 여행지를 둘러보고, 즐겨찾기한 여행지를 지도에서 볼 수 있습니다.](assets/star.gif)
 
 ### 2-2. 여행지 검색
 - 여행지를 검색할 수 있습니다.
-
-![여행지를 검색할 수 있습니다.](assets/search.gif)
+- ![여행지를 검색할 수 있습니다.](assets/search.gif)
 
 ## Contributor
 
@@ -51,4 +47,6 @@
 | 윤지훈     | [@younjihoon](https://github.com/younjihoon) | jihoon9835@gmail.com |
 | 김나혜     | [@nanahyeya](https://github.com/nanahyeya)   | knh8783@gmail.com      |
 
+## Download APK
+[download](https://drive.google.com/file/d/1G4zI_RWFy0amg5cvcpFJcEmaEW87j9M0/view?usp=sharing)
 
