@@ -80,7 +80,7 @@
             android:layout_height="50dp"
             android:layout_gravity="top|end"
             android:background="@android:color/transparent"
-            android:src="@drawable/ic_edit_pencil"
+            android:src="@drawable/ic_edit_pencil_2"
             android:contentDescription="@string/edit_item"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
