@@ -105,10 +105,6 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
         maplinkTextView.text = photo.link
         mapdescriptionTextView.text = photo.description
 
-        mapfavoriteButton.setImageResource(
-            if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline
-        )
-
         // 초기 즐겨찾기 상태 설정
         mapfavoriteButton.setImageResource(
             if (photo.isFavorite) R.drawable.ic_star_filled else R.drawable.ic_star_outline

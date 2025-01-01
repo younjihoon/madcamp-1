@@ -28,12 +28,8 @@
                 android:id="@+id/mapfavoriteButton"
                 android:layout_width="46dp"
                 android:layout_height="46dp"
-                android:layout_gravity="end|top"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="4dp"
-                android:background="@drawable/ic_star_outline"
-                android:textColor="@android:color/black" />
+                android:layout_gravity="center"
+                android:background="@null" />
 
             <TextView
                 android:id="@+id/maptitle"
@@ -41,29 +37,33 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"
+                android:textSize="23sp"
                 android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 
     <TextView
         android:id="@+id/mapdescription"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:textSize="15sp"
         android:textColor="@android:color/black"
-        android:layout_marginBottom="5dp" />
+        android:layout_marginBottom="5dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"/>
 
 
     <TextView
         android:id="@+id/maplink"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:autoLink="web"
         android:textColor="@color/teal_700"
         android:textSize="13sp"
-        android:layout_marginBottom="18dp" />
+        android:layout_marginBottom="18dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"/>
 
 </LinearLayout>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@android:color/white" /> <!-- 배경색 -->
+    <corners android:radius="10dp" /> <!-- 모서리를 둥글게 설정 -->
+    <padding
+        android:bottom="8dp"
+        android:top="8dp" />
+</shape>

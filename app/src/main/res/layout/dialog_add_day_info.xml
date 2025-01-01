@@ -7,7 +7,7 @@
     android:padding="18dp">
 
     <LinearLayout
-        android:layout_width="156dp"
+        android:layout_width="120dp"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:layout_margin="20dp"
@@ -21,7 +21,6 @@
             android:layout_width="59dp"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:enabled="false"
             android:inputType="number"
             android:padding="10dp"
             android:singleLine="true"
