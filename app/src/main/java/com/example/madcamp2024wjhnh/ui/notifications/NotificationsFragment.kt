@@ -156,7 +156,7 @@ class NotificationsFragment : Fragment(), OnMapReadyCallback {
             gravity = android.view.Gravity.BOTTOM
             width = ViewGroup.LayoutParams.MATCH_PARENT
         }
-
+        dialog.window?.setBackgroundDrawableResource(R.drawable.rounded_dialog)
         dialog.show()
     }
     private fun saveFavoriteIds(favoriteIds: List<String>) {
