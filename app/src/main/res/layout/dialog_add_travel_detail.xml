@@ -23,7 +23,6 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="16dp"
         app:cardCornerRadius="30dp"
-        android:backgroundTint="#79A0C1"
         android:textColor="#FFFFFF"
         android:textSize="15sp"
         android:text="대표 이미지" />
@@ -60,7 +59,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             app:cardCornerRadius="30dp"
-            android:backgroundTint="#79A0C1"
             android:textColor="#FFFFFF"
             android:text="00/00/00"
             android:textSize="14sp"/>
@@ -82,7 +80,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cardCornerRadius="30dp"
-            android:backgroundTint="#79A0C1"
             android:textColor="#FFFFFF"
             android:text="00/00/00"
             android:textSize="14sp"/>
@@ -113,7 +110,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         app:cardCornerRadius="30dp"
-        android:backgroundTint="#79A0C1"
+        android:backgroundTint="@color/deep_orange"
         android:textColor="#FFFFFF"
         android:text="저장"
         android:textSize="15sp"/>
